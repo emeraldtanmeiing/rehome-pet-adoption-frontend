@@ -1,5 +1,5 @@
 import React from "react";
-import {fetchPets} from "../services/pet.service";
+// import {fetchPets} from "../services/pet.service";
 
 function PetsListing() {
   const pets = fetchPets();
