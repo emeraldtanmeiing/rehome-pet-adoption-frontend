@@ -1,0 +1,66 @@
+@import "~antd/dist/antd.css";
+
+.menu {
+  padding: 10px 20px;
+  border-bottom: solid 1px #e8e8e8;
+  overflow: auto;
+  // box-shadow: 0 0 0px #d6d6d6;
+  max-width: 1500px !important;
+  
+}
+
+.menu_horizontal {
+  display: flex;
+  height: 100%;
+  justify-content: space-between;
+
+  .menu_left,
+  .menu_right {
+    display: flex;
+    align-items: center;
+  }
+
+  .ant-menu-horizontal {
+    border-bottom: none;
+  }
+
+  .ant-menu-item-selected {
+    color: black;
+  }
+
+  .menu__logo {
+    width: 150px;
+  }
+}
+
+.menu__logo img {
+  width: 100%;
+}
+
+.menu_mobile {
+  display: none !important; /* use of important to overwrite ant-btn */
+
+  .menu__logo {
+    width: 40px;
+  }
+
+  .menu__mobile-button {
+    float: right;
+    height: 32px;
+    padding: 6px;
+    margin-top: 8px;
+    background: #3e91f7;
+  }
+}
+
+@media (max-width: 767px) {
+  .menu_mobile {
+    display: flex !important;
+    height: 100%;
+    justify-content: space-between;
+  }
+
+  .menu_horizontal {
+    display: none;
+  }
+}
