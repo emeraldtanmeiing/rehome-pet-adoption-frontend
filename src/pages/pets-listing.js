@@ -2,7 +2,7 @@ import React from "react";
 // import {fetchPets} from "../services/pet.service";
 
 function PetsListing() {
-  const pets = fetchPets();
+  // const pets = fetchPets();
   return (
     <div className="App">
       pet listing
