@@ -1,0 +1,5 @@
+// start server
+run `npm start` or `npm run start`
+
+// deploy on vercel
+push latest code to main branch, then run `vercel`

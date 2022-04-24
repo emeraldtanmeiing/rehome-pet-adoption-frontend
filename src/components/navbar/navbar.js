@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import LeftMenu from "./leftMenu";
 import RightMenu from "./rightMenu";
 import { Drawer, Button } from "antd";
@@ -6,6 +6,8 @@ import "./navbar.scss";
 import { AlignRightOutlined } from "@ant-design/icons";
 import logo from "../../images/logo.png";
 import logoSmall from "../../images/logo_small.png";
+import { Routes, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
+import AuthContext from "../../context/authContext";
 
 const Navbar = ({}) => {
   const [visible, setVisible] = useState(false);
@@ -18,11 +20,29 @@ const Navbar = ({}) => {
     setVisible(false);
   };
 
+  
+  const Auth = useContext(AuthContext);
+  const accountType = Auth.auth?.type;
+  const accessToken = Auth.auth?.accessToken;
+
+  const navigate = useNavigate();
+  const onClick = () => {
+    if(!accessToken || accountType=="adopter"){
+      navigate("/");
+    }else if(accountType=="rescuer"){
+      navigate("/rescuer/pets");
+    }else if(accountType=="admin"){
+      navigate("/admin/dashboard")
+    }else{
+      navigate(-1)
+    }
+  }
+
   return (
     <nav className="menu">
       <div className="menu_horizontal">
         <div className="menu_left">
-          <div className="menu__logo">
+          <div className="menu__logo" onClick={onClick}>
             <img src={logo} alt="logo" />
           </div>
           <LeftMenu mode="horizontal" />
@@ -33,7 +53,7 @@ const Navbar = ({}) => {
       </div>
 
       <div className="menu_mobile">
-        <div className="menu__logo">
+        <div className="menu__logo" onClick={onClick}>
           <img src={logoSmall} alt="logo" />
         </div>
         <Button
