@@ -1,12 +1,15 @@
-import React, { Component, useContext } from "react";
+import React, { useContext } from "react";
 import { Menu } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import AuthContext from "../../context/authContext";
 import Cookies from "js-cookie";
 
 const RightMenu = ({ mode }) => {
   const Auth = useContext(AuthContext);
   const accessToken = Auth.auth?.accessToken;
+
+  const location = useLocation();
+  const { pathname } = location;
 
   const handleLogout = () => {
     Auth.setAuth({});
@@ -36,7 +39,7 @@ const RightMenu = ({ mode }) => {
   );
 
   return (
-    <Menu mode={mode} disabledOverflow={true}>
+    <Menu mode={mode} disabledOverflow={true} selectedKeys={[pathname]}>
       {!accessToken ? MenuForPublic : MenuForLoginUser}
     </Menu>
   );
