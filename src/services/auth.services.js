@@ -35,6 +35,37 @@ export const registerRescuer = async (account) => {
   }
 };
 
+export const registerAdopter = async (account) => {
+  const url = apiURL("/auth");
+  account.email = account.email.toLowerCase();
+  account.password = hash(account.password);
+  account.phone = `${account.prefix}${account.phone}`;
+  unset(account, "prefix");
+  account.type = "adopter";
+  const payload = { account: account };
+
+  try {
+    const res = await axios({
+      method: "POST",
+      url: url,
+      data: payload,
+    });
+
+    if (res?.data?.account) {
+      return true;
+    }
+  } catch (err) {
+    const errorFromApi = err.response?.data;
+    const error = await errorHandler({
+      error: errorFromApi,
+      callback: null,
+      redirect: null,
+    });
+    return { error };
+  }
+};
+
+
 export const login = async ({ email, password }) => {
   const url = apiURL("/auth/login");
   const emailInLowerCase = email.toLowerCase();

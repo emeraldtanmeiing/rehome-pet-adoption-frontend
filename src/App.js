@@ -7,12 +7,12 @@ import AuthContext from "./context/authContext";
 
 import Navbar from "./components/navbar";
 import Login from "./pages/login/login";
-import Signup from "./pages/signup";
 import Pet from "./pages/pet";
 import PetsListing from "./pages/pets-listing";
 import AddPet from "./pages/add-pet";
 
 import SignupRescuer from "./pages/signup-rescuer/signup-rescuer";
+import SignupAdopter from "./pages/signup-adopter/signup-adopter";
 import Unauthorized from "./pages/unauthorized/unauthorized";
 
 import "./App.scss";
@@ -52,7 +52,7 @@ const AllRoutes = () => {
       {/* Public Routes */}
       <Route exact path="/" element={<PetsListing />} />
       <Route exact path="/login" element={<Login />} />
-      <Route exact path="/signup" element={<Signup />} />
+      <Route exact path="/signup" element={<SignupAdopter />} />
       <Route exact path="/rescuer/signup" element={<SignupRescuer />} />
       <Route exact path="/pets/:id" element={<Pet />} />
 

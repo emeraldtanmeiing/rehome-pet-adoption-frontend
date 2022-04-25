@@ -45,11 +45,11 @@ const Login = () => {
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 10 },
+      sm: { span: 3 },
     },
     wrapperCol: {
       xs: { span: 20 },
-      sm: { span: 14 },
+      sm: { span: 21 },
     },
   };
 
@@ -65,6 +65,10 @@ const Login = () => {
       },
     },
   };
+
+  const handleOnClick = () => {
+    navigate("/signup");
+  }
 
   return (
     <div className="login">
@@ -105,7 +109,7 @@ const Login = () => {
             </Form.Item>
           </Form>
 
-          <Button type="link" style={{ width: "100%" }}>
+          <Button type="link" style={{ width: "100%" }} onClick={handleOnClick}>
             Don't have an account? Sign up now!
           </Button>
         </div>

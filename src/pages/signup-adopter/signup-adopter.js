@@ -1,22 +1,22 @@
-import React, { useState } from "react";
-import { Form, Button, Input, Selector, Select, AutoComplete } from "antd";
+import React from "react";
+import { Form, Button, Input, Select } from "antd";
 import { omitBy, isNil, unset } from "lodash";
-import { registerRescuer } from "../../services/auth.services.js";
+import { registerAdopter } from "../../services/auth.services.js";
 import { useNavigate } from "react-router-dom";
-import "./signup-rescuer.scss";
 import toaster from "../../components/toaster/toaster.js";
+import "./signup-adopter.scss";
 
 const { Option } = Select;
 
-function SignupRescuer() {
+function SignupAdopter() {
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 10 },
+      sm: { span: 3 },
     },
     wrapperCol: {
       xs: { span: 20 },
-      sm: { span: 14 },
+      sm: { span: 21 },
     },
   };
 
@@ -45,22 +45,9 @@ function SignupRescuer() {
     </Form.Item>
   );
 
-  const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-
-  const onWebsiteChange = (value) => {
-    if (!value) {
-      setAutoCompleteResult([]);
-    } else {
-      setAutoCompleteResult(
-        [".com", ".my", ".org"].map((domain) => `${value}${domain}`)
-      );
-    }
+  const handleSignUpAsRescuer = () => {
+    navigate("/rescuer/signup");
   };
-
-  const websiteOptions = autoCompleteResult.map((website) => ({
-    label: website,
-    value: website,
-  }));
 
   const validateMessages = {
     required: "${label} is required.",
@@ -75,7 +62,7 @@ function SignupRescuer() {
     const account = omitBy(values, (v) => isNil(v) || v.trim() === "");
     unset(account, "confirm_password");
 
-    const res = await registerRescuer(account);
+    const res = await registerAdopter(account);
     if (res?.error) {
       toaster("error", res.error.description);
     } else {
@@ -84,17 +71,19 @@ function SignupRescuer() {
   };
 
   return (
-    <div className="signup-rescuer">
+    <div className="signup-adopter">
       <div className="signup-form-wrapper">
-        Sign up Rescuer
-        <div className="signup-criteria">
-          Rescuer will need to be verified by ReHome's admin before posting any
-          pet for adoption. Hence, please provide social media page link or
-          license number for verification purpose.
-        </div>
+        Sign up Adopter
+        <Button
+          type="link"
+          style={{ width: "100%" }}
+          onClick={handleSignUpAsRescuer}
+        >
+          If you're a rescuer, sign up as rescuer here.
+        </Button>
         <div className="signup-form">
           <Form
-            name="signup-rescuer"
+            name="signup-adopter"
             onFinish={onFinish}
             validateMessages={validateMessages}
             initialValues={{
@@ -184,49 +173,6 @@ function SignupRescuer() {
               </Select>
             </Form.Item>
 
-            <Form.Item
-              name="description"
-              label="Description"
-              rules={[{ required: true }]}
-              tooltip="Make people know about your organization. (eg. What your organization do? Where is your organization?) "
-            >
-              <Input.TextArea showCount maxLength={1000} />
-            </Form.Item>
-
-            <Form.Item
-              name="licenseNo"
-              label="License Number"
-              tooltip="NGO License Number, Vet License or any license for verification purpose"
-            >
-              <Input placeholder="Add your License Number" />
-            </Form.Item>
-
-            <Form.Item
-              name="facebookLink"
-              label="Facebook Link"
-              tooltip="Your organization's Facebook Page for verification and publicity purpose"
-            >
-              <Input placeholder="Add your Facebook Page Link" />
-            </Form.Item>
-
-            <Form.Item
-              name="instagramLink"
-              label="Instagram Link"
-              tooltip="Your organization's Instagram Page for verification and publicity purpose"
-            >
-              <Input placeholder="Add your Instagram Page Link" />
-            </Form.Item>
-
-            <Form.Item
-              name="organizationWebsiteLink"
-              label="Organization Website Link"
-              tooltip="Your organization's Website for verification and publicity purpose"
-            >
-              <AutoComplete options={websiteOptions} onChange={onWebsiteChange}>
-                <Input placeholder="Add your Website Link" />
-              </AutoComplete>
-            </Form.Item>
-
             <Form.Item {...tailFormItemLayout}>
               <Button
                 type="primary"
@@ -243,19 +189,13 @@ function SignupRescuer() {
   );
 }
 
-export default SignupRescuer;
+export default SignupAdopter;
 
-// type: "rescuer",
-// name: "rescuer1",
-// email: "rescuer15@gmail.com",
+// type: "adopter",
+// name: "adopter1",
+// email: "adopter4@gmail.com",
 // phone: "0123334444",
 // password: passwordHash,
 // active: true,
-
-// //rescuer
-// verified: false,
-// address: "address1",
-// description: "description1",
-// facebookLink: "facebookLink1",
-// instagramLink: "instagramLink1",
-// organizationWebsiteLink: "organizationWebsiteLink1",
+// address: "address for rescuer, taman for rescuer",
+// country: "malaysia",
