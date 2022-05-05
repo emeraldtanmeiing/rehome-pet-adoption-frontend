@@ -23,11 +23,11 @@ const Navbar = ({}) => {
   
   const Auth = useContext(AuthContext);
   const accountType = Auth.auth?.type;
-  const accessToken = Auth.auth?.accessToken;
+  const accountID = Auth.auth?.accountID;
 
   const navigate = useNavigate();
   const onClick = () => {
-    if(!accessToken || accountType=="adopter"){
+    if(!accountID || accountType=="adopter"){
       navigate("/");
     }else if(accountType=="rescuer"){
       navigate("/rescuer/pets");

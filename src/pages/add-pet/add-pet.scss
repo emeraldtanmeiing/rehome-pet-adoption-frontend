@@ -1,0 +1,9 @@
+.add-pet {
+    .left {
+        .ant-radio-group, .ant-form-item-control-input-content, .ant-select-selection-item{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+    }
+}

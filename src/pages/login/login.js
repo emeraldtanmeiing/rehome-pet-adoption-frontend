@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Cookies from "js-cookie";
 import AuthContext from "../../context/authContext";
 
@@ -8,29 +8,42 @@ import { login } from "../../services/auth.services.js";
 import "./login.scss";
 import toaster from "../../components/toaster/toaster.js";
 
+// loading={loadings[0]}
 const Login = () => {
-  const Auth = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
+  const Auth = useContext(AuthContext);
   const navigate = useNavigate();
 
   const onFinish = async (value) => {
+    setIsLoading(true);
+
     const res = await login(value);
+
     if (res?.error) {
       toaster("error", res.error.description);
+      setIsLoading(false);
     } else {
-      Auth.setAuth({ accessToken: res.accessToken, refreshToken: res.refreshToken, type: res.type });
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+      Cookies.remove("type");
+      Cookies.remove("accountID");
+
+      Auth.setAuth({ type: res.type, accountID: res.accountID });
+
       Cookies.set("accessToken", res.accessToken);
       Cookies.set("refreshToken", res.refreshToken);
       Cookies.set("type", res.type);
+      Cookies.set("accountID", res.accountID);
 
-      if(res.type=="adopter"){
+      if (res.type == "adopter") {
         navigate("/");
-      }else if(res.type=="rescuer"){
+      } else if (res.type == "rescuer") {
         navigate("/rescuer/pets");
-      }else if(res.type=="admin"){
-        navigate("/admin/dashboard")
-      }else{
-        navigate(-1)
+      } else if (res.type == "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate(-1);
       }
     }
   };
@@ -68,7 +81,7 @@ const Login = () => {
 
   const handleOnClick = () => {
     navigate("/signup");
-  }
+  };
 
   return (
     <div className="login">
@@ -102,6 +115,7 @@ const Login = () => {
               <Button
                 type="primary"
                 htmlType="submit"
+                loading={isLoading}
                 style={{ width: "100%" }}
               >
                 Log in

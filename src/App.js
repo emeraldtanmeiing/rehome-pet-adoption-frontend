@@ -1,18 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import { Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import AuthContext from "./context/authContext";
 import { AllRoutes } from "./Routes";
 
 import Navbar from "./components/navbar";
-import Login from "./pages/login/login";
-import Pet from "./pages/pet";
-import PetsListing from "./pages/pets-listing";
-import AddPet from "./pages/add-pet";
-import SignupRescuer from "./pages/signup-rescuer/signup-rescuer";
-import SignupAdopter from "./pages/signup-adopter/signup-adopter";
-import Unauthorized from "./pages/unauthorized/unauthorized";
 
 import "./App.scss";
 
@@ -23,10 +15,14 @@ function App() {
     const accessToken = Cookies.get("accessToken");
     const refreshToken = Cookies.get("refreshToken");
     const type = Cookies.get("type");
+    const accountID = Cookies.get("accountID");
 
-    if (accessToken && refreshToken && type) {
-      setAuth({ accessToken, refreshToken, type });
+    if (accessToken && refreshToken && type && accountID) {
+      setAuth({ type, accountID });
     }
+
+    console.log("read cookie")
+    console.log({auth})
   };
 
   useEffect(() => {

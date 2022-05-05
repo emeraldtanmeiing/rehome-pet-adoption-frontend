@@ -5,11 +5,12 @@ import Cookies from "js-cookie";
 import Login from "./pages/login/login";
 import Pet from "./pages/pet";
 import PetsListing from "./pages/pets-listing";
-import AddPet from "./pages/add-pet";
+import AddPet from "./pages/add-pet/add-pet";
 
 import SignupRescuer from "./pages/signup-rescuer/signup-rescuer";
 import SignupAdopter from "./pages/signup-adopter/signup-adopter";
 import Unauthorized from "./pages/unauthorized/unauthorized";
+import PetsListingSpecificRescuer from "./pages/pets-listing-rescuer/pets-listing-rescuer";
 
 export const AllRoutes = () => {
   return (
@@ -42,7 +43,9 @@ export const AllRoutes = () => {
         element={<ProtectedRouteRequireType allowedTypes={["rescuer"]} />}
       >
         <Route exact path="/rescuer/pets/upload" element={<AddPet />} />
+        <Route exact path="/rescuer/pets" element={<PetsListingSpecificRescuer />} />
       </Route>
+      
     </Routes>
   );
 };

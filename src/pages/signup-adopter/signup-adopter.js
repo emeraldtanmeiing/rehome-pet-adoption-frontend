@@ -88,7 +88,7 @@ function SignupAdopter() {
             validateMessages={validateMessages}
             initialValues={{
               prefix: "60",
-              country: "malaysia",
+              country: "Malaysia",
             }}
             scrollToFirstError
             {...formItemLayout}
@@ -169,7 +169,7 @@ function SignupAdopter() {
               rules={[{ required: true }]}
             >
               <Select placeholder="select your country">
-                <Option value="malaysia">Malaysia</Option>
+                <Option value="Malaysia">Malaysia</Option>
               </Select>
             </Form.Item>
 
@@ -198,4 +198,4 @@ export default SignupAdopter;
 // password: passwordHash,
 // active: true,
 // address: "address for rescuer, taman for rescuer",
-// country: "malaysia",
+// country: "Malaysia",

@@ -3,6 +3,8 @@ import { hash } from "../helpers/crypto";
 import { unset } from "lodash";
 import axios from "axios";
 import errorHandler from "../helpers/errorHandler";
+import Cookies from "js-cookie";
+import toaster from "../components/toaster/toaster";
 
 export const registerRescuer = async (account) => {
   const url = apiURL("/auth");
@@ -65,7 +67,6 @@ export const registerAdopter = async (account) => {
   }
 };
 
-
 export const login = async ({ email, password }) => {
   const url = apiURL("/auth/login");
   const emailInLowerCase = email.toLowerCase();
@@ -90,5 +91,42 @@ export const login = async ({ email, password }) => {
       redirect: null,
     });
     return { error };
+  }
+};
+
+export const refreshAccess = async () => {
+  const url = apiURL("/auth/refresh");
+  const refreshToken = Cookies.get("refreshToken");
+  if (!refreshToken) {
+    return { description: "Session Expired. Please login again." };
+  }
+  const payload = { refreshToken };
+
+  try {
+    const res = await axios({
+      method: "POST",
+      url: url,
+      data: payload,
+    });
+
+    if (res?.data?.data?.accessToken && res?.data?.data?.refreshToken) {
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+      Cookies.set("accessToken", res?.data?.data?.accessToken);
+      Cookies.set("refreshToken", res?.data?.data?.refreshToken);
+      //TODO: update AuthContext
+      return true;
+    }
+  } catch (err) {
+    const errorFromApi = err.response?.data;
+    if (errorFromApi.errorCode === 1009) {
+      toaster("error", "Session expired. Please login again.");
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+      Cookies.remove("type");
+      Cookies.remove("accountID");
+    }
+    console.error(errorFromApi);
+    return false;
   }
 };

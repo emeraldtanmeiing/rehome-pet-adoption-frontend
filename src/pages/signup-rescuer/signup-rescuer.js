@@ -99,7 +99,7 @@ function SignupRescuer() {
             validateMessages={validateMessages}
             initialValues={{
               prefix: "60",
-              country: "malaysia",
+              country: "Malaysia",
             }}
             scrollToFirstError
             {...formItemLayout}
@@ -180,7 +180,7 @@ function SignupRescuer() {
               rules={[{ required: true }]}
             >
               <Select placeholder="select your country">
-                <Option value="malaysia">Malaysia</Option>
+                <Option value="Malaysia">Malaysia</Option>
               </Select>
             </Form.Item>
 

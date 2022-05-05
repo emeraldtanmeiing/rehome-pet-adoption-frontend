@@ -7,7 +7,7 @@ import { Link, useLocation } from "react-router-dom";
 const LeftMenu = ({ mode }) => {
   const Auth = useContext(AuthContext);
   const accountType = Auth.auth?.type;
-  const accessToken = Auth.auth?.accessToken;
+  const accountID = Auth.auth?.accountID;
 
   const location = useLocation();
   const { pathname } = location;
@@ -67,24 +67,24 @@ const LeftMenu = ({ mode }) => {
 
   return (
     <Menu mode={mode} disabledOverflow={true} selectedKeys={[pathname]}>
-      {!accessToken
+      {!accountID
         ? MenuForPublic
-        : accountType == "adopter"
+        : accountType === "adopter"
         ? MenuForAdopter
-        : accountType == "rescuer"
+        : accountType === "rescuer"
         ? MenuForRescuer
         : MenuForAdmin}
     </Menu>
   );
 };
 
-{
+
   /* <Menu.Item>
           <Link to={"/about"}>About us</Link>
         </Menu.Item> */
-}
 
-{
+
+
   /* <SubMenu title={<span>Blogs</span>}>
   <MenuItemGroup title="Item 1">
     <Menu.Item key="setting:1">Option 1</Menu.Item>
@@ -95,6 +95,6 @@ const LeftMenu = ({ mode }) => {
     <Menu.Item key="setting:4">Option 4</Menu.Item>
   </MenuItemGroup>
 </SubMenu>; */
-}
+
 
 export default LeftMenu;

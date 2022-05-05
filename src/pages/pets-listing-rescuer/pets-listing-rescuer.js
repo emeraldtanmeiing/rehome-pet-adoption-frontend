@@ -3,7 +3,9 @@ import { Result, Button } from "antd";
 import AuthContext from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
 
-function Unauthorized() {
+import "./pets-listing-rescuer.scss";
+
+function PetsListingSpecificRescuer() {
   const Auth = useContext(AuthContext);
   const accountType = Auth.auth?.type;
   const accountID = Auth.auth?.accountID;
@@ -13,27 +15,20 @@ function Unauthorized() {
   const handleOnClick = () => {
     !accountID
       ? navigate("/")
-      : accountType == "adopter"
+      : accountType === "adopter"
       ? navigate("/")
-      : accountType == "rescuer"
+      : accountType === "rescuer"
       ? navigate("/rescuer/pets")
-      : accountType == "rescuer"
+      : accountType === "rescuer"
       ? navigate("/admin/dashboard")
       : navigate(-1);
   };
 
   return (
-    <Result
-      status="403"
-      title="403"
-      subTitle="UNAUTHORIZED: Sorry, your account does not have access to this page."
-      extra={
-        <Button type="primary" onClick={handleOnClick}>
-          Back Home
-        </Button>
-      }
-    />
+    <div>
+      Pet listing for a specific rescuer page
+    </div>
   );
 }
 
-export default Unauthorized;
+export default PetsListingSpecificRescuer;

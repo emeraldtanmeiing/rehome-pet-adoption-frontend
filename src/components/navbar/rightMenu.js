@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 
 const RightMenu = ({ mode }) => {
   const Auth = useContext(AuthContext);
-  const accessToken = Auth.auth?.accessToken;
+  const accountID = Auth.auth?.accountID;
 
   const location = useLocation();
   const { pathname } = location;
@@ -16,6 +16,7 @@ const RightMenu = ({ mode }) => {
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
     Cookies.remove("type");
+    Cookies.remove("accountID");
   };
 
   const MenuForPublic = (
@@ -40,7 +41,7 @@ const RightMenu = ({ mode }) => {
 
   return (
     <Menu mode={mode} disabledOverflow={true} selectedKeys={[pathname]}>
-      {!accessToken ? MenuForPublic : MenuForLoginUser}
+      {!accountID ? MenuForPublic : MenuForLoginUser}
     </Menu>
   );
 };
