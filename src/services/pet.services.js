@@ -36,3 +36,31 @@ export const createPet = async (pet) => {
     return { error };
   }
 };
+
+export const getPets = async (params) => {
+  const queryString = new URLSearchParams(params).toString();
+  const url = apiURL(`/pet?${queryString}`);
+
+  const accessToken = Cookies.get("accessToken");
+  try {
+    const res = await axios({
+      method: "GET",
+      url: url,
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    console.log({res})
+    if (res?.data?.data) {
+      return res.data.data;
+    }
+  } catch (err) {
+    const errorFromApi = err.response?.data;
+    const callback = async () => await getPets(params);
+    const error = await errorHandler({
+      error: errorFromApi,
+      callback: callback,
+      redirect: null,
+    });
+    return { error };
+  }
+};

@@ -30,7 +30,7 @@ const Navbar = ({}) => {
     if(!accountID || accountType=="adopter"){
       navigate("/");
     }else if(accountType=="rescuer"){
-      navigate("/rescuer/pets");
+      navigate(`/rescuer/pets?rescuerID=${accountID}`);
     }else if(accountType=="admin"){
       navigate("/admin/dashboard")
     }else{
@@ -67,7 +67,7 @@ const Navbar = ({}) => {
           title="Rehome: Adopt a pet"
           placement="right"
           className="menu_drawer"
-          closable={false}
+          closable={true}
           onClose={onClose}
           visible={visible}
         >

@@ -61,7 +61,6 @@ function AddPet() {
   const onFinish = async (values) => {
     setIsLoading(true);
     const pet = omitBy(values, (v) => isNil(v));
-    console.log({Auth})
     pet.rescuerID = Auth.auth?.accountID;
 
     const res = await createPet(pet);

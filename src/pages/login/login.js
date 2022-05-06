@@ -39,7 +39,7 @@ const Login = () => {
       if (res.type == "adopter") {
         navigate("/");
       } else if (res.type == "rescuer") {
-        navigate("/rescuer/pets");
+        navigate(`/rescuer/pets?rescuerID=${res.accountID}`);
       } else if (res.type == "admin") {
         navigate("/admin/dashboard");
       } else {

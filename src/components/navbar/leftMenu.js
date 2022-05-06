@@ -43,7 +43,7 @@ const LeftMenu = ({ mode }) => {
         <Link to={"/rescuer/pets/upload"}>Upload a pet</Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to={"/rescuer/pets"}>My pets</Link>
+        <Link to={`/rescuer/pets?rescuerID=${accountID}`}>My pets</Link>
       </Menu.Item>
       <Menu.Item>
         <Link to={"/rescuer/events"}>My events</Link>
