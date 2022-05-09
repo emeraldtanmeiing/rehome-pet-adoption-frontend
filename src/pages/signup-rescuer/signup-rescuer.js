@@ -1,22 +1,105 @@
-import React, { useState } from "react";
-import { Form, Button, Input, Selector, Select, AutoComplete } from "antd";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { omitBy, isNil, unset } from "lodash";
 import { registerRescuer } from "../../services/auth.services.js";
-import { useNavigate } from "react-router-dom";
+
+import {
+  Form,
+  Button,
+  Input,
+  Select,
+  AutoComplete,
+  Upload,
+  message,
+} from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+
 import "./signup-rescuer.scss";
-import toaster from "../../components/toaster/toaster.js";
 
 const { Option } = Select;
 
 function SignupRescuer() {
+  const [autoCompleteResult, setAutoCompleteResult] = useState([]);
+  const [image, setImage] = useState(null);
+
+  const onWebsiteChange = (value) => {
+    if (!value) {
+      setAutoCompleteResult([]);
+    } else {
+      setAutoCompleteResult(
+        [".com", ".my", ".org"].map((domain) => `${value}${domain}`)
+      );
+    }
+  };
+
+  const websiteOptions = autoCompleteResult.map((website) => ({
+    label: website,
+    value: website,
+  }));
+
+  const normFile = (uploadEvent) => {
+    if (Array.isArray(uploadEvent)) {
+      return uploadEvent;
+    }
+  };
+
+  const validateFile = (value) => {
+    const file = value;
+
+    const fileTypes = ["image/png", "image/jpg", "image/jpeg", "image/svg+xml"];
+
+    if (!fileTypes.includes(file.type)) {
+      message.error(`${file.name} format is not accepted.`);
+      return Upload.LIST_IGNORE;
+    }
+
+    const isLt1M = file.size / 1024 / 1024 <= 1;
+    if (!isLt1M) {
+      message.error(`Image size should be smaller than 1MB.`);
+      return Upload.LIST_IGNORE;
+    }
+  };
+
+  const onImageChange = (value) => {
+    setImage(value.fileList[0]?.originFileObj);
+  };
+
+  //TODO: move this to BE: get base64 of all File(s)
+  // let imageList = [];
+  // fileList.forEach((file, index) => {
+  //   getBase64(file.originFileObj).then((base64) => {
+  //     // console.log(base64);
+  //     imageList[index] = { filename: file.name, fileBase64: base64 };
+  //   });
+  // });
+
+  // useEffect(() => {
+  //   console.log("image has changed", image);
+  // }, [image]);
+
+  const validateMessages = {
+    required: "${label} is required.",
+    types: {
+      email: "${label} is not a valid email.",
+    },
+  };
+
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 10 },
+      sm: { span: 6 },
+      md: { span: 5 },
+      lg: { span: 3 },
+      xl: { span: 3 },
+      xxl: { span: 3 },
     },
     wrapperCol: {
-      xs: { span: 20 },
-      sm: { span: 14 },
+      xs: { span: 24 },
+      sm: { span: 18 },
+      md: { span: 19 },
+      lg: { span: 21 },
+      xl: { span: 21 },
+      xxl: { span: 21 },
     },
   };
 
@@ -35,52 +118,36 @@ function SignupRescuer() {
 
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
-      <Select
-        style={{
-          width: 70,
-        }}
-      >
+      <Select style={{ width: 70 }}>
         <Option value="60">+60</Option>
       </Select>
     </Form.Item>
   );
 
-  const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-
-  const onWebsiteChange = (value) => {
-    if (!value) {
-      setAutoCompleteResult([]);
-    } else {
-      setAutoCompleteResult(
-        [".com", ".my", ".org"].map((domain) => `${value}${domain}`)
-      );
-    }
-  };
-
-  const websiteOptions = autoCompleteResult.map((website) => ({
-    label: website,
-    value: website,
-  }));
-
-  const validateMessages = {
-    required: "${label} is required.",
-    types: {
-      email: "${label} is not a valid email.",
-    },
-  };
-
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
-    const account = omitBy(values, (v) => isNil(v) || v.trim() === "");
+    values.image = image
+    const account = omitBy(values, isNil);
     unset(account, "confirm_password");
+    const payload = {
+      ...(account && { account }),
+      ...(image && { image }),
+    };
+
+    console.log({ payload });
+    
 
     const res = await registerRescuer(account);
     if (res?.error) {
-      toaster("error", res.error.description);
+      message.error(res.error.description);
     } else {
       navigate("/login");
     }
+  };
+
+  const handleSignUpAsAdopter = () => {
+    navigate("/signup");
   };
 
   return (
@@ -91,6 +158,13 @@ function SignupRescuer() {
           Rescuer will need to be verified by ReHome's admin before posting any
           pet for adoption. Hence, please provide social media page link or
           license number for verification purpose.
+          <Button
+            type="link"
+            style={{ width: "100%" }}
+            onClick={handleSignUpAsAdopter}
+          >
+            If you wish to adopter, sign up as adopter here.
+          </Button>
         </div>
         <div className="signup-form">
           <Form
@@ -100,6 +174,7 @@ function SignupRescuer() {
             initialValues={{
               prefix: "60",
               country: "Malaysia",
+              stateOrProvince: "Selangor",
             }}
             scrollToFirstError
             {...formItemLayout}
@@ -175,11 +250,79 @@ function SignupRescuer() {
             </Form.Item>
 
             <Form.Item
+              name="stateOrProvince"
+              label="State/Province"
+              rules={[{ required: true }]}
+              className="left"
+            >
+              <Select placeholder="Select your state or province">
+                <Option value="Selangor">Selangor</Option>
+                <Option value="Kuala Lumpur">Kuala Lumpur</Option>
+                <Option value="Putrajaya">Putrajaya</Option>
+                <Option value="Negeri Sembilan">Negeri Sembilan</Option>
+                <Option value="Johor">Johor</Option>
+                <Option value="Melaka">Melaka</Option>
+                <Option value="Kedah">Kedah</Option>
+                <Option value="Kelantan">Kelantan</Option>
+                <Option value="Pahang">Pahang</Option>
+                <Option value="Perak">Perak</Option>
+                <Option value="Perlis">Perlis</Option>
+                <Option value="Pulau Pinang">Pulau Pinang</Option>
+                <Option value="Terengganu">Terengganu</Option>
+                <Option value="Sabah">Sabah</Option>
+                <Option value="Sarawak">Sarawak</Option>
+                <Option value="Labuan">Labuan</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              name="city"
+              label="City"
+              rules={[
+                {
+                  required: true,
+                  whitespace: true,
+                },
+              ]}
+            >
+              <Input placeholder="Type your city" />
+            </Form.Item>
+
+            <Form.Item
+              name="postcode"
+              label="Postcode"
+              rules={[
+                {
+                  required: true,
+                  whitespace: true,
+                },
+                () => ({
+                  validator(_, value) {
+                    if (
+                      !value ||
+                      (value.length == 5 && value.match(/^[0-9]+$/) != null)
+                    ) {
+                      return Promise.resolve();
+                    }
+
+                    return Promise.reject(
+                      new Error("Postcode should be five digit numeric.")
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input placeholder="Type your postcode" />
+            </Form.Item>
+
+            <Form.Item
               name="country"
               label="Country"
               rules={[{ required: true }]}
+              tooltip="ReHome is currently serving in Malaysia only."
+              className="left"
             >
-              <Select placeholder="select your country">
+              <Select placeholder="select your country" disabled>
                 <Option value="Malaysia">Malaysia</Option>
               </Select>
             </Form.Item>
@@ -219,12 +362,33 @@ function SignupRescuer() {
 
             <Form.Item
               name="organizationWebsiteLink"
-              label="Organization Website Link"
+              label="Website Link"
               tooltip="Your organization's Website for verification and publicity purpose"
             >
               <AutoComplete options={websiteOptions} onChange={onWebsiteChange}>
-                <Input placeholder="Add your Website Link" />
+                <Input placeholder="Add your Organization's Website Link" />
               </AutoComplete>
+            </Form.Item>
+
+            <Form.Item
+              name="image"
+              label="Profile Picture"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+              className="left"
+            >
+              <Upload
+                name="logo"
+                listType="picture"
+                maxCount={1}
+                beforeUpload={validateFile}
+                onChange={onImageChange}
+                accept="image/png, image/jpeg, image/svg+xml"
+              >
+                <Button icon={<UploadOutlined />}>
+                  Upload image only (Max: 1)
+                </Button>
+              </Upload>
             </Form.Item>
 
             <Form.Item {...tailFormItemLayout}>
@@ -244,18 +408,3 @@ function SignupRescuer() {
 }
 
 export default SignupRescuer;
-
-// type: "rescuer",
-// name: "rescuer1",
-// email: "rescuer15@gmail.com",
-// phone: "0123334444",
-// password: passwordHash,
-// active: true,
-
-// //rescuer
-// verified: false,
-// address: "address1",
-// description: "description1",
-// facebookLink: "facebookLink1",
-// instagramLink: "instagramLink1",
-// organizationWebsiteLink: "organizationWebsiteLink1",

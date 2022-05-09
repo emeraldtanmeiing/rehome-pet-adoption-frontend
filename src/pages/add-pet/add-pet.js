@@ -3,21 +3,19 @@ import {
   Form,
   Button,
   Input,
-  Selector,
   Select,
-  AutoComplete,
   Radio,
   InputNumber,
   Switch,
   Checkbox,
   Row,
   Col,
+  message
 } from "antd";
-import { omitBy, isNil, unset } from "lodash";
+import { omitBy, isNil } from "lodash";
 import { createPet } from "../../services/pet.services.js";
 import { useNavigate } from "react-router-dom";
 import "./add-pet.scss";
-import toaster from "../../components/toaster/toaster.js";
 import AuthContext from "../../context/authContext";
 
 const { Option } = Select;
@@ -65,7 +63,7 @@ function AddPet() {
 
     const res = await createPet(pet);
     if (res?.error) {
-      toaster("error", res.error.description);
+      message.error(res.error.description);
       setIsLoading(false);
     } else {
       navigate("/rescuer/pets");

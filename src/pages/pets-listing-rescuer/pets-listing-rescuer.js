@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { omitBy, isNil, unset, forEach } from "lodash";
+import { omitBy, isNil } from "lodash";
 import useQuery from "../../hooks/useQuery";
 import { getPets } from "../../services/pet.services";
 
-import { Row, Col, Skeleton, Card } from "antd";
-import toaster from "../../components/toaster/toaster";
+import { Row, Col, Skeleton, Card, message } from "antd";
 import PetCard from "../../components/petCard/petCard";
 
 import "./pets-listing-rescuer.scss";
@@ -36,7 +35,7 @@ function PetsListingSpecificRescuer() {
     const res = await getPets(params);
 
     if (res?.error) {
-      toaster("error", res.error.description);
+      message.error(res.error.description);
     } else {
       setPetState({ ...petState, status: "success", data: res });
     }
@@ -63,7 +62,7 @@ function PetsListingSpecificRescuer() {
         
 
         <div className="cards">
-          {petState.status == "loading" && 
+          {petState.status === "loading" && 
             <>
               <Row gutter={[30, 30]}>
                 {[...Array(12).keys()].map((index) => (
@@ -73,7 +72,7 @@ function PetsListingSpecificRescuer() {
             </>
           }
 
-          {petState.status == "success" && 
+          {petState.status === "success" && 
             <>
               <div className="search-bar"> Search bar will be implemented later </div>
             

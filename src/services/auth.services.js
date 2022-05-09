@@ -4,17 +4,22 @@ import { unset } from "lodash";
 import axios from "axios";
 import errorHandler from "../helpers/errorHandler";
 import Cookies from "js-cookie";
-import toaster from "../components/toaster/toaster";
+import { message } from "antd";
 
-export const registerRescuer = async (account) => {
+export const registerRescuer = async ({ account, image = null }) => {
   const url = apiURL("/auth");
+
+  account.type = "rescuer";
+  account.verified = false;
   account.email = account.email.toLowerCase();
   account.password = hash(account.password);
   account.phone = `${account.prefix}${account.phone}`;
   unset(account, "prefix");
-  account.type = "rescuer";
-  account.verified = false; //TODO: change this to false
-  const payload = { account: account };
+  unset(account, "confirm_password");
+
+  const payload = { account, image };
+
+  console.log("registerRescuer payload", payload)
 
   try {
     const res = await axios({
@@ -120,7 +125,7 @@ export const refreshAccess = async () => {
   } catch (err) {
     const errorFromApi = err.response?.data;
     if (errorFromApi.errorCode === 1009) {
-      toaster("error", "Session expired. Please login again.");
+      message.error("Session expired. Please login again.");
       Cookies.remove("accessToken");
       Cookies.remove("refreshToken");
       Cookies.remove("type");

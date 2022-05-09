@@ -3,10 +3,10 @@ import { useContext, useState } from "react";
 import Cookies from "js-cookie";
 import AuthContext from "../../context/authContext";
 
-import { Form, Button, Input } from "antd";
+import { Form, Button, Input, message } from "antd";
 import { login } from "../../services/auth.services.js";
+
 import "./login.scss";
-import toaster from "../../components/toaster/toaster.js";
 
 // loading={loadings[0]}
 const Login = () => {
@@ -21,7 +21,7 @@ const Login = () => {
     const res = await login(value);
 
     if (res?.error) {
-      toaster("error", res.error.description);
+      message.error(res.error.description);
       setIsLoading(false);
     } else {
       Cookies.remove("accessToken");
@@ -36,11 +36,11 @@ const Login = () => {
       Cookies.set("type", res.type);
       Cookies.set("accountID", res.accountID);
 
-      if (res.type == "adopter") {
+      if (res.type === "adopter") {
         navigate("/");
-      } else if (res.type == "rescuer") {
+      } else if (res.type === "rescuer") {
         navigate(`/rescuer/pets?rescuerID=${res.accountID}`);
-      } else if (res.type == "admin") {
+      } else if (res.type === "admin") {
         navigate("/admin/dashboard");
       } else {
         navigate(-1);

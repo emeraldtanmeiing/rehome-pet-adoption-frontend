@@ -6,7 +6,11 @@
     color: #fcc43c;
   }
 
-  // .signup-form {
-  //   width: 500px;
-  // }
+  .left {
+    .ant-select-selection-item, .ant-upload {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+  }
 }
