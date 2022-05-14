@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { omitBy, isNil, unset } from "lodash";
 import { registerRescuer } from "../../services/auth.services.js";
+import { hash } from "../../helpers/crypto.js";
 
 import {
   Form,
@@ -21,6 +22,7 @@ const { Option } = Select;
 function SignupRescuer() {
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
   const [image, setImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onWebsiteChange = (value) => {
     if (!value) {
@@ -63,19 +65,13 @@ function SignupRescuer() {
   const onImageChange = (value) => {
     setImage(value.fileList[0]?.originFileObj);
   };
+  
+  const dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  };
 
-  //TODO: move this to BE: get base64 of all File(s)
-  // let imageList = [];
-  // fileList.forEach((file, index) => {
-  //   getBase64(file.originFileObj).then((base64) => {
-  //     // console.log(base64);
-  //     imageList[index] = { filename: file.name, fileBase64: base64 };
-  //   });
-  // });
-
-  // useEffect(() => {
-  //   console.log("image has changed", image);
-  // }, [image]);
 
   const validateMessages = {
     required: "${label} is required.",
@@ -127,21 +123,16 @@ function SignupRescuer() {
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
-    values.image = image
+    setIsLoading(true);
     const account = omitBy(values, isNil);
-    unset(account, "confirm_password");
-    const payload = {
-      ...(account && { account }),
-      ...(image && { image }),
-    };
 
-    console.log({ payload });
+    const res = await registerRescuer({ account, image });
     
-
-    const res = await registerRescuer(account);
     if (res?.error) {
       message.error(res.error.description);
+      setIsLoading(false);
     } else {
+      message.success("Signup successful! Please login.")
       navigate("/login");
     }
   };
@@ -383,6 +374,7 @@ function SignupRescuer() {
                 maxCount={1}
                 beforeUpload={validateFile}
                 onChange={onImageChange}
+                customRequest={dummyRequest}
                 accept="image/png, image/jpeg, image/svg+xml"
               >
                 <Button icon={<UploadOutlined />}>
@@ -395,6 +387,7 @@ function SignupRescuer() {
               <Button
                 type="primary"
                 htmlType="submit"
+                loading={isLoading}
                 style={{ width: "100%" }}
               >
                 Register

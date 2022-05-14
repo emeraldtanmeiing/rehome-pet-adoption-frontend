@@ -1,4 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { omitBy, isNil, isEmpty } from "lodash";
+import { createPet } from "../../services/pet.services.js";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../../context/authContext";
+
 import {
   Form,
   Button,
@@ -10,18 +15,62 @@ import {
   Checkbox,
   Row,
   Col,
+  Upload,
   message
 } from "antd";
-import { omitBy, isNil } from "lodash";
-import { createPet } from "../../services/pet.services.js";
-import { useNavigate } from "react-router-dom";
+import { UploadOutlined } from "@ant-design/icons";
+
 import "./add-pet.scss";
-import AuthContext from "../../context/authContext";
 
 const { Option } = Select;
 
 function AddPet() {
+
+  const [images, setImages] = useState(null);
+  const [mainImage, setMainImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const onImageChange = (value) => {
+    let fetchImages = []
+    value.fileList.forEach((v, index) => {
+      fetchImages[index] = v.originFileObj
+    });
+    setImages(fetchImages)
+  }
+
+  const onMainImageChange = (value) => {
+    setMainImage(value.fileList[0]?.originFileObj);
+  };
+
+  const normFile = (uploadEvent) => {
+    if (Array.isArray(uploadEvent)) {
+      console.log("in if")
+      return uploadEvent;
+    }
+  };
+
+  const validateFile = (value) => {
+    const file = value;
+
+    const fileTypes = ["image/png", "image/jpg", "image/jpeg", "image/svg+xml"];
+
+    if (!fileTypes.includes(file.type)) {
+      message.error(`${file.name} format is not accepted.`);
+      return Upload.LIST_IGNORE;
+    }
+
+    const isLt1M = file.size / 1024 / 1024 <= 1;
+    if (!isLt1M) {
+      message.error(`Image size should be smaller than 1MB.`);
+      return Upload.LIST_IGNORE;
+    }
+  };
+
+  const dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  };
 
   const formItemLayout = {
     labelCol: {
@@ -57,17 +106,25 @@ function AddPet() {
   const Auth = useContext(AuthContext);
   const navigate = useNavigate();
   const onFinish = async (values) => {
-    setIsLoading(true);
-    const pet = omitBy(values, (v) => isNil(v));
-    pet.rescuerID = Auth.auth?.accountID;
 
-    const res = await createPet(pet);
+    if(isEmpty(mainImage)){
+      message.error("Please upload Main image.");
+      return;
+    }
+
+    setIsLoading(true);
+    const pet = omitBy(values, isNil);
+    const rescuerID = Auth.auth?.accountID;
+    const res = await createPet({ pet, mainImage, images, rescuerID });
+    
     if (res?.error) {
       message.error(res.error.description);
       setIsLoading(false);
     } else {
+      message.success("Create pet successful!.")
       navigate("/rescuer/pets");
     }
+
   };
 
   const descForType = "More pet types will be added later.";
@@ -397,6 +454,51 @@ function AddPet() {
                 maxLength={5000}
                 placeholder="Describe the pet"
               />
+            </Form.Item>
+            
+            <Form.Item
+              name="mainImage"
+              label="Main image"
+              valuePropName="mainImage"
+              getValueFromEvent={normFile}
+              className="left"
+            >
+              <Upload
+                name="mainImage"
+                listType="picture"
+                maxCount={1}
+                beforeUpload={validateFile}
+                onChange={onMainImageChange}
+                customRequest={dummyRequest}
+                rules={[{ required: true }]}
+                accept="image/png, image/jpeg, image/svg+xml"
+              >
+                <Button icon={<UploadOutlined />}>
+                  Upload image only (Max: 1)
+                </Button>
+              </Upload>
+            </Form.Item>
+
+            <Form.Item
+              name="images"
+              label="More images"
+              valuePropName="images"
+              getValueFromEvent={normFile}
+              className="left"
+            >
+              <Upload
+                name="images"
+                listType="picture"
+                maxCount={10}
+                beforeUpload={validateFile}
+                onChange={onImageChange}
+                customRequest={dummyRequest}
+                accept="image/png, image/jpeg, image/svg+xml"
+              >
+                <Button icon={<UploadOutlined />}>
+                  Upload images only (Max: 10)
+                </Button>
+              </Upload>
             </Form.Item>
 
             <Form.Item {...tailFormItemLayout}>

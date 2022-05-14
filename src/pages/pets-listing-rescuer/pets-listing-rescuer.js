@@ -78,7 +78,7 @@ function PetsListingSpecificRescuer() {
             
               <h2>{petState.data.totalResultsFound} pets found</h2>
 
-              <Row gutter={[16, 16]}>
+              <Row gutter={[30, 30]}>
                 {petState.data.petsList.map((p) => (
                   <PetCard pet={p} />
                 ))}

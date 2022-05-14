@@ -12,11 +12,8 @@ const { Option } = Select;
 
 function SignupAdopter() {
 
-  const handleSignUpAsRescuer = () => {
-    navigate("/rescuer/signup");
-  };
-
   const [image, setImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const normFile = (uploadEvent) => {
     if (Array.isArray(uploadEvent)) {
@@ -45,6 +42,16 @@ function SignupAdopter() {
     setImage(value.fileList[0]?.originFileObj)
   }
 
+  const dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  };
+
+  const handleSignUpAsRescuer = () => {
+    navigate("/rescuer/signup");
+  };
+
   const validateMessages = {
     required: "${label} is required.",
     types: {
@@ -53,17 +60,17 @@ function SignupAdopter() {
   };
 
   const navigate = useNavigate();
-
   const onFinish = async (values) => {
-    values.image = image;
+    setIsLoading(true);
     const account = omitBy(values, isNil);
-    unset(account, "confirm_password");
-    console.log({ account });
 
-    const res = await registerAdopter(account);
+    const res = await registerAdopter({ account, image });
+    
     if (res?.error) {
       message.error(res.error.description);
+      setIsLoading(false);
     } else {
+      message.success("Signup successful! Please login.")
       navigate("/login");
     }
   };
@@ -296,6 +303,7 @@ function SignupAdopter() {
                 maxCount={1}
                 beforeUpload={validateFile}
                 onChange={onImageChange}
+                customRequest={dummyRequest}
                 accept="image/png, image/jpeg, image/svg+xml"
               >
                 <Button icon={<UploadOutlined />}>
@@ -308,6 +316,7 @@ function SignupAdopter() {
               <Button
                 type="primary"
                 htmlType="submit"
+                loading={isLoading}
                 style={{ width: "100%" }}
               >
                 Register

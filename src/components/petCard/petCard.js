@@ -6,12 +6,11 @@ import { Card, Col } from "antd";
 const { Meta } = Card;
 
 const PetCard = ({ pet }) => {
-
   const navigate = useNavigate();
 
   const handleOnClick = () => {
-    navigate(`/rescuer/pet?petID=${pet._id}`)
-  }
+    navigate(`/rescuer/pet?petID=${pet._id}`);
+  };
 
   return (
     <>
@@ -19,18 +18,27 @@ const PetCard = ({ pet }) => {
         <Card
           key={pet._id}
           hoverable
+          size="small"
           onClick={handleOnClick}
           cover={
-            //TODO: Replace with main pet image later
-            <img
-              alt="pet image"
-              src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-            />
+            <div
+              style={{
+                overflow: "hidden",
+                height: "180px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <img
+                alt="pet image"
+                className="pet-image"
+                style={{ width: "100%" }}
+                src={pet.mainImage}
+              />
+            </div>
           }
         >
           <Meta
-            //TODO: Replace with profile pic of rescuer
-            // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
             title={pet.name}
           />
 

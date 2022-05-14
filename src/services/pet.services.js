@@ -1,36 +1,56 @@
-import { apiURL } from "../helpers/url";
-import { hash } from "../helpers/crypto";
-import { unset } from "lodash";
+import apiURL from "../helpers/url";
 import axios from "axios";
 import errorHandler from "../helpers/errorHandler";
-import AuthContext from "../context/authContext";
 import Cookies from "js-cookie";
+import lodash from "lodash";
+const { isEmpty } = lodash;
 
-export const createPet = async (pet) => {
+export const createPet = async ({ pet, mainImage, images, rescuerID }) => {
   const url = apiURL("/pet");
 
-  const payload = {
-    pet: { ...pet, adopted: false, active: true },
-  };
+  pet.active = true;
+  pet.rescuerID = rescuerID;
+
+  const data = new FormData();
+
+  data.append("mainImage", mainImage);
+
+  if(!isEmpty(images)){
+    const lengthOfimages = images.length;
+    for (let i = 0; i < lengthOfimages; i++) {
+      data.append("images", images[i]);
+    }
+  }
+
+  for (const i in pet) {
+    data.append(i, pet[i]);
+  }
+
+  // print values in form data
+  // for (var pair of data.entries()) {
+  //   console.log(pair[0] + ", " + pair[1]);
+  // }
 
   const accessToken = Cookies.get("accessToken");
   try {
     const res = await axios({
       method: "POST",
       url: url,
-      data: payload,
-      headers: { Authorization: `Bearer ${accessToken}` },
+      data: data,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "multipart/form-data",
+      },
     });
 
-    if (res?.data?.pet) {
-      return true;
+    if (res?.data?.data?.pet) {
+      return res.data.data.pet;
     }
   } catch (err) {
     const errorFromApi = err.response?.data;
-    const callback = async () => await createPet(pet);
     const error = await errorHandler({
       error: errorFromApi,
-      callback: callback,
+      callback: null,
       redirect: null,
     });
     return { error };
@@ -49,7 +69,6 @@ export const getPets = async (params) => {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    console.log({res})
     if (res?.data?.data) {
       return res.data.data;
     }

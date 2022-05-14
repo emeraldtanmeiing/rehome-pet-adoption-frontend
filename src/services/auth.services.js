@@ -1,4 +1,4 @@
-import { apiURL } from "../helpers/url";
+import apiURL from "../helpers/url";
 import { hash } from "../helpers/crypto";
 import { unset } from "lodash";
 import axios from "axios";
@@ -6,7 +6,7 @@ import errorHandler from "../helpers/errorHandler";
 import Cookies from "js-cookie";
 import { message } from "antd";
 
-export const registerRescuer = async ({ account, image = null }) => {
+export const registerRescuer = async ({ account, image }) => {
   const url = apiURL("/auth");
 
   account.type = "rescuer";
@@ -17,19 +17,27 @@ export const registerRescuer = async ({ account, image = null }) => {
   unset(account, "prefix");
   unset(account, "confirm_password");
 
-  const payload = { account, image };
+  const data = new FormData();
+  data.append("image", image);
+  for (const i in account) {
+    data.append(i, account[i]);
+  }
 
-  console.log("registerRescuer payload", payload)
+  // print values in form data
+  // for (var pair of data.entries()) {
+  //   console.log(pair[0] + ", " + pair[1]);
+  // }
 
   try {
     const res = await axios({
       method: "POST",
       url: url,
-      data: payload,
+      data: data,
+      headers: { "Content-Type": "multipart/form-data" },
     });
 
-    if (res?.data?.account) {
-      return true;
+    if (res?.data?.data?.account) {
+      return res.data.data.account
     }
   } catch (err) {
     const errorFromApi = err.response?.data;
@@ -42,24 +50,37 @@ export const registerRescuer = async ({ account, image = null }) => {
   }
 };
 
-export const registerAdopter = async (account) => {
+export const registerAdopter = async ({ account, image }) => {
   const url = apiURL("/auth");
+
+  account.type = "adopter";
   account.email = account.email.toLowerCase();
   account.password = hash(account.password);
   account.phone = `${account.prefix}${account.phone}`;
   unset(account, "prefix");
-  account.type = "adopter";
-  const payload = { account: account };
+  unset(account, "confirm_password");
+
+  const data = new FormData();
+  data.append("image", image);
+  for (const i in account) {
+    data.append(i, account[i]);
+  }
+
+  // print values in form data
+  // for (var pair of data.entries()) {
+  //   console.log(pair[0] + ", " + pair[1]);
+  // }
 
   try {
     const res = await axios({
       method: "POST",
       url: url,
-      data: payload,
+      data: data,
+      headers: { "Content-Type": "multipart/form-data" },
     });
-
-    if (res?.data?.account) {
-      return true;
+    
+    if (res?.data?.data?.account) {
+      return res.data.data.account
     }
   } catch (err) {
     const errorFromApi = err.response?.data;
@@ -70,6 +91,7 @@ export const registerAdopter = async (account) => {
     });
     return { error };
   }
+
 };
 
 export const login = async ({ email, password }) => {
