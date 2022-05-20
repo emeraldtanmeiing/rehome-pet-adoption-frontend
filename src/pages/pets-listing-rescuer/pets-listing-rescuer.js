@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { omitBy, isNil } from "lodash";
 import useQuery from "../../hooks/useQuery";
 import { getPets } from "../../services/pet.services";
+import AuthContext from "../../context/authContext";
 
 import { Row, Col, Skeleton, Card, message } from "antd";
 import PetCard from "../../components/petCard/petCard";
@@ -53,6 +54,9 @@ function PetsListingSpecificRescuer() {
     );
   };
 
+  const Auth = useContext(AuthContext);
+  const accountType = Auth.auth?.type;
+
   return (
     <div className="pets-listing-rescuer">
       <h1>My pets</h1> Pet listing for a specific rescuer page
@@ -80,7 +84,7 @@ function PetsListingSpecificRescuer() {
 
               <Row gutter={[30, 30]}>
                 {petState.data.petsList.map((p) => (
-                  <PetCard pet={p} />
+                  <PetCard pet={p} accountType={accountType}/>
                 ))}
               </Row>
             </>

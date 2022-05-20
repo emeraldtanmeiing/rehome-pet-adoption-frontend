@@ -20,9 +20,6 @@ function App() {
     if (accessToken && refreshToken && type && accountID) {
       setAuth({ type, accountID });
     }
-
-    console.log("read cookie")
-    console.log({auth})
   };
 
   useEffect(() => {

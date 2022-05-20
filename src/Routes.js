@@ -44,8 +44,8 @@ export const AllRoutes = () => {
         path="/"
         element={<ProtectedRouteRequireType allowedTypes={["rescuer"]} />}
       >
-        <Route exact path="/rescuer/pets/upload" element={<AddPet />} />
         <Route exact path="/rescuer/pets" element={<PetsListingSpecificRescuer />} />
+        <Route exact path="/rescuer/pets/upload" element={<AddPet />} />
       </Route>
       
     </Routes>

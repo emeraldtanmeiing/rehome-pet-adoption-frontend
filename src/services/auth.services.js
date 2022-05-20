@@ -141,7 +141,9 @@ export const refreshAccess = async () => {
       Cookies.remove("refreshToken");
       Cookies.set("accessToken", res?.data?.data?.accessToken);
       Cookies.set("refreshToken", res?.data?.data?.refreshToken);
-      //TODO: update AuthContext
+      
+      window.location.href = window.location.href; //force refresh page to update AuthContext
+      
       return true;
     }
   } catch (err) {
@@ -152,6 +154,7 @@ export const refreshAccess = async () => {
       Cookies.remove("refreshToken");
       Cookies.remove("type");
       Cookies.remove("accountID");
+      window.location.href = window.location.href; //force refresh page to update AuthContext
     }
     console.error(errorFromApi);
     return false;

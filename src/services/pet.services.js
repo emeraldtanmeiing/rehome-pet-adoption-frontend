@@ -48,9 +48,10 @@ export const createPet = async ({ pet, mainImage, images, rescuerID }) => {
     }
   } catch (err) {
     const errorFromApi = err.response?.data;
+    const callback = async () => await createPet({ pet, mainImage, images, rescuerID });
     const error = await errorHandler({
       error: errorFromApi,
-      callback: null,
+      callback: callback,
       redirect: null,
     });
     return { error };
