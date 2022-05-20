@@ -1,13 +1,11 @@
-import React, { useContext } from "react";
-import AuthContext from "../../context/authContext";
+import React from "react";
 import { Menu } from "antd";
 import { Link, useLocation } from "react-router-dom";
+import useAuthContext from "../../hooks/useAuthContext";
 
 
 const LeftMenu = ({ mode }) => {
-  const Auth = useContext(AuthContext);
-  const accountType = Auth.auth?.type;
-  const accountID = Auth.auth?.accountID;
+  const { accountType, accountID } = useAuthContext();
 
   const location = useLocation();
   const { pathname } = location;

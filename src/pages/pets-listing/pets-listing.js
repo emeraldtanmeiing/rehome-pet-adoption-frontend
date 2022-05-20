@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { omitBy, isNil } from "lodash";
 import useQuery from "../../hooks/useQuery";
-import AuthContext from "../../context/authContext";
+import useAuthContext from "../../hooks/useAuthContext";
 import { getPets } from "../../services/pet.services";
 
 import { Row, Col, Skeleton, Card, message } from "antd";
@@ -14,7 +14,7 @@ function PetsListing() {
 
   useEffect(() => {
     fetchPets();
-  }, []);
+  },[]);
 
   const query = useQuery();
   const petID = query.get("petID");
@@ -25,8 +25,7 @@ function PetsListing() {
   const resultsPerPage = query.get("resultsPerPage");
   const page = query.get("page");
 
-  const Auth = useContext(AuthContext);
-  const accountType = Auth.auth?.type;
+  const { accountType } = useAuthContext();
 
   const fetchPets = async () => {
     setPetState({ ...petState, status: "loading" });

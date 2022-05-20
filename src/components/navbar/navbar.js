@@ -1,15 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
+import useAuthContext from "../../hooks/useAuthContext";
+import { useNavigate } from "react-router-dom";
+
+import { Drawer, Button } from "antd";
+import { AlignRightOutlined } from "@ant-design/icons";
 import LeftMenu from "./leftMenu";
 import RightMenu from "./rightMenu";
-import { Drawer, Button } from "antd";
-import "./navbar.scss";
-import { AlignRightOutlined } from "@ant-design/icons";
 import logo from "../../images/logo.png";
 import logoSmall from "../../images/logo_small.png";
-import { Routes, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
-import AuthContext from "../../context/authContext";
 
-const Navbar = ({}) => {
+import "./navbar.scss";
+
+const Navbar = () => {
   const [visible, setVisible] = useState(false);
 
   const showDrawer = () => {
@@ -21,17 +23,15 @@ const Navbar = ({}) => {
   };
 
   
-  const Auth = useContext(AuthContext);
-  const accountType = Auth.auth?.type;
-  const accountID = Auth.auth?.accountID;
+  const { accountType, accountID } = useAuthContext();
 
   const navigate = useNavigate();
   const onClick = () => {
-    if(!accountID || accountType=="adopter"){
+    if(!accountID || accountType === "adopter"){
       navigate("/");
-    }else if(accountType=="rescuer"){
+    }else if(accountType === "rescuer"){
       navigate(`/rescuer/pets?rescuerID=${accountID}`);
-    }else if(accountType=="admin"){
+    }else if(accountType === "admin"){
       navigate("/admin/dashboard")
     }else{
       navigate(-1)

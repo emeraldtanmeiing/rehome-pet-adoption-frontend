@@ -1,18 +1,14 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { omitBy, isNil, map } from "lodash";
 import useQuery from "../../hooks/useQuery";
-import AuthContext from "../../context/authContext";
 import { getPets } from "../../services/pet.services";
 
-import { Row, Col, Spin, Carousel, Button, Tooltip, Divider, message } from "antd";
+import { Row, Col, Spin, Button, Tooltip, Divider, message } from "antd";
 import {
   LoadingOutlined,
-  LeftOutlined,
-  RightOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { HiLocationMarker } from "react-icons/hi";
-import { FaHeartbeat } from "react-icons/fa";
 
 import "./pet.scss";
 import { getAccount } from "../../services/auth.services";
@@ -24,13 +20,10 @@ function Pet() {
 
   useEffect(() => {
     fetchPets();
-  }, []);
+  },[]);
 
   const query = useQuery();
   const petID = query.get("petID");
-
-  const Auth = useContext(AuthContext);
-  const accountType = Auth.auth?.type;
 
   const fetchPets = async () => {
     setPetState({ ...petState, status: "loading" });
@@ -73,14 +66,6 @@ function Pet() {
 
   };
 
-  const contentStyle = {
-    height: "160px",
-    color: "#fff",
-    lineHeight: "160px",
-    textAlign: "center",
-    background: "#364d79",
-  };
-
   const descForVaccinated =
     "Vaccinations help prevent the pet from catching and spreading some serious infectious diseases, many of which can be fatal. We highly recommend pet owners to discuss with vet a vaccination plan that's right for the pet.";
   const descForSpayedOrNeutered =
@@ -115,6 +100,7 @@ function Pet() {
                         (image, index) => {
                           return (
                             <img
+                              alt="pet"
                               src={image}
                               key={index}
                               onClick={() => window.open(image.href)}
@@ -193,7 +179,7 @@ function Pet() {
                   </Col>
                   <Col {...rightColProps}>
                     <h3>Adoption fee</h3>
-                    <div>{petState.data.fee == 0? "FREE" : petState.data.fee}</div>
+                    <div>{petState.data.fee === 0? "FREE" : petState.data.fee}</div>
                     <Button type="primary" onClick={onClickAdopt}>
                       Apply for adoption
                     </Button>

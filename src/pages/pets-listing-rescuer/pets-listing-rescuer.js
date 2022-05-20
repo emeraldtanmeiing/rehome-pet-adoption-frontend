@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { omitBy, isNil } from "lodash";
 import useQuery from "../../hooks/useQuery";
 import { getPets } from "../../services/pet.services";
-import AuthContext from "../../context/authContext";
+import useAuthContext from "../../hooks/useAuthContext";
 
 import { Row, Col, Skeleton, Card, message } from "antd";
 import PetCard from "../../components/petCard/petCard";
@@ -14,7 +14,7 @@ function PetsListingSpecificRescuer() {
 
   useEffect(() => {
     fetchPets();
-  }, []);
+  },[]);
 
   const query = useQuery();
   const petID = query.get("petID");
@@ -54,16 +54,13 @@ function PetsListingSpecificRescuer() {
     );
   };
 
-  const Auth = useContext(AuthContext);
-  const accountType = Auth.auth?.type;
+  const { accountType } = useAuthContext();
 
   return (
     <div className="pets-listing-rescuer">
       <h1>My pets</h1> Pet listing for a specific rescuer page
 
       <div className="pets-listing-rescuer-container">
-
-        
 
         <div className="cards">
           {petState.status === "loading" && 

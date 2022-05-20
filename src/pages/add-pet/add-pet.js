@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import { omitBy, isNil, isEmpty } from "lodash";
 import { createPet } from "../../services/pet.services.js";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../../context/authContext";
+import useAuthContext from "../../hooks/useAuthContext.js";
 
 import {
   Form,
@@ -103,7 +103,7 @@ function AddPet() {
     },
   };
 
-  const Auth = useContext(AuthContext);
+  const { accountID } = useAuthContext();
   const navigate = useNavigate();
   const onFinish = async (values) => {
 
@@ -114,15 +114,14 @@ function AddPet() {
 
     setIsLoading(true);
     const pet = omitBy(values, isNil);
-    const rescuerID = Auth.auth?.accountID;
-    const res = await createPet({ pet, mainImage, images, rescuerID });
+    const res = await createPet({ pet, mainImage, images, accountID });
     
     if (res?.error) {
       message.error(res.error.description);
       setIsLoading(false);
     } else {
       message.success("Create pet successful!")
-      navigate(`/rescuer/pets?rescuerID=${rescuerID}`);
+      navigate(`/rescuer/pets?rescuerID=${accountID}`);
     }
 
   };
@@ -428,7 +427,7 @@ function AddPet() {
                   validator(_, value) {
                     if (
                       !value ||
-                      (value.length == 5 && value.match(/^[0-9]+$/) != null)
+                      (value.length === 5 && value.match(/^[0-9]+$/) != null)
                     ) {
                       return Promise.resolve();
                     }

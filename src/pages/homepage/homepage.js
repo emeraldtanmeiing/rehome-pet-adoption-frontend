@@ -1,18 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import AuthContext from "../../context/authContext";
 
-import { Form, Button, Input, message } from "antd";
+import { Button, message } from "antd";
 
 import "./homepage.scss";
-import { DribbbleCircleFilled } from "@ant-design/icons";
 
-// loading={loadings[0]}
 const Homepage = () => {
-  const Auth = useContext(AuthContext);
-
-  const accountType = Auth.auth?.type;
-  const accountID = Auth.auth?.accountID;
 
   const navigate = useNavigate();
   const onClickAdopt = () => {

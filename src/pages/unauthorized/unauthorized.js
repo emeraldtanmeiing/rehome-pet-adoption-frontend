@@ -1,23 +1,21 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Result, Button } from "antd";
-import AuthContext from "../../context/authContext";
+import useAuthContext from "../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 
 function Unauthorized() {
-  const Auth = useContext(AuthContext);
-  const accountType = Auth.auth?.type;
-  const accountID = Auth.auth?.accountID;
+  const { accountType, accountID } = useAuthContext();
 
   const navigate = useNavigate();
 
   const handleOnClick = () => {
     !accountID
       ? navigate("/")
-      : accountType == "adopter"
+      : accountType === "adopter"
       ? navigate("/")
-      : accountType == "rescuer"
+      : accountType === "rescuer"
       ? navigate("/rescuer/pets")
-      : accountType == "rescuer"
+      : accountType === "rescuer"
       ? navigate("/admin/dashboard")
       : navigate(-1);
   };
