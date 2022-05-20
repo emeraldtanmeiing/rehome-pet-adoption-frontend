@@ -5,11 +5,17 @@ import { Card, Col } from "antd";
 
 const { Meta } = Card;
 
-const PetCard = ({ pet }) => {
+const PetCard = ({ pet, accountType }) => {
   const navigate = useNavigate();
 
   const handleOnClick = () => {
-    navigate(`/rescuer/pet?petID=${pet._id}`);
+    
+    if (accountType === "rescuer") {
+      navigate(`/rescuer/pets?petID=${pet._id}`);
+    } else {
+      navigate(`/pets?petID=${pet._id}`);
+    }
+
   };
 
   return (

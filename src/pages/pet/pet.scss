@@ -1,0 +1,51 @@
+.pet {
+
+  .left {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .sliders {
+    display: flex;
+    overflow-x: scroll;
+    flex-direction: row;
+    height: 200px;
+
+    img {
+      max-width: 100%;
+      margin-right: 8px;
+    }
+
+    &::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+      border-radius: 100px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 100px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      opacity: 0;
+      height: 5px;
+    }
+  }
+
+  .brief {
+    border: 2px solid rgba(0, 41, 77, 0.3);
+    border-radius: 4px;
+  }
+
+  .details {
+    border: 2px solid rgba(0, 41, 77, 0.3);
+    border-radius: 4px;
+    margin: 5px;
+  }
+}

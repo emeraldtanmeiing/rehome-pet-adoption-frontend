@@ -3,24 +3,26 @@ import { Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 
 import Login from "./pages/login/login";
-import Pet from "./pages/pet";
-import PetsListing from "./pages/pets-listing";
+import Pet from "./pages/pet/pet";
+import PetsListing from "./pages/pets-listing/pets-listing";
 import AddPet from "./pages/add-pet/add-pet";
 
 import SignupRescuer from "./pages/signup-rescuer/signup-rescuer";
 import SignupAdopter from "./pages/signup-adopter/signup-adopter";
 import Unauthorized from "./pages/unauthorized/unauthorized";
 import PetsListingSpecificRescuer from "./pages/pets-listing-rescuer/pets-listing-rescuer";
+import Homepage from "./pages/homepage/homepage";
 
 export const AllRoutes = () => {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route exact path="/" element={<PetsListing />} />
+      <Route exact path="/" element={<Homepage />} />
       <Route exact path="/login" element={<Login />} />
       <Route exact path="/signup" element={<SignupAdopter />} />
       <Route exact path="/rescuer/signup" element={<SignupRescuer />} />
-      <Route exact path="/pets/:id" element={<Pet />} />
+      <Route exact path="/pets" element={<Pet />} />
+      <Route exact path="/adopt" element={<PetsListing />} />
 
       {/* Only open to login user */}
       <Route exact path="/" element={<ProtectedRouteRequireLogin />}>
@@ -33,7 +35,7 @@ export const AllRoutes = () => {
         path="/"
         element={<ProtectedRouteRequireType allowedTypes={["adopter"]} />}
       >
-        <Route exact path="/adopt" element={<PetsListing />} />
+        
       </Route>
 
       {/* Only open to rescuer */}

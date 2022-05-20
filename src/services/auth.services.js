@@ -157,3 +157,30 @@ export const refreshAccess = async () => {
     return false;
   }
 };
+
+export const getAccount = async (params) => {
+  const queryString = new URLSearchParams(params).toString();
+  const url = apiURL(`/auth?${queryString}`);
+
+  const accessToken = Cookies.get("accessToken");
+  try {
+    const res = await axios({
+      method: "GET",
+      url: url,
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    if (res?.data?.data) {
+      return res.data.data;
+    }
+  } catch (err) {
+    const errorFromApi = err.response?.data;
+    const callback = async () => await getAccount(params);
+    const error = await errorHandler({
+      error: errorFromApi,
+      callback: callback,
+      redirect: null,
+    });
+    return { error };
+  }
+};

@@ -122,7 +122,7 @@ function AddPet() {
       setIsLoading(false);
     } else {
       message.success("Create pet successful!.")
-      navigate("/rescuer/pets");
+      navigate(`/rescuer/pets?rescuerID=${rescuerID}`);
     }
 
   };
