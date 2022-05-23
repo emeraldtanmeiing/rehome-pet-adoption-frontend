@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Menu } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import AuthContext from "../../context/authContext";
-import Cookies from "js-cookie";
+import { logout } from "../../services/auth.services";
 
 const RightMenu = ({ mode }) => {
   const Auth = useContext(AuthContext);
@@ -12,11 +12,8 @@ const RightMenu = ({ mode }) => {
   const { pathname } = location;
 
   const handleLogout = () => {
+    logout();
     Auth.setAuth({});
-    Cookies.remove("accessToken");
-    Cookies.remove("refreshToken");
-    Cookies.remove("type");
-    Cookies.remove("accountID");
   };
 
   const MenuForPublic = (

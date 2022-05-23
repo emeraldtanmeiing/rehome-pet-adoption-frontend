@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import Cookies from "js-cookie";
 import AuthContext from "../../context/authContext";
 
 import { Form, Button, Input, message } from "antd";
@@ -8,7 +7,6 @@ import { login } from "../../services/auth.services.js";
 
 import "./login.scss";
 
-// loading={loadings[0]}
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,17 +22,8 @@ const Login = () => {
       message.error(res.error.description);
       setIsLoading(false);
     } else {
-      Cookies.remove("accessToken");
-      Cookies.remove("refreshToken");
-      Cookies.remove("type");
-      Cookies.remove("accountID");
 
       Auth.setAuth({ type: res.type, accountID: res.accountID });
-
-      Cookies.set("accessToken", res.accessToken);
-      Cookies.set("refreshToken", res.refreshToken);
-      Cookies.set("type", res.type);
-      Cookies.set("accountID", res.accountID);
 
       if (res.type === "adopter") {
         navigate("/");

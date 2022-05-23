@@ -104,9 +104,9 @@ function AddPet() {
   };
 
   const { accountID } = useAuthContext();
+  const rescuerID = accountID;
   const navigate = useNavigate();
   const onFinish = async (values) => {
-
     if(isEmpty(mainImage)){
       message.error("Please upload Main image.");
       return;
@@ -114,14 +114,14 @@ function AddPet() {
 
     setIsLoading(true);
     const pet = omitBy(values, isNil);
-    const res = await createPet({ pet, mainImage, images, accountID });
+    const res = await createPet({ pet, mainImage, images, rescuerID });
     
     if (res?.error) {
       message.error(res.error.description);
       setIsLoading(false);
     } else {
       message.success("Create pet successful!")
-      navigate(`/rescuer/pets?rescuerID=${accountID}`);
+      navigate(`/rescuer/pets?rescuerID=${rescuerID}`);
     }
 
   };

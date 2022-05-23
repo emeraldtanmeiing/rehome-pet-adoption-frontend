@@ -1,8 +1,13 @@
 .pet {
-
   .left {
     display: flex;
     justify-content: flex-start;
+  }
+
+  .outline {
+    border: 1px solid #d9d9d9;
+    box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
+    border-radius: 4px;
   }
 
   .sliders {
@@ -17,8 +22,8 @@
     }
 
     &::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
+      width: 7px;
+      height: 7px;
       border-radius: 100px;
     }
 
@@ -39,13 +44,48 @@
   }
 
   .brief {
-    border: 2px solid rgba(0, 41, 77, 0.3);
-    border-radius: 4px;
+    padding: 10px;
+  }
+
+  .adoption {
+    padding: 10px;
+    height: 120px;
+    background-color: rgb(243 132 52 / 50%);
+    border-color: transparent;
+    box-shadow: 0 1px 10px -2px rgb(243 132 52 / 16%),
+      0 3px 10px 0 rgb(243 132 52 / 12%), 0 5px 12px 10px rgb(243 132 52 / 9%);
   }
 
   .details {
-    border: 2px solid rgba(0, 41, 77, 0.3);
-    border-radius: 4px;
-    margin: 5px;
+    background-color: #f6f6f6;
+    margin: 0 5px;
+    padding: 8px;
+  }
+
+  .dot {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 1px;
+  }
+
+  .tips {
+    padding-top: 32px;
+  }
+
+  .links {
+    button {
+      padding: 0;
+      margin: 0;
+    }
+
+    a {
+      margin-right: 20px;
+    }
+  }
+
+  .anticon-question-circle {
+    padding: 0 3px;
   }
 }

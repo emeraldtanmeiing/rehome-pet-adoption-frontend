@@ -37,7 +37,7 @@ export const registerRescuer = async ({ account, image }) => {
     });
 
     if (res?.data?.data?.account) {
-      return res.data.data.account
+      return res.data.data.account;
     }
   } catch (err) {
     const errorFromApi = err.response?.data;
@@ -78,9 +78,9 @@ export const registerAdopter = async ({ account, image }) => {
       data: data,
       headers: { "Content-Type": "multipart/form-data" },
     });
-    
+
     if (res?.data?.data?.account) {
-      return res.data.data.account
+      return res.data.data.account;
     }
   } catch (err) {
     const errorFromApi = err.response?.data;
@@ -91,7 +91,6 @@ export const registerAdopter = async ({ account, image }) => {
     });
     return { error };
   }
-
 };
 
 export const login = async ({ email, password }) => {
@@ -108,7 +107,15 @@ export const login = async ({ email, password }) => {
     });
 
     if (res?.data?.data?.accessToken) {
-      return res.data.data;
+      const accountData = res.data.data;
+      logout();
+
+      Cookies.set("accessToken", accountData.accessToken);
+      Cookies.set("refreshToken", accountData.refreshToken);
+      Cookies.set("type", accountData.type);
+      Cookies.set("accountID", accountData.accountID);
+
+      return accountData;
     }
   } catch (err) {
     const errorFromApi = err.response?.data;
@@ -119,6 +126,13 @@ export const login = async ({ email, password }) => {
     });
     return { error };
   }
+};
+
+export const logout = () => {
+  Cookies.remove("accessToken");
+  Cookies.remove("refreshToken");
+  Cookies.remove("type");
+  Cookies.remove("accountID");
 };
 
 export const refreshAccess = async () => {
@@ -141,9 +155,9 @@ export const refreshAccess = async () => {
       Cookies.remove("refreshToken");
       Cookies.set("accessToken", res?.data?.data?.accessToken);
       Cookies.set("refreshToken", res?.data?.data?.refreshToken);
-      
+
       window.location.href = window.location.href; //force refresh page to update AuthContext
-      
+
       return true;
     }
   } catch (err) {

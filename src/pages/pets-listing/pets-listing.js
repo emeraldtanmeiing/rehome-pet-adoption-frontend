@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { omitBy, isNil } from "lodash";
+import { omitBy, isNil, sortBy } from "lodash";
 import useQuery from "../../hooks/useQuery";
 import useAuthContext from "../../hooks/useAuthContext";
 import { getPets } from "../../services/pet.services";
@@ -40,7 +40,9 @@ function PetsListing() {
     if (res?.error) {
       message.error(res.error.description);
     } else {
-      setPetState({ ...petState, status: "success", data: res });
+      const data = {...res, petsList: sortBy(res.petsList, "createdAt").reverse()}
+      setPetState({ ...petState, status: "success", data: data });
+     
     }
   };
 

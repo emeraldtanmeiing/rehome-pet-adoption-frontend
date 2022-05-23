@@ -339,6 +339,8 @@ function SignupRescuer() {
               name="facebookLink"
               label="Facebook Link"
               tooltip="Your organization's Facebook Page for verification and publicity purpose"
+              extra="Please provide complete link (eg. https://www.rehomepet.me)"
+              className="left"
             >
               <Input placeholder="Add your Facebook Page Link" />
             </Form.Item>
@@ -347,6 +349,8 @@ function SignupRescuer() {
               name="instagramLink"
               label="Instagram Link"
               tooltip="Your organization's Instagram Page for verification and publicity purpose"
+              extra="Please provide complete link (eg. https://www.rehomepet.me)"
+              className="left"
             >
               <Input placeholder="Add your Instagram Page Link" />
             </Form.Item>
@@ -355,6 +359,8 @@ function SignupRescuer() {
               name="organizationWebsiteLink"
               label="Website Link"
               tooltip="Your organization's Website for verification and publicity purpose"
+              extra="Please provide complete link (eg. https://www.rehomepet.me)"
+              className="left"
             >
               <AutoComplete options={websiteOptions} onChange={onWebsiteChange}>
                 <Input placeholder="Add your Organization's Website Link" />

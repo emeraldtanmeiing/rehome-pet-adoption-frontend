@@ -6,6 +6,7 @@ import { AllRoutes } from "./Routes";
 
 import Navbar from "./components/navbar";
 
+import "./App.less";
 import "./App.scss";
 
 function App() {
