@@ -1,4 +1,5 @@
 @import "~antd/dist/antd.css";
+@import 'fonts/fonts.css';
 
 html,
 body {
@@ -18,4 +19,13 @@ body {
   margin-bottom: 3rem;
   // background-color: aqua;
   padding: 10px 30px;
+
+  h1, h2, h3 {
+    font-weight: 900;
+  }
+
+  h4, h5, h6 {
+    font-style: italic;
+  }
 }
+

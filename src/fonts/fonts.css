@@ -1,0 +1,45 @@
+@font-face {
+    font-family: 'Zen Maru Gothic';
+    src: url('./ZenMaruGothic-Light.woff2') format('woff2'),
+        url('./ZenMaruGothic-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Zen Maru Gothic';
+    src: url('./ZenMaruGothic-Bold.woff2') format('woff2'),
+        url('./ZenMaruGothic-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Zen Maru Gothic';
+    src: url('./ZenMaruGothic-Black.woff2') format('woff2'),
+        url('./ZenMaruGothic-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Zen Maru Gothic';
+    src: url('./ZenMaruGothic-Medium.woff2') format('woff2'),
+        url('./ZenMaruGothic-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Zen Maru Gothic';
+    src: url('./ZenMaruGothic-Regular.woff2') format('woff2'),
+        url('./ZenMaruGothic-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

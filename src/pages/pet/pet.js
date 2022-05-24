@@ -174,7 +174,7 @@ function Pet() {
                     <Row>
                       <Col span={24}>
                         <h2>
-                          <strong>{petState.data.name.toUpperCase()}</strong>
+                          {petState.data.name.toUpperCase()}
                         </h2>
                       </Col>
                       <Col span={24} align="left">
