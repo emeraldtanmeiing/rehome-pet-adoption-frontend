@@ -3,6 +3,7 @@ import { useState } from "react";
 import Cookies from "js-cookie";
 import AuthContext from "./context/authContext";
 import { AllRoutes } from "./Routes";
+import { Helmet } from "react-helmet";
 
 import Navbar from "./components/navbar";
 
@@ -30,6 +31,9 @@ function App() {
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
       <div className="app">
+        <Helmet>
+          <title>{process.env.REACT_APP_TITLE}</title>
+        </Helmet>
         <Navbar />
         <div className="stack-screen">
           <AllRoutes />
