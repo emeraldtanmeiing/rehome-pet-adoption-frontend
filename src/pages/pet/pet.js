@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { omitBy, isNil, map, sortBy } from "lodash";
+import { useNavigate } from "react-router-dom";
 import useQuery from "../../hooks/useQuery";
 import useAuthContext from "../../hooks/useAuthContext";
 import { monthDifference, formatDate } from "../../helpers/date";
 import { getPets } from "../../services/pet.services";
+import { getAccount } from "../../services/auth.services";
+import getColorCodes from "../../helpers/color";
 
 import {
   Row,
@@ -13,6 +16,7 @@ import {
   Tooltip,
   Divider,
   Avatar,
+  Tag,
   message,
 } from "antd";
 import {
@@ -23,14 +27,13 @@ import {
   FacebookFilled,
   InstagramFilled,
   GlobalOutlined,
+  CheckCircleOutlined,
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
-import { HiLocationMarker } from "react-icons/hi";
+import { EnvironmentFilled } from "@ant-design/icons";
 import LoginModal from "../../components/login-modal/login-modal";
 
-import "./pet.scss";
-import { getAccount } from "../../services/auth.services";
-import { useNavigate } from "react-router-dom";
-import getColorCodes from "../../helpers/color";
+import "./pet.less";
 
 function Pet() {
   const [petState, setPetState] = useState({ status: "idle", data: null });
@@ -129,9 +132,9 @@ function Pet() {
   const descForDewormed =
     "Deworming the pet contributes to its health. We recommend pet owner to discuss with vet for a deworming plan.";
 
-  const leftColProps = { xxl: 16, xl: 16, lg: 16, md: 16, sm: 24, xs: 24 }
-  const rightColProps = { xxl: 8, xl: 8, lg: 8, md: 8, sm: 24, xs: 24 }
-  const detailsProps = { xxl: 6, xl: 6, lg: 6, md: 6, sm: 6, xs: 6 }
+  const leftColProps = { xxl: 16, xl: 16, lg: 16, md: 16, sm: 24, xs: 24 };
+  const rightColProps = { xxl: 8, xl: 8, lg: 8, md: 8, sm: 24, xs: 24 };
+  const detailsProps = { xxl: 6, xl: 6, lg: 6, md: 12, sm: 12, xs: 12 };
 
   return (
     <div className="pet">
@@ -167,47 +170,95 @@ function Pet() {
                     </div>
                   </Col>
                   <Col
-                    className="brief outline"
+                    className="brief-wrapper outline"
                     align="left"
                     {...rightColProps}
                   >
                     <Row>
                       <Col span={24}>
-                        <h2>
-                          {petState.data.name.toUpperCase()}
-                        </h2>
+                        <h2>{petState.data.name.toUpperCase()}</h2>
                       </Col>
-                      <Col span={24} align="left">
-                        <ul>
-                          <li>{petState.data.healthCondition}</li>
-                          <li>
-                            Vaccinated
-                            <Tooltip placement="top" title={descForVaccinated}>
-                              <QuestionCircleOutlined />
-                            </Tooltip>
-                            : {petState.data.vaccinated ? "Yes" : "No"}
-                          </li>
-                          <li>
-                            Dewormed
-                            <Tooltip placement="top" title={descForDewormed}>
-                              <QuestionCircleOutlined />
-                            </Tooltip>
-                            : {petState.data.dewormed ? "Yes" : "No"}
-                          </li>
-                          <li>
-                            Spayed/Neutered
-                            <Tooltip
-                              placement="top"
-                              title={descForSpayedOrNeutered}
+
+                      <Col span={24} align="left" className="brief">
+                        {petState.data.healthCondition == "healthy" ? (
+                          <Tooltip placement="top" title={descForVaccinated}>
+                            <Tag icon={<CheckCircleOutlined />} color="green">
+                              {petState.data.healthCondition}
+                            </Tag>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip placement="top" title={descForVaccinated}>
+                            <Tag
+                              icon={<ExclamationCircleOutlined />}
+                              color="red"
                             >
-                              <QuestionCircleOutlined />
-                            </Tooltip>
-                            : {petState.data.spayedOrNeutered ? "Yes" : "No"}
-                          </li>
-                        </ul>
+                              {petState.data.healthCondition}
+                            </Tag>
+                          </Tooltip>
+                        )}
+
+                        {petState.data.vaccinated ? (
+                          <Tooltip placement="top" title={descForVaccinated}>
+                            <Tag icon={<CheckCircleOutlined />} color="green">
+                              Vaccinated
+                            </Tag>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip placement="top" title={descForVaccinated}>
+                            <Tag
+                              icon={<ExclamationCircleOutlined />}
+                              color="red"
+                            >
+                              Not Vaccinated
+                            </Tag>
+                          </Tooltip>
+                        )}
+
+                        {petState.data.dewormed ? (
+                          <Tooltip placement="top" title={descForVaccinated}>
+                            <Tag icon={<CheckCircleOutlined />} color="green">
+                              Dewormed
+                            </Tag>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip placement="top" title={descForDewormed}>
+                            <Tag
+                              icon={<ExclamationCircleOutlined />}
+                              color="red"
+                            >
+                              Not Dewormed
+                            </Tag>
+                          </Tooltip>
+                        )}
+
+                        {petState.data.dewormed ? (
+                          <Tooltip placement="top" title={descForVaccinated}>
+                            <Tag icon={<CheckCircleOutlined />} color="green">
+                              Spayed/Neutered
+                            </Tag>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip
+                            placement="top"
+                            title={descForSpayedOrNeutered}
+                          >
+                            <Tag
+                              icon={<ExclamationCircleOutlined />}
+                              color="red"
+                            >
+                              Not Spayed/Neutered
+                            </Tag>
+                          </Tooltip>
+                        )}
                       </Col>
-                      <Col span={24} align="left">
-                        <HiLocationMarker style={{ color: "grey" }} />{" "}
+
+                      <Col span={24} align="left" className="location">
+                      {/* <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}
+                          {rescuerState.data.address}
+                          {", "}
+                          {rescuerState.data.city}, {rescuerState.data.country} */}
+
+                        <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}
                         {petState.data.city}, {petState.data.stateOrProvince}
                       </Col>
                     </Row>
@@ -217,57 +268,60 @@ function Pet() {
                 <Row gutter={[32, 16]}>
                   <Col align="left" {...leftColProps}>
                     <Row gutter={[32, 16]}>
+
                       <Col span={24} align="left">
                         <h5>Posted on {formatDate(petState.data.createdAt)}</h5>
                       </Col>
+                      
                       <Col className="description" span={24}>
                         {petState.data.description}
                       </Col>
 
                       <Divider />
-                      
+
                       <Col align="left" span={24}>
-                        <h2>More details</h2>
-                      </Col>
-                      <Col
-                        className="details outline"
-                        {...detailsProps}
-                      >
-                        <h3>Breed</h3>
-                        <div>{petState.data.breed}</div>
-                      </Col>
-                      <Col
-                        className="details outline"
-                        {...detailsProps}
-                      >
-                        <h3>Color</h3>
-                        {petState.data.colorCodes.map((c) => (
-                          <span
-                            class="dot outline"
-                            style={{ "background-color": c }}
-                          ></span>
-                        ))}
-                      </Col>
-                      <Col
-                        className="details outline"
-                        {...detailsProps}
-                      >
-                        <h3>Gender</h3>
-                        <div>{petState.data.gender}</div>
-                      </Col>
-                      <Col
-                        className="details outline"
-                        {...detailsProps}
-                      >
-                        <h3>Age</h3>
-                        <div>{petState.data.ageInMonths} month(s)</div>
-                      </Col>
-                      <Col
-                        className="details outline"
-                        {...detailsProps}
-                      >
-                        <h3>Food</h3>
-                        <div>Approximate 10kgs per month, around RM300</div>
+                        <Row>
+                          <h2>More details</h2>
+                        </Row>
+                        <Row gutter={[16, 16]}>
+                          <Col {...detailsProps}>
+                            <div className="details outline">
+                              <h3>Breed</h3>
+                              <div>{petState.data.breed}</div>
+                            </div>
+                          </Col>
+                          <Col {...detailsProps}>
+                            <div className="details outline">
+                              <h3>Color</h3>
+                              {petState.data.colorCodes.map((c) => (
+                                <span
+                                  class="dot outline"
+                                  style={{ "background-color": c }}
+                                ></span>
+                              ))}
+                            </div>
+                          </Col>
+                          <Col {...detailsProps}>
+                            <div className="details outline">
+                              <h3>Gender</h3>
+                              <div>{petState.data.gender}</div>
+                            </div>
+                          </Col>
+                          <Col {...detailsProps}>
+                            <div className="details outline">
+                              <h3>Age</h3>
+                              <div>{petState.data.ageInMonths} month(s)</div>
+                            </div>
+                          </Col>
+                          <Col {...detailsProps}>
+                            <div className="details outline">
+                              <h3>Food</h3>
+                              <div>
+                                Approximate -kgs per month, around RM-
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>
                       </Col>
                     </Row>
                     <Row gutter={[22, 22]} className="tips">
@@ -282,13 +336,18 @@ function Pet() {
                   </Col>
                   <Col className="adoption outline" {...rightColProps}>
                     <h4>Adoption fee</h4>
-                    <h3>
+                    <h2>
                       {petState.data.fee === 0
                         ? "FREE"
                         : `RM${petState.data.fee}`}
-                    </h3>
-                    <Button type="primary" onClick={onClickAdopt}>
-                      Apply for adoption
+                    </h2>
+                    <Button
+                      type="primary"
+                      size="large"
+                      style={{ width: "100%" }}
+                      onClick={onClickAdopt}
+                    >
+                      Adopt
                     </Button>
                   </Col>
                 </Row>
@@ -297,7 +356,7 @@ function Pet() {
 
                 <Row className="rescuer" gutter={[32, 16]}>
                   <Col align="left" span={24}>
-                    <h2>Rescuer Info </h2>
+                    <h2>Contact Person </h2>
                   </Col>
                   <Col
                     align="left"
@@ -310,7 +369,7 @@ function Pet() {
                       <Col>
                         <h3>{rescuerState.data.name}</h3>
                         <div>
-                          <HiLocationMarker style={{ color: "grey" }} />
+                          <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}
                           {rescuerState.data.address}
                           {", "}
                           {rescuerState.data.city}, {rescuerState.data.country}

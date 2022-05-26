@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { omitBy, isNil } from "lodash";
+import { omitBy, isNil, sortBy } from "lodash";
 import useQuery from "../../hooks/useQuery";
 import { getPets } from "../../services/pet.services";
 import useAuthContext from "../../hooks/useAuthContext";
+import { monthDifference } from "../../helpers/date";
 
-import { Row, Col, Skeleton, Card, message } from "antd";
+import { Row, Col, Skeleton, Card, Button, message } from "antd";
 import PetCard from "../../components/petCard/petCard";
 
 import "./pets-listing-rescuer.scss";
@@ -14,7 +15,7 @@ function PetsListingSpecificRescuer() {
 
   useEffect(() => {
     fetchPets();
-  },[]);
+  }, []);
 
   const query = useQuery();
   const petID = query.get("petID");
@@ -38,7 +39,19 @@ function PetsListingSpecificRescuer() {
     if (res?.error) {
       message.error(res.error.description);
     } else {
-      setPetState({ ...petState, status: "success", data: res });
+      res.petsList.map((pet) => {
+        const diffInMonths = monthDifference(
+          new Date(pet.createdAt),
+          new Date(Date.now())
+        );
+        const ageInMonths = parseInt(pet.ageInMonths) + diffInMonths;
+        pet.ageInMonths = ageInMonths;
+      });
+      const data = {
+        ...res,
+        petsList: sortBy(res.petsList, "createdAt").reverse(),
+      };
+      setPetState({ ...petState, status: "success", data: data });
     }
   };
 
@@ -58,36 +71,69 @@ function PetsListingSpecificRescuer() {
 
   return (
     <div className="pets-listing-rescuer">
-      <h1>My pets</h1> Pet listing for a specific rescuer page
-
-      <div className="pets-listing-rescuer-container">
-
+      <div className="pets-listing-rescuer-wrapper">
         <div className="cards">
-          {petState.status === "loading" && 
+          {petState.status === "loading" && (
             <>
-              <Row gutter={[30, 30]}>
+              <Row gutter={[30, 30]} className="loading">
                 {[...Array(12).keys()].map((index) => (
                   <CardSkeleton index={index} />
                 ))}
               </Row>
             </>
-          }
+          )}
 
-          {petState.status === "success" && 
+          {petState.status === "success" && (
             <>
-              <div className="search-bar"> Search bar will be implemented later </div>
-            
-              <h2>{petState.data.totalResultsFound} pets found</h2>
+              <Row>
+                <Col className="title" align="left">
+                  <div>
+                    <h1>My Pets</h1>
+                  </div>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col span={24} align="left">
+                  <h2>Recently added</h2>
+                </Col>
+              </Row>
+
+              <Row gutter={[30, 30]}>
+                {petState.data.petsList.slice(0,4).map((p) => (
+                  <PetCard pet={p} accountType={accountType} />
+                ))}
+              </Row>
+
+              <Row>
+                <Col span={24} align="left">
+                  <h2>All pets</h2>
+                </Col>
+              </Row>
+
+              <Row>
+              <Col className="filter-bar" align="left">
+                  <h4>{petState.data.totalResultsFound} pets found</h4>
+                  {/* <div>
+                    <Button href={`/adopt`}>All</Button>
+                  </div>
+                  <div>
+                    <Button href={`/adopt?type=cat`}>Cats</Button>
+                  </div>
+                  <div>
+                    <Button href={`/adopt?type=dog`}>Dogs</Button>
+                  </div> */}
+                </Col>
+              </Row>
 
               <Row gutter={[30, 30]}>
                 {petState.data.petsList.map((p) => (
-                  <PetCard pet={p} accountType={accountType}/>
+                  <PetCard pet={p} accountType={accountType} />
                 ))}
               </Row>
             </>
-          }
+          )}
         </div>
-
       </div>
     </div>
   );

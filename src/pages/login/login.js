@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import AuthContext from "../../context/authContext";
 
-import { Form, Button, Input, message } from "antd";
+import { Row, Col, Form, Button, Input, message } from "antd";
 import { login } from "../../services/auth.services.js";
 
 import "./login.scss";
@@ -22,7 +22,6 @@ const Login = () => {
       message.error(res.error.description);
       setIsLoading(false);
     } else {
-
       Auth.setAuth({ type: res.type, accountID: res.accountID });
 
       if (res.type === "adopter") {
@@ -47,11 +46,11 @@ const Login = () => {
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 3 },
+      sm: { span: 5 },
     },
     wrapperCol: {
-      xs: { span: 20 },
-      sm: { span: 21 },
+      xs: { span: 24 },
+      sm: { span: 18 },
     },
   };
 
@@ -72,50 +71,60 @@ const Login = () => {
     navigate("/signup");
   };
 
+  const gridProps = { xxl: 10, xl: 10, lg: 10, md: 24, sm: 24, xs: 24 }
+  
   return (
     <div className="login">
       <div className="login-form-wrapper">
-        Login (Rescuer, Adopter, Admin)
-        <div className="login-form">
-          <Form
-            name="login"
-            onFinish={onFinish}
-            validateMessages={validateMessages}
-            scrollToFirstError
-            {...formItemLayout}
-          >
-            <Form.Item
-              name="email"
-              label="Email"
-              rules={[{ required: true, type: "email" }]}
-            >
-              <Input placeholder="Type your email" />
-            </Form.Item>
-
-            <Form.Item
-              name="password"
-              label="Password"
-              rules={[{ required: true }]}
-            >
-              <Input.Password placeholder="Type your password" />
-            </Form.Item>
-
-            <Form.Item {...tailFormItemLayout}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={isLoading}
-                style={{ width: "100%" }}
+        <Row align="center">
+          <Col {...gridProps} align="center" >
+            <h1>Log In</h1>
+            <div className="login-form">
+              <Form
+                name="login"
+                onFinish={onFinish}
+                validateMessages={validateMessages}
+                scrollToFirstError
+                {...formItemLayout}
               >
-                Log in
-              </Button>
-            </Form.Item>
-          </Form>
+                <Form.Item
+                  name="email"
+                  label="Email"
+                  rules={[{ required: true, type: "email" }]}
+                >
+                  <Input placeholder="Type your email" />
+                </Form.Item>
 
-          <Button type="link" style={{ width: "100%" }} onClick={handleOnClick}>
-            Don't have an account? Sign up now!
-          </Button>
-        </div>
+                <Form.Item
+                  name="password"
+                  label="Password"
+                  rules={[{ required: true }]}
+                >
+                  <Input.Password placeholder="Type your password" />
+                </Form.Item>
+
+                <Form.Item {...tailFormItemLayout}>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={isLoading}
+                    style={{ width: "100%" }}
+                  >
+                    Log in
+                  </Button>
+                </Form.Item>
+              </Form>
+
+              <Button
+                type="link"
+                style={{ width: "100%" }}
+                onClick={handleOnClick}
+              >
+                Don't have an account? Sign up now!
+              </Button>
+            </div>
+          </Col>
+        </Row>
       </div>
     </div>
   );

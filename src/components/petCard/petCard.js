@@ -1,7 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../../helpers/date";
 
-import { Card, Col } from "antd";
+import { Card, Row, Col } from "antd";
+import { ClockCircleFilled, EnvironmentFilled } from "@ant-design/icons";
+
+import "./petCard.scss";
 
 const { Meta } = Card;
 
@@ -9,13 +13,11 @@ const PetCard = ({ pet, accountType }) => {
   const navigate = useNavigate();
 
   const handleOnClick = () => {
-    
     if (accountType === "rescuer") {
       navigate(`/rescuer/pets?petID=${pet._id}`);
     } else {
       navigate(`/pets?petID=${pet._id}`);
     }
-
   };
 
   return (
@@ -44,13 +46,38 @@ const PetCard = ({ pet, accountType }) => {
             </div>
           }
         >
-          <Meta
-            title={pet.name}
-          />
-
           <div className="pet-card-details">
-            <p className="type">{pet.type}</p>
-            <p className="age">{pet.age}</p>
+            {accountType === "rescuer" ? (
+              <Row>
+                <Col className="petName" span={24}>
+                  {pet.name.toUpperCase()}
+                </Col>
+                <Col span={24}>
+                  {pet.type} &#8226; {pet.ageInMonths} months
+                </Col>
+                <Col className="createdAt" span={24}>
+                  <ClockCircleFilled style={{ color: "#abaaaa" }} />{" "}
+                  {formatDate(pet.createdAt)}
+                </Col>
+                <Col className="location" span={24}>
+                  <EnvironmentFilled style={{ color: "#abaaaa" }} /> {pet.city},{" "}
+                  {pet.stateOrProvince}
+                </Col>
+              </Row>
+            ) : (
+              <Row>
+                <Col className="petName" span={24}>
+                  {pet.name.toUpperCase()}
+                </Col>
+                <Col span={24}>
+                  {pet.type} &#8226; {pet.ageInMonths} months
+                </Col>
+                <Col className="location" span={24}>
+                  <EnvironmentFilled style={{ color: "#abaaaa" }} /> {pet.city},{" "}
+                  {pet.stateOrProvince}
+                </Col>
+              </Row>
+            )}
           </div>
         </Card>
       </Col>

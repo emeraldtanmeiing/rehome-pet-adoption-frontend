@@ -3,18 +3,16 @@ import { omitBy, isNil, sortBy } from "lodash";
 import useQuery from "../../hooks/useQuery";
 import useAuthContext from "../../hooks/useAuthContext";
 import { getPets } from "../../services/pet.services";
+import { monthDifference } from "../../helpers/date";
+import { useNavigate } from "react-router-dom";
 
-import { Row, Col, Skeleton, Card, message } from "antd";
+import { Row, Col, Skeleton, Card, Button, message } from "antd";
 import PetCard from "../../components/petCard/petCard";
 
 import "./pets-listing.scss";
 
 function PetsListing() {
   const [petState, setPetState] = useState({ status: "idle", data: null });
-
-  useEffect(() => {
-    fetchPets();
-  },[]);
 
   const query = useQuery();
   const petID = query.get("petID");
@@ -28,21 +26,33 @@ function PetsListing() {
   const { accountType } = useAuthContext();
 
   const fetchPets = async () => {
+    console.log("fetchPets");
     setPetState({ ...petState, status: "loading" });
 
     const params = omitBy(
       { petID, type, name, ageInMonths, rescuerID, resultsPerPage, page },
       isNil
     );
-      //TODO: IMPORTANT: only get active pets
+
+    //TODO: IMPORTANT: only get active, non-adopted pets
     const res = await getPets(params);
 
     if (res?.error) {
       message.error(res.error.description);
     } else {
-      const data = {...res, petsList: sortBy(res.petsList, "createdAt").reverse()}
+      res.petsList.map((pet) => {
+        const diffInMonths = monthDifference(
+          new Date(pet.createdAt),
+          new Date(Date.now())
+        );
+        const ageInMonths = parseInt(pet.ageInMonths) + diffInMonths;
+        pet.ageInMonths = ageInMonths;
+      });
+      const data = {
+        ...res,
+        petsList: sortBy(res.petsList, "createdAt").reverse(),
+      };
       setPetState({ ...petState, status: "success", data: data });
-     
     }
   };
 
@@ -58,40 +68,51 @@ function PetsListing() {
     );
   };
 
+  useEffect(() => {
+    fetchPets();
+  }, []);
+
   return (
-    <div className="pets-listing-rescuer">
-      <h1>My pets</h1> Pet listing for a specific rescuer page
-
-      <div className="pets-listing-rescuer-container">
-
-        
-
+    <div className="pets-listing">
+      <div className="pets-listing-wrapper">
         <div className="cards">
-          {petState.status === "loading" && 
+          {petState.status === "loading" && (
             <>
-              <Row gutter={[30, 30]}>
+              <Row gutter={[30, 30]} className="loading">
                 {[...Array(12).keys()].map((index) => (
                   <CardSkeleton index={index} />
                 ))}
               </Row>
             </>
-          }
+          )}
 
-          {petState.status === "success" && 
+          {petState.status === "success" && (
             <>
-              <div className="search-bar"> Search bar will be implemented later </div>
-            
-              <h2>{petState.data.totalResultsFound} pets found</h2>
+              <Row>
+                <Col className="filter-bar" align="left">
+                  <div>
+                    <h1>{petState.data.totalResultsFound} pets found</h1>
+                  </div>
+                  <div>
+                    <Button href={`/adopt`}>All</Button>
+                  </div>
+                  <div>
+                    <Button href={`/adopt?type=cat`}>Cats</Button>
+                  </div>
+                  <div>
+                    <Button href={`/adopt?type=dog`}>Dogs</Button>
+                  </div>
+                </Col>
+              </Row>
 
               <Row gutter={[30, 30]}>
                 {petState.data.petsList.map((p) => (
-                  <PetCard pet={p} accountType={accountType}/>
+                  <PetCard pet={p} accountType={accountType} />
                 ))}
               </Row>
             </>
-          }
+          )}
         </div>
-
       </div>
     </div>
   );

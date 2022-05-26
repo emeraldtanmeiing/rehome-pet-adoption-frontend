@@ -1,9 +1,17 @@
 .add-pet {
-    .left {
-        .ant-radio-group, .ant-form-item-control-input-content, .ant-select-selection-item{
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-        }
+  .left {
+    .ant-radio-group,
+    .ant-form-item-control-input-content,
+    .ant-select-selection-item,
+    .ant-form-item-extra {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
     }
+  }
+
+  h1 {
+    margin-bottom: 30px;
+  }
+
 }

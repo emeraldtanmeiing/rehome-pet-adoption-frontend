@@ -10,7 +10,7 @@ module.exports = {
             modifyVars: { 
                 '@font-family': 'Zen Maru Gothic',
                 '@primary-color': '#f38434',
-                '@link-color': '#2f2f2f',
+                '@link-color': '#cd7333',
                 '@text-color': '#2f2f2f',
                 '@border-radius-base': '3px',
             },

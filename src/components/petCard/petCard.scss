@@ -1,0 +1,18 @@
+.pet-card-details {
+    padding-top: 10px;
+
+    .petName {
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .createdAt, .location {
+        font-size: 12px;
+        color: #9e9d9d;
+    }
+
+    .createdAt {
+        padding-top: 10px;
+    }
+    
+}

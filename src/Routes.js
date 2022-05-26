@@ -12,6 +12,7 @@ import SignupAdopter from "./pages/signup-adopter/signup-adopter";
 import Unauthorized from "./pages/unauthorized/unauthorized";
 import PetsListingSpecificRescuer from "./pages/pets-listing-rescuer/pets-listing-rescuer";
 import Homepage from "./pages/homepage/homepage";
+import Info from "./pages/info/info";
 
 export const AllRoutes = () => {
   return (
@@ -35,7 +36,7 @@ export const AllRoutes = () => {
         path="/"
         element={<ProtectedRouteRequireType allowedTypes={["adopter"]} />}
       >
-        
+        <Route exact path="/info" element={<Info />} />
       </Route>
 
       {/* Only open to rescuer */}

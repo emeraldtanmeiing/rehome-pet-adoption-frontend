@@ -1,0 +1,21 @@
+.pets-listing {
+  .filter-bar {
+    margin: 30px 0;
+    display: flex;
+    align-items: center;
+
+    a {
+      margin: 0;
+      margin-bottom: 5px;
+      border-radius: 24px;
+    }
+
+    div {
+      padding-right: 15px;
+    }
+  }
+
+  .loading {
+    margin-top: 60px;
+  }
+}

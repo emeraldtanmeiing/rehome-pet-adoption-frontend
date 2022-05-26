@@ -1,16 +1,21 @@
 .signup-adopter {
-  .signup-form-wrapper {
-    // box-shadow: 1.5px 1px 2px 1px rgb(0 0 0 / 25%);
-    // margin-bottom: 4em;
-    // border-radius: 10px;
-    color: #fcc43c;
-
-    .left {
-      .ant-select-selection-item, .ant-upload {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-      }
+  
+  .left {
+    .ant-select-selection-item,
+    .ant-upload {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
     }
+  }
+
+  .right {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  .signup-rescuer-button {
+    margin-bottom: 20px;
   }
 }
