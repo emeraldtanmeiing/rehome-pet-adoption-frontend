@@ -5,4 +5,5 @@ run `npm start` or `npm run start`
 push latest code to main branch, then run `vercel`
 
 TODO:
-- implement refresh token
+[/] - implement refresh token
+[ ] - do not show social media link icon if organization doesn't have that

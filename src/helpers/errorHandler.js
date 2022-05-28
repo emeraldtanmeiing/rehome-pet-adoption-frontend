@@ -1,8 +1,3 @@
-import { getErrorPath } from "ajv/dist/compile/util";
-import { camelCase, omitBy, isNil, find } from "lodash";
-// import useRefreshToken from "Hooks/refresh-token.hook";
-// import errors from "./errors.json";
-import Cookies from "js-cookie";
 import { refreshAccess } from "../services/auth.services.js";
 
 const errorHandler = async ({ error, callback = null, redirect = null }) => {

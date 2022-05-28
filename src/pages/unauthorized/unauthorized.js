@@ -14,7 +14,7 @@ function Unauthorized() {
       : accountType === "adopter"
       ? navigate("/")
       : accountType === "rescuer"
-      ? navigate("/rescuer/pets")
+      ? navigate("/rescuer/pets-listing")
       : accountType === "rescuer"
       ? navigate("/admin/dashboard")
       : navigate(-1);

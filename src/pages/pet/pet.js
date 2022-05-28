@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { omitBy, isNil, map, sortBy } from "lodash";
+import { omitBy, isNil, map, sortBy, trim } from "lodash";
 import { useNavigate } from "react-router-dom";
 import useQuery from "../../hooks/useQuery";
 import useAuthContext from "../../hooks/useAuthContext";
@@ -55,7 +55,7 @@ function Pet() {
   const fetchPets = async () => {
     setPetState({ ...petState, status: "loading" });
 
-    const params = omitBy({ petID }, isNil);
+    const params = omitBy({ petID }, v => isNil(v) || v.toString().trim() === '');
 
     const res = await getPets(params);
 
@@ -114,10 +114,10 @@ function Pet() {
       message.error(res.error.description);
       return;
     }
-    if (!res.account.infoID) {
-      navigate("/info");
+    if (!res.account.adoptionFormID) {
+      navigate("/adopt/form/new");
     } else {
-      navigate("application/new");
+      navigate("/adopt/application/new");
     }
   };
 
@@ -253,11 +253,6 @@ function Pet() {
                       </Col>
 
                       <Col span={24} align="left" className="location">
-                      {/* <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}
-                          {rescuerState.data.address}
-                          {", "}
-                          {rescuerState.data.city}, {rescuerState.data.country} */}
-
                         <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}
                         {petState.data.city}, {petState.data.stateOrProvince}
                       </Col>
@@ -268,13 +263,27 @@ function Pet() {
                 <Row gutter={[32, 16]}>
                   <Col align="left" {...leftColProps}>
                     <Row gutter={[32, 16]}>
-
                       <Col span={24} align="left">
                         <h5>Posted on {formatDate(petState.data.createdAt)}</h5>
                       </Col>
-                      
+
                       <Col className="description" span={24}>
                         {petState.data.description}
+                      </Col>
+
+                      <Col className="fee-explanation" span={24}>
+                        <h4 className="star">*</h4>
+                        <h4>
+                          All rescuers in ReHome have been verified, indicating
+                          that they are likely to be licenced non-governmental
+                          organisations (NGOs) or long-term pet rescue
+                          organisations. The adoption fee can assist the
+                          rescuers in covering operating costs, pet care,
+                          medical bills, and other expenses so that they can
+                          continue to save lives and help more animals in need.
+                          As a result, ReHome advises rescuers to charge a small
+                          fee.
+                        </h4>
                       </Col>
 
                       <Divider />
@@ -316,9 +325,7 @@ function Pet() {
                           <Col {...detailsProps}>
                             <div className="details outline">
                               <h3>Food</h3>
-                              <div>
-                                Approximate -kgs per month, around RM-
-                              </div>
+                              <div>Approximate -kgs per month, around RM-</div>
                             </div>
                           </Col>
                         </Row>
@@ -423,34 +430,6 @@ function Pet() {
                   </Col>
                 </Row>
               </Row>
-              {/* <div>name: {petState.data.name}</div> ---
-            <div>active: true</div>
-            <div>adopted: false</div>
-            <div>ageInMonths: 1</div>
-            <div>breed: "mix breed"</div>
-            <div>city: "Ulu Tiram"</div> ---
-            <div>color: ["White,Brown"]</div>
-            <div>country: "Malaysia"</div>
-            <div>createdAt: "2022-05-12T15:54:11.140Z"</div>
-            <div>description: "Introduce the pet to get a higher chance of adoption. i.e. how it was rescued, how is its typical day, what </div>is its favourite food and other relevant details. " ---
-            <div>dewormed: false</div> ---
-            <div>fee: 0</div>
-            <div>gender: "male"</div>
-            <div>healthCondition: "healthy"</div> ---
-            <div>images: [,…]</div>
-            <div>0: "https://res.cloudinary.com/emeraldtanmeiing/image/upload/v1652370849/rehome_pet_adoption/vpsu2mzpqdlur6g3wduf.jpg"</div>
-            <div>1: "https://res.cloudinary.com/emeraldtanmeiing/image/upload/v1652370849/rehome_pet_adoption/ywqffm8ezzxkfy2q4vs9.jpg"</div>
-            <div>2: "https://res.cloudinary.com/emeraldtanmeiing/image/upload/v1652370849/rehome_pet_adoption/h6qfctgwbkrjssie4unp.jpg"</div>
-            <div>3: "https://res.cloudinary.com/emeraldtanmeiing/image/upload/v1652370849/rehome_pet_adoption/z57elnxxebtjunezbeiv.jpg"</div>
-            <div>4: "https://res.cloudinary.com/emeraldtanmeiing/image/upload/v1652370850/rehome_pet_adoption/rdxxhblzsuwjmdj71vqs.jpg"</div>
-            <div>mainImage: "https://res.cloudinary.com/emeraldtanmeiing/image/upload/v1652370847/rehome_pet_adoption/xz7r3qvfsdpqgchoxzzg.</div>jpg"
-            <div>name: "lucky"</div> ---
-            <div>postcode: "11111"</div>
-            <div>rescuerID: "627be23dd12a118257594746"</div>
-            <div>spayedOrNeutered: false</div> ---
-            <div>stateOrProvince: "Selangor"</div> ---
-            <div>type: "dog"</div>
-            <div>vaccinated: false</div> ---*/}
             </>
           )}
         </div>

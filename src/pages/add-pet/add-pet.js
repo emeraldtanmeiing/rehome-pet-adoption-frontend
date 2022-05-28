@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { omitBy, isNil, isEmpty } from "lodash";
+import { omitBy, isNil, isEmpty, trim } from "lodash";
 import { createPet } from "../../services/pet.services.js";
 import { useNavigate } from "react-router-dom";
 import useAuthContext from "../../hooks/useAuthContext.js";
@@ -112,7 +112,7 @@ function AddPet() {
     }
 
     setIsLoading(true);
-    const pet = omitBy(values, isNil);
+    const pet = omitBy(values, v => isNil(v) || v.toString().trim() === '');
     const res = await createPet({ pet, mainImage, images, rescuerID });
 
     if (res?.error) {

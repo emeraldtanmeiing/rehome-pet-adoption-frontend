@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { omitBy, isNil, sortBy } from "lodash";
+import { omitBy, isNil, sortBy, trim } from "lodash";
 import useQuery from "../../hooks/useQuery";
 import { getPets } from "../../services/pet.services";
 import useAuthContext from "../../hooks/useAuthContext";
@@ -31,7 +31,7 @@ function PetsListingSpecificRescuer() {
 
     const params = omitBy(
       { petID, type, name, ageInMonths, rescuerID, resultsPerPage, page },
-      isNil
+      v => isNil(v) || v.toString().trim() === ''
     );
 
     const res = await getPets(params);

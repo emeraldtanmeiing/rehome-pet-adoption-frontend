@@ -12,7 +12,7 @@ import SignupAdopter from "./pages/signup-adopter/signup-adopter";
 import Unauthorized from "./pages/unauthorized/unauthorized";
 import PetsListingSpecificRescuer from "./pages/pets-listing-rescuer/pets-listing-rescuer";
 import Homepage from "./pages/homepage/homepage";
-import Info from "./pages/info/info";
+import AdoptionForm from "./pages/adoptionForm/adoptionForm";
 
 export const AllRoutes = () => {
   return (
@@ -23,7 +23,7 @@ export const AllRoutes = () => {
       <Route exact path="/signup" element={<SignupAdopter />} />
       <Route exact path="/rescuer/signup" element={<SignupRescuer />} />
       <Route exact path="/pets" element={<Pet />} />
-      <Route exact path="/adopt" element={<PetsListing />} />
+      <Route exact path="/pets-listing" element={<PetsListing />} />
 
       {/* Only open to login user */}
       <Route exact path="/" element={<ProtectedRouteRequireLogin />}>
@@ -36,7 +36,7 @@ export const AllRoutes = () => {
         path="/"
         element={<ProtectedRouteRequireType allowedTypes={["adopter"]} />}
       >
-        <Route exact path="/info" element={<Info />} />
+        <Route exact path="/adopt/form/new" element={<AdoptionForm />} />
       </Route>
 
       {/* Only open to rescuer */}
@@ -45,7 +45,7 @@ export const AllRoutes = () => {
         path="/"
         element={<ProtectedRouteRequireType allowedTypes={["rescuer"]} />}
       >
-        <Route exact path="/rescuer/pets" element={<PetsListingSpecificRescuer />} />
+        <Route exact path="/rescuer/pets-listing" element={<PetsListingSpecificRescuer />} />
         <Route exact path="/rescuer/pets/upload" element={<AddPet />} />
       </Route>
       

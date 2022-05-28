@@ -1,0 +1,71 @@
+.adoptionForm {
+  .fade-in {
+    opacity: 1;
+    animation-name: fadeInOpacity;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 0.5s;
+  }
+
+  @keyframes fadeInOpacity {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .adoptionForm-wrapper {
+    margin-top: 30px;
+  }
+
+  .adoptionForm-description {
+    padding-top: 20px;
+    div {
+      font-size: 1.1em;
+    }
+
+  }
+
+  .adoptionForm-form {
+    margin-top: 30px;
+  }
+
+  .ant-form-item {
+    margin-bottom: 50px;
+  }
+
+  // .ant-radio-group,
+  .ant-form-item-control-input-content,
+  .ant-select-selection-item,
+  .ant-select-selection-placeholder,
+  .ant-form-item-extra {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  @media (max-width: 767px) {
+    .adoptionForm-form-wrapper {
+      margin-top: 10px;
+    }
+
+    .adoptionForm-description-title > h1 {
+      font-size: 1.4em;
+    }
+
+    .adoptionForm-description {
+      padding-top: 10px;
+      div {
+        font-size: 0.9em;
+        // text-align: justify;
+      }
+    }
+
+    .ant-form-item-extra {
+      font-size: 0.8em;
+    }
+  }
+}

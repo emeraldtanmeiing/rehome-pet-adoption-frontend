@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { omitBy, isNil, unset } from "lodash";
+import { omitBy, isNil, unset, trim } from "lodash";
 import { useNavigate } from "react-router-dom";
 import { registerAdopter } from "../../services/auth.services.js";
 
@@ -71,7 +71,7 @@ function SignupAdopter() {
   const navigate = useNavigate();
   const onFinish = async (values) => {
     setIsLoading(true);
-    const account = omitBy(values, isNil);
+    const account = omitBy(values, v => isNil(v) || v.toString().trim() === '');
 
     const res = await registerAdopter({ account, image });
 
