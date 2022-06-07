@@ -26,7 +26,6 @@ function PetsListing() {
   const { accountType } = useAuthContext();
 
   const fetchPets = async () => {
-    console.log("fetchPets");
     setPetState({ ...petState, status: "loading" });
 
     const params = omitBy(

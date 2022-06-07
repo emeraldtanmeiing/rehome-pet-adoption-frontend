@@ -24,17 +24,22 @@ const Homepage = () => {
         Homepage
         <div className="button">
           <Button type="primary" onClick={onClickAdopt}>
-            Browse to-be-adopted pets
+            Browse available pets
           </Button>
         </div>
         <div className="button">
           <Button type="primary" onClick={onClickUploadPets}>
-            Upload a pet
+            Upload a to-be-adopted pet
           </Button>
         </div>
         <div className="button">
           <Button disabled type="primary" onClick={onClickevents}>
             Browse pet adoption event
+          </Button>
+        </div>
+        <div className="button">
+          <Button disabled type="primary" onClick={onClickevents}>
+            Successful pet adoption story
           </Button>
         </div>
       </div>

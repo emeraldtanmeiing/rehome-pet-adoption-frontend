@@ -65,7 +65,7 @@ function AdoptionForm() {
 
   const navigate = useNavigate();
   const onFinish = async (values) => {
-    // setIsLoading(true);
+    setIsLoading(true);
     const adoptionForm = omitBy(values, v => isNil(v) || v.toString().trim() === '');
 
     const res = await createAdoptionForm({ adoptionForm });

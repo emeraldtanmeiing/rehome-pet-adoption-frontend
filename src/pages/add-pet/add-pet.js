@@ -43,7 +43,6 @@ function AddPet() {
 
   const normFile = (uploadEvent) => {
     if (Array.isArray(uploadEvent)) {
-      console.log("in if");
       return uploadEvent;
     }
   };

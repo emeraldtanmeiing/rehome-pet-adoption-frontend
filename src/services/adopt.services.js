@@ -21,11 +21,9 @@ export const createAdoptionForm = async ({ adoptionForm }) => {
       },
     });
 
-
-    console.log({res})
-    // if (res?.data?.data?.pet) {
-    //   return res.data.data.pet;
-    // }
+    if (res?.data?.data?.newAdoptionForm || res?.data?.data?.updatedAdoptionForm) {
+      return res?.data?.data?.newAdoptionForm || res?.data?.data?.updatedAdoptionForm;
+    }
   } catch (err) {
     const errorFromApi = err.response?.data;
     const callback = async () => await createAdoptionForm({ adoptionForm });

@@ -7,3 +7,13 @@ push latest code to main branch, then run `vercel`
 TODO:
 [/] - implement refresh token
 [ ] - do not show social media link icon if organization doesn't have that
+[ ] - change cookie key
+[ ] - add notification on homepage: This is a dummy website
+[ ] - footer
+[ ] - open another tab when click on social media link
+[ ] - pet page tags tooltip only show vaccinations in mobile view 
+[ ] - loading speed
+[ ] - food details in pet page
+[ ] - 
+[ ] - 
+[ ] - 

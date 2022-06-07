@@ -6,7 +6,7 @@ const errorHandler = async ({ error, callback = null, redirect = null }) => {
   // const matchedError = find(errors, e => e.errorCode === error.errorCode);
   // let errorDescription = matchedError?.description;
   const defaultDescription =
-    "Oops. Something went wrong. Please try again later.";
+    "Oops. Something went wrong. Please refresh the page or contact us for help.";
 
   if (error?.errorObject === "TokenExpiredError jwt expired") {
     const isRefreshSuccess = await refreshAccess();

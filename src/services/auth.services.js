@@ -201,3 +201,48 @@ export const getAccount = async (params) => {
     return { error };
   }
 };
+
+export const updateAccount = async ({ account, image }) => {
+  const url = apiURL("/auth");
+  // account.phone = `${account.prefix}${account.phone}`;
+  // unset(account, "prefix");
+
+  const data = new FormData();
+  if (image) {
+    data.append("image", image);
+  }
+  for (const i in account) {
+    data.append(i, account[i]);
+  }
+
+  // print values in form data
+  // for (var pair of data.entries()) {
+  //   console.log(pair[0] + ", " + pair[1]);
+  // }
+
+  const accessToken = Cookies.get("accessToken");
+
+  try {
+    const res = await axios({
+      method: "PUT",
+      url: url,
+      data: data,
+      headers: {
+        "Authorization": `Bearer ${accessToken}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    if (res?.data?.data?.updatedAccount) {
+      return res.data.data.updatedAccount;
+    }
+  } catch (err) {
+    const errorFromApi = err.response?.data;
+    const error = await errorHandler({
+      error: errorFromApi,
+      callback: null,
+      redirect: null,
+    });
+    return { error };
+  }
+};

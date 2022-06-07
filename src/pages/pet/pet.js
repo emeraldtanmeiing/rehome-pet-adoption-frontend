@@ -114,6 +114,7 @@ function Pet() {
       message.error(res.error.description);
       return;
     }
+    localStorage.setItem("toBeAppliedPet", JSON.stringify(petState.data._id))
     if (!res.account.adoptionFormID) {
       navigate("/adopt/form/new");
     } else {
