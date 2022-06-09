@@ -117,19 +117,6 @@ function AdoptionForm() {
                   numberOfHousemate: 1,
                   currentNumberOfPets: 0,
                   pastNumberOfPets: 0,
-
-                  //TODO: IMPORTANT: uncomment later
-                  caregiver: "Yes.",
-                  preparation: "I have prepare this.",
-                  typicalDay: "My dog will wake up at around 7am.",
-                  livingSituation: "Landed property.",
-                  petLivingSituation: "Indoor",
-                  housemateAcknowledgement: "everyoneExcited",
-                  reasonOfAdoption: "I have financial ability now.",
-                  remark: "Could I adopt...",
-                  interestedPetTypes: [ 'Cat' ],
-                  currentPetTypes: [ 'Bird', 'Hamster' ],
-                  pastPetTypes: [ 'Bird', 'Cat' ],
                 }}
                 scrollToFirstError
                 {...formItemLayout}
