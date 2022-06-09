@@ -41,6 +41,13 @@ const RescuerForm = ({ accountID = null, editable = true }) => {
       let fields = [];
       let a = res.account;
       fields.push({
+        name: "image",
+        label: "Image",
+        value: a.image,
+        editable: true,
+        type: "image",
+      });
+      fields.push({
         name: "name",
         label: "Name",
         value: a.name,
@@ -100,22 +107,15 @@ const RescuerForm = ({ accountID = null, editable = true }) => {
         required: true,
       });
       fields.push({
-        name: "image",
-        label: "Image",
-        value: a.image,
-        editable: true,
-        type: "image",
-      });
-      fields.push({
-        name: "description",
-        label: "Description",
-        value: a.description,
-        editable: true,
-      });
-      fields.push({
         name: "verified",
         label: "Verified",
         value: a.verified,
+        editable: false,
+      });
+      fields.push({
+        name: "licenseNo",
+        label: "License No",
+        value: a.licenseNo,
         editable: true,
       });
       fields.push({
@@ -123,24 +123,31 @@ const RescuerForm = ({ accountID = null, editable = true }) => {
         label: "Facebook Link",
         value: a.facebookLink,
         editable: true,
+        type: "website",
+        extra:"Please provide complete link (eg. https://www.rehomepet.me)"
       });
       fields.push({
         name: "instagramLink",
         label: "Instagram Link",
         value: a.instagramLink,
         editable: true,
+        type: "website",
+        extra:"Please provide complete link (eg. https://www.rehomepet.me)"
       });
       fields.push({
         name: "organizationWebsiteLink",
         label: "Website Link",
         value: a.organizationWebsiteLink,
         editable: true,
+        type: "website",
+        extra:"Please provide complete link (eg. https://www.rehomepet.me)"
       });
       fields.push({
-        name: "licenseNo",
-        label: "License No",
-        value: a.licenseNo,
+        name: "description",
+        label: "Description",
+        value: a.description,
         editable: true,
+        type: "textArea"
       });
 
       setAccountFields({ ...accountFields, status: "success", data: fields });

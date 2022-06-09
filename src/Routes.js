@@ -14,8 +14,13 @@ import AddPet from "./pages/add-pet/add-pet";
 import PetsListingSpecificRescuer from "./pages/pets-listing-rescuer/pets-listing-rescuer";
 import AdoptionForm from "./pages/adoptionForm/adoptionForm";
 import AdoptionApplication from "./pages/adoptionApplication/adoptionApplication";
+import AdopterForm from "./components/adopterForm/adopterForm";
+import RescuerForm from "./components/rescuerForm/rescuerForm";
 
 export const AllRoutes = () => {
+  const accessToken = Cookies.get("accessToken");
+  const accountType = Cookies.get("type");
+
   return (
     <Routes>
       {/* Public Routes */}
@@ -29,6 +34,7 @@ export const AllRoutes = () => {
       {/* Only open to login user */}
       <Route exact path="/" element={<ProtectedRouteRequireLogin />}>
         <Route exact path="/unauthorized" element={<Unauthorized />} />
+        <Route exact path="/profile" element={accountType == "adopter" ? <AdopterForm /> : <RescuerForm />} />
       </Route>
 
       {/* Only open to adopter */}

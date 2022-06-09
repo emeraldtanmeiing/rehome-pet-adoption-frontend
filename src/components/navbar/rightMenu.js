@@ -29,7 +29,7 @@ const RightMenu = ({ mode }) => {
 
   const MenuForLoginUser = (
     <>
-      <Menu.Item disabled={true}>
+      <Menu.Item>
         <Link to={"/profile"}>My Profile</Link>
       </Menu.Item>
       <Menu.Item onClick={handleLogout}>Logout</Menu.Item>

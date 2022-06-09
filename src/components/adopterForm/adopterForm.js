@@ -40,6 +40,13 @@ const AdopterForm = ({ accountID = null, editable = true }) => {
       let fields = [];
       let a = res.account;
       fields.push({
+        name: "image",
+        label: "Image",
+        value: a.image,
+        editable: true,
+        type: "image",
+      });
+      fields.push({
         name: "name",
         label: "Name",
         value: a.name,
@@ -97,13 +104,6 @@ const AdopterForm = ({ accountID = null, editable = true }) => {
         value: a.country,
         editable: false,
         required: true,
-      });
-      fields.push({
-        name: "image",
-        label: "Image",
-        value: a.image,
-        editable: true,
-        type: "image",
       });
       setAccountFields({ ...accountFields, status: "success", data: fields });
 
