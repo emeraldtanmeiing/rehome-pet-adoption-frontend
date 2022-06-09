@@ -33,7 +33,7 @@ function PetsListing() {
       v => isNil(v) || v.toString().trim() === ''
     );
 
-    //TODO: IMPORTANT: only get active, non-adopted pets
+    //TODO: IMPORTANT: only get {active:true, adopted:false} pets
     const res = await getPets(params);
 
     if (res?.error) {
@@ -79,7 +79,7 @@ function PetsListing() {
             <>
               <Row gutter={[30, 30]} className="loading">
                 {[...Array(12).keys()].map((index) => (
-                  <CardSkeleton index={index} />
+                  <CardSkeleton index={index} key={index}/>
                 ))}
               </Row>
             </>

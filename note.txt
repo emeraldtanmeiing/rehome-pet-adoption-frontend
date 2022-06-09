@@ -14,6 +14,6 @@ TODO:
 [ ] - pet page tags tooltip only show vaccinations in mobile view 
 [ ] - loading speed
 [ ] - food details in pet page
-[ ] - 
+[ ] - pet change age need to add date.now() to pet.updatedAt, not pet.createdAt
 [ ] - 
 [ ] - 

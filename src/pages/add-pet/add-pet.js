@@ -149,9 +149,9 @@ function AddPet() {
                 onFinish={onFinish}
                 validateMessages={validateMessages}
                 initialValues={{
-                  type: "dog",
-                  gender: "male",
-                  healthCondition: "healthy",
+                  type: "Dog",
+                  gender: "Male",
+                  healthCondition: "Healthy",
                   stateOrProvince: "Selangor",
                   fee: 0,
                   vaccinated: false,
@@ -173,8 +173,8 @@ function AddPet() {
                   className="left"
                 >
                   <Radio.Group style={{ width: "100%" }} buttonStyle="solid">
-                    <Radio.Button value="dog">Dog</Radio.Button>
-                    <Radio.Button value="cat">Cat</Radio.Button>
+                    <Radio.Button value="Dog">Dog</Radio.Button>
+                    <Radio.Button value="Cat">Cat</Radio.Button>
                   </Radio.Group>
                 </Form.Item>
 
@@ -217,8 +217,8 @@ function AddPet() {
                   className="left"
                 >
                   <Radio.Group style={{ width: "100%" }} buttonStyle="solid">
-                    <Radio.Button value="male">Male</Radio.Button>
-                    <Radio.Button value="female">Female</Radio.Button>
+                    <Radio.Button value="Male">Male</Radio.Button>
+                    <Radio.Button value="Female">Female</Radio.Button>
                   </Radio.Group>
                 </Form.Item>
 
@@ -318,15 +318,15 @@ function AddPet() {
                   className="left"
                 >
                   <Radio.Group style={{ width: "100%" }} buttonStyle="solid">
-                    <Radio.Button value="healthy">healthy</Radio.Button>
-                    <Radio.Button value="minor injury">
-                      minor injury
+                    <Radio.Button value="Healthy">Healthy</Radio.Button>
+                    <Radio.Button value="Minor injury">
+                      Minor injury
                     </Radio.Button>
-                    <Radio.Button value="serious injury">
-                      serious injury
+                    <Radio.Button value="Serious injury">
+                      Serious injury
                     </Radio.Button>
-                    <Radio.Button value="chronic disease">
-                      chronic disease
+                    <Radio.Button value="Chronic disease">
+                      Chronic disease
                     </Radio.Button>
                   </Radio.Group>
                 </Form.Item>

@@ -191,11 +191,24 @@ function SignupAdopter() {
                 <Form.Item
                   name="phone"
                   label="Phone"
-                  rules={[{ required: true }]}
+                  rules={[
+                    { required: true },
+                    () => ({
+                      validator(_, value) {
+                        if (!value || value.match(/^[0-9]+$/) != null) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(
+                          new Error("Phone should be numeric.")
+                        );
+                      },
+                    }),
+                  ]}
                 >
                   <Input
                     addonBefore={prefixSelector}
-                    placeholder="Type your phone"
+                    placeholder="Type your phone (eg. 1112222, with no dash(-))"
                   />
                 </Form.Item>
 

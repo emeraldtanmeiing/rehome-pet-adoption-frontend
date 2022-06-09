@@ -163,7 +163,7 @@ function Pet() {
                               alt="pet"
                               src={image}
                               key={index}
-                              onClick={() => window.open(image.href)}
+                              onClick={() => window.open(image)}
                             />
                           );
                         }
@@ -181,7 +181,7 @@ function Pet() {
                       </Col>
 
                       <Col span={24} align="left" className="brief">
-                        {petState.data.healthCondition == "healthy" ? (
+                        {petState.data.healthCondition == "Healthy" ? (
                           <Tooltip placement="top" title={descForVaccinated}>
                             <Tag icon={<CheckCircleOutlined />} color="green">
                               {petState.data.healthCondition}
@@ -306,7 +306,7 @@ function Pet() {
                               {petState.data.colorCodes.map((c) => (
                                 <span
                                   class="dot outline"
-                                  style={{ "background-color": c }}
+                                  style={{ "backgroundColor": c }}
                                 ></span>
                               ))}
                             </div>

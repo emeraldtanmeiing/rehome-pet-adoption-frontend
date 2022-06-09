@@ -1,11 +1,23 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { map } from "lodash";
 
-import { Row, Col, Input, Button, Form, Upload, Avatar, message } from "antd";
+import {
+  Row,
+  Col,
+  Input,
+  Button,
+  Form,
+  Upload,
+  Avatar,
+  Select,
+  Grid,
+  message,
+} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
 import "./editableForm.less";
 
+const { Option } = Select;
 const EditableContext = React.createContext();
 
 const EditableFormItem = ({
@@ -16,12 +28,12 @@ const EditableFormItem = ({
   extra,
   type,
   editable = false,
+  required,
   editing,
   setImage,
   ...restProps
 }) => {
   const inputRef = useRef(value);
-  // const [image, setImage] = useState(null);
 
   const normFile = (uploadEvent) => {
     if (Array.isArray(uploadEvent)) {
@@ -62,7 +74,17 @@ const EditableFormItem = ({
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item name={name} label={label} extra={extra} key={key}>
-            <Avatar size={96} src={value} id="image-id" />
+            <div className="image">
+              <img alt="image" src={value} onClick={() => window.open(value)} />
+            </div>
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "textArea") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item name={name} label={label} extra={extra} key={key}>
+            <Input.TextArea rows={20} disabled />
           </Form.Item>
         </Col>
       );
@@ -76,6 +98,7 @@ const EditableFormItem = ({
       );
     }
   } else {
+    //TODO: add boolean, integer, healthCondition, images, color
     if (type == "image") {
       formItem = (
         <Form.Item
@@ -84,6 +107,7 @@ const EditableFormItem = ({
           valuePropName={name}
           getValueFromEvent={normFile}
           className="left"
+          required={required}
         >
           <Upload
             name={name}
@@ -101,6 +125,108 @@ const EditableFormItem = ({
           </Upload>
         </Form.Item>
       );
+    } else if (type == "textArea") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Input.TextArea rows={20} ref={inputRef} />
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "stateOrProvince") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Select placeholder="Select your state or province">
+              <Option value="Selangor">Selangor</Option>
+              <Option value="Kuala Lumpur">Kuala Lumpur</Option>
+              <Option value="Putrajaya">Putrajaya</Option>
+              <Option value="Negeri Sembilan">Negeri Sembilan</Option>
+              <Option value="Johor">Johor</Option>
+              <Option value="Melaka">Melaka</Option>
+              <Option value="Kedah">Kedah</Option>
+              <Option value="Kelantan">Kelantan</Option>
+              <Option value="Pahang">Pahang</Option>
+              <Option value="Perak">Perak</Option>
+              <Option value="Perlis">Perlis</Option>
+              <Option value="Pulau Pinang">Pulau Pinang</Option>
+              <Option value="Terengganu">Terengganu</Option>
+              <Option value="Sabah">Sabah</Option>
+              <Option value="Sarawak">Sarawak</Option>
+              <Option value="Labuan">Labuan</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "postcode") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            rules={[
+              {
+                required: required,
+              },
+              () => ({
+                validator(_, value) {
+                  if (
+                    !value ||
+                    (value.length == 5 && value.match(/^[0-9]+$/) != null)
+                  ) {
+                    return Promise.resolve();
+                  }
+
+                  return Promise.reject(
+                    new Error("Postcode should be five digit numeric.")
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "phone") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            rules={[
+              { required: required },
+              () => ({
+                validator(_, value) {
+                  if (!value || value.match(/^[0-9]+$/) != null) {
+                    return Promise.resolve();
+                  }
+
+                  return Promise.reject(new Error("Phone should be numeric."));
+                },
+              }),
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+      );
     } else {
       formItem = (
         <Col>
@@ -110,7 +236,7 @@ const EditableFormItem = ({
             extra={extra}
             rules={[
               {
-                required: true,
+                required: required,
                 message: `${label} is required.`,
               },
             ]}
@@ -125,7 +251,7 @@ const EditableFormItem = ({
   return <div {...restProps}>{formItem}</div>;
 };
 
-const EditableForm = ({ fields, api }) => {
+const EditableForm = ({ fields, api, editable = true }) => {
   let formattedFields = fields.map((item) => ({ [item.name]: item.value }));
   formattedFields = Object.assign({}, ...formattedFields);
 
@@ -173,6 +299,9 @@ const EditableForm = ({ fields, api }) => {
       ...validationResult,
       ...(image && { image }),
     });
+    if(!res){
+      form.setFieldsValue(data);
+    }
     if (res) {
       setData({
         ...data,
@@ -195,6 +324,8 @@ const EditableForm = ({ fields, api }) => {
   };
 
   const [form] = Form.useForm();
+
+  const breakpoint = Grid.useBreakpoint();
 
   return (
     <div className="editable-form">
@@ -219,7 +350,7 @@ const EditableForm = ({ fields, api }) => {
                 Cancel
               </Button>
             </>
-          ) : (
+          ) : editable ? (
             <>
               <Col>
                 <Button
@@ -231,26 +362,35 @@ const EditableForm = ({ fields, api }) => {
                 </Button>
               </Col>
             </>
+          ) : (
+            <></>
           )}
         </Col>
 
         <Col span={24}>
           <Form form={form}>
-            <Row gutter={48}>
+            <Row gutter={12}>
               <EditableContext.Provider value={form}>
                 {map(fields, (field, index) => {
                   return (
-                    <EditableFormItem
-                      key={index}
-                      name={field.name}
-                      label={field.label}
-                      value={field.value}
-                      extra={field.extra}
-                      editable={field.editable}
-                      type={field.type}
-                      editing={editing}
-                      setImage={setImage}
-                    />
+                    <Col
+                      span={
+                        field.type == "textArea" || !breakpoint.md ? 24 : 12
+                      }
+                    >
+                      <EditableFormItem
+                        key={index}
+                        name={field.name}
+                        label={field.label}
+                        value={field.value}
+                        extra={field.extra}
+                        editable={field.editable}
+                        type={field.type}
+                        required={field.required || false}
+                        editing={editing}
+                        setImage={setImage}
+                      />
+                    </Col>
                   );
                 })}
               </EditableContext.Provider>

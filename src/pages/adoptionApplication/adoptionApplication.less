@@ -1,71 +1,79 @@
-.adoptionForm {
-  .fade-in {
-    opacity: 1;
-    animation-name: fadeInOpacity;
-    animation-iteration-count: 1;
-    animation-timing-function: ease-in;
-    animation-duration: 0.5s;
-  }
+.adoptionApplication {
 
-  @keyframes fadeInOpacity {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-
-  .adoptionForm-wrapper {
+  .steps-content {
     margin-top: 30px;
+    padding: 30px 10px 10px 10px;
+    text-align: center;
+    background-color: #fafafa;
+    border: 1px dashed #e9e9e9;
+    border-radius: 2px;
   }
-
-  .adoptionForm-description {
-    padding-top: 20px;
-    div {
-      font-size: 1.1em;
-    }
-
-  }
-
-  .adoptionForm-form {
-    margin-top: 30px;
-  }
-
-  .ant-form-item {
-    margin-bottom: 50px;
-  }
-
-  // .ant-radio-group,
-  .ant-form-item-control-input-content,
-  .ant-select-selection-item,
-  .ant-select-selection-placeholder,
-  .ant-form-item-extra {
+  
+  .steps-action {
+    margin-top: 24px;
     display: flex;
+    justify-content: flex-end;
+  }
+  
+  .adoptionApplication-description-title {
+    padding: 30px 0 50px 0;
+  }
+
+  .rescuer-image {
+    height: 200px;
+    padding-bottom: 20px;
+    
+    img {
+      max-width: 100%;
+    }
+
+  }
+
+  .brief-info {
+    text-align: justify;
+    margin-bottom: 20px;
+  }
+
+  .sliders {
+    margin-bottom: 30px;
+    display: flex;
+    overflow-x: scroll;
     flex-direction: row;
-    justify-content: flex-start;
-    text-align: left;
+    height: 200px;
+
+    img {
+      max-width: 100%;
+      margin-right: 8px;
+    }
+
+    &::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+      border-radius: 100px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 100px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      opacity: 0;
+      height: 5px;
+    }
   }
-
-  @media (max-width: 767px) {
-    .adoptionForm-form-wrapper {
-      margin-top: 10px;
-    }
-
-    .adoptionForm-description-title > h1 {
-      font-size: 1.4em;
-    }
-
-    .adoptionForm-description {
-      padding-top: 10px;
-      div {
-        font-size: 0.9em;
-        // text-align: justify;
-      }
-    }
-
+  
+  .ant-radio-group,
+    .ant-form-item-control-input-content,
+    .ant-select-selection-item,
     .ant-form-item-extra {
-      font-size: 0.8em;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
     }
-  }
 }

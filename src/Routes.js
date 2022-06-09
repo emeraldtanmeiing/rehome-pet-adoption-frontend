@@ -39,6 +39,7 @@ export const AllRoutes = () => {
       >
         <Route exact path="/adopt/form/new" element={<AdoptionForm />} />
         <Route exact path="/adopt/application/new" element={<AdoptionApplication />} />
+        <Route exact path="/adopt/applications" element={<AdoptionApplication />} />
       </Route>
 
       {/* Only open to rescuer */}

@@ -30,7 +30,7 @@ const LeftMenu = ({ mode }) => {
         <Link to={"/events"}>Adoption events</Link>
       </Menu.Item>
       <Menu.Item disabled={true}>
-        <Link to={"/applications"}>My applications</Link>
+        <Link to={"/adopt/applications"}>My applications</Link>
       </Menu.Item>
     </>
   );
