@@ -7,6 +7,8 @@ import Unauthorized from "./pages/unauthorized/unauthorized";
 import SignupRescuer from "./pages/signup-rescuer/signup-rescuer";
 import SignupAdopter from "./pages/signup-adopter/signup-adopter";
 import Login from "./pages/login/login";
+import AdopterForm from "./components/adopterForm/adopterForm";
+import RescuerForm from "./components/rescuerForm/rescuerForm";
 
 import Pet from "./pages/pet/pet";
 import PetsListing from "./pages/pets-listing/pets-listing";
@@ -14,8 +16,8 @@ import AddPet from "./pages/add-pet/add-pet";
 import PetsListingSpecificRescuer from "./pages/pets-listing-rescuer/pets-listing-rescuer";
 import AdoptionForm from "./pages/adoptionForm/adoptionForm";
 import AdoptionApplication from "./pages/adoptionApplication/adoptionApplication";
-import AdopterForm from "./components/adopterForm/adopterForm";
-import RescuerForm from "./components/rescuerForm/rescuerForm";
+import ApplicationsListingRescuer from "./pages/applications-listing-rescuer/applications-listing-rescuer";
+import ApplicationRescuer from "./pages/application-rescuer/application-rescuer";
 
 export const AllRoutes = () => {
   const accessToken = Cookies.get("accessToken");
@@ -24,7 +26,7 @@ export const AllRoutes = () => {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route exact path="/" element={<Homepage />} />
+      <Route exact path="/" element={<Homepage />}/>
       <Route exact path="/login" element={<Login />} />
       <Route exact path="/signup" element={<SignupAdopter />} />
       <Route exact path="/rescuer/signup" element={<SignupRescuer />} />
@@ -45,7 +47,7 @@ export const AllRoutes = () => {
       >
         <Route exact path="/adopt/form/new" element={<AdoptionForm />} />
         <Route exact path="/adopt/application/new" element={<AdoptionApplication />} />
-        <Route exact path="/adopt/applications" element={<AdoptionApplication />} />
+        {/* <Route exact path="/adopt/applications" element={<ApplicationsListing />} /> */}
       </Route>
 
       {/* Only open to rescuer */}
@@ -56,6 +58,8 @@ export const AllRoutes = () => {
       >
         <Route exact path="/rescuer/pets-listing" element={<PetsListingSpecificRescuer />} />
         <Route exact path="/rescuer/pets/upload" element={<AddPet />} />
+        <Route exact path="/rescuer/applications" element={<ApplicationsListingRescuer />} />
+        <Route exact path="/rescuer/application" element={<ApplicationRescuer />} />
       </Route>
       
     </Routes>

@@ -74,12 +74,13 @@ const EditableFormItem = ({
     if (type == "image") {
       formItem = (
         <Col span={24} className="editable-form-item">
-          {/* <Form.Item name={name} label={label} extra={extra} key={key}> */}
-            <div className="image">
-          <Avatar size={breakpoint.sm ? 128 : 76} src={value} className="image"/>
-              {/* <img alt="image" src={value} onClick={() => window.open(value)} /> */}
-            </div>
-          {/* </Form.Item> */}
+          <div className="image">
+            <Avatar
+              size={breakpoint.sm ? 128 : 76}
+              src={value}
+              className="image"
+            />
+          </div>
         </Col>
       );
     } else if (type == "textArea") {
@@ -219,14 +220,15 @@ const EditableFormItem = ({
               () => ({
                 validator(_, value) {
                   if (
-                    !value || value.match(/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/) != null
+                    !value ||
+                    value.match(
+                      /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/
+                    ) != null
                   ) {
                     return Promise.resolve();
                   }
 
-                  return Promise.reject(
-                    new Error("Invalid website.")
-                  );
+                  return Promise.reject(new Error("Invalid website."));
                 },
               }),
             ]}
@@ -332,7 +334,7 @@ const EditableForm = ({ fields, api, editable = true }) => {
       ...validationResult,
       ...(image && { image }),
     });
-    if(!res){
+    if (!res) {
       form.setFieldsValue(data);
     }
     if (res) {
@@ -408,7 +410,12 @@ const EditableForm = ({ fields, api, editable = true }) => {
                   return (
                     <Col
                       span={
-                        field.type == "textArea" || field.type == "image" || field.type == "images" || !breakpoint.md ? 24 : 12
+                        field.type == "textArea" ||
+                        field.type == "image" ||
+                        field.type == "images" ||
+                        !breakpoint.md
+                          ? 24
+                          : 12
                       }
                     >
                       <EditableFormItem

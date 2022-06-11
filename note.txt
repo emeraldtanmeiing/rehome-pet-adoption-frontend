@@ -14,6 +14,11 @@ TODO:
 [ ] - pet page tags tooltip only show vaccinations in mobile view 
 [ ] - loading speed
 [ ] - food details in pet page
-[ ] - pet change age need to add date.now() to pet.updatedAt, not pet.createdAt
+[ ] - pet change age need to add date.now() to pet.updatedAt, not pet.createdAt (but modify other fields will trigger the updatedAt too, so maybe add another field call ageUpdatedAt)
+[ ] - edit adoption form page
+[ ] - format date to msia time
+[ ] - fix header in application listing
+[ ] - add today's interview&pick up in application listing (filter "To interview" and today's time?)
+[ ] - 
 [ ] - 
 [ ] - 

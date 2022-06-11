@@ -160,7 +160,7 @@ function SignupRescuer() {
             <Row className="signup-criteria" gutter={[18, 18]}>
               <Col span={12}>
                 <div>
-                  By signing up as an rescuer, you can upload a pets that are
+                  By signing up as an rescuer, you can publish pets that are
                   opened to adoption, as well as receive and manage the
                   applications upon adoption.
                 </div>

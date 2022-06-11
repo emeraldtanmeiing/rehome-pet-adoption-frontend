@@ -30,7 +30,7 @@ const Navbar = () => {
     if(!accountID || accountType === "adopter"){
       navigate("/");
     }else if(accountType === "rescuer"){
-      navigate(`/rescuer/pets?rescuerID=${accountID}`);
+      navigate(`/rescuer/pets-listing?rescuerID=${accountID}`);
     }else if(accountType === "admin"){
       navigate("/admin/dashboard")
     }else{

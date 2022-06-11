@@ -29,7 +29,7 @@ const Homepage = () => {
         </div>
         <div className="button">
           <Button type="primary" onClick={onClickUploadPets}>
-            Upload a to-be-adopted pet
+            Publish a to-be-adopted pet
           </Button>
         </div>
         <div className="button">

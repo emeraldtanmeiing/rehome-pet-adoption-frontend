@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPets } from "../../services/pet.services.js";
-import { createAdoptionApplication } from "../../services/adopt.services.js";
+import { createApplication } from "../../services/application.services.js";
 
 import { Row, Col, Spin, Button, Grid, message, Steps } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -62,7 +62,7 @@ function AdoptionApplication() {
       adopterID: accountID,
       petID: getToBeAppliedPetID(),
     };
-    const res = await createAdoptionApplication({ adoptionApplication });
+    const res = await createApplication({ adoptionApplication });
     if (res?.error) {
       message.error(res.error.description);
       setIsLoading(false);

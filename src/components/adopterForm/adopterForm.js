@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { filter } from "lodash";
 import { getAccount, updateAccount } from "../../services/auth.services";
 
-import { Spin, message } from "antd";
+import { Col, Avatar, Grid, Spin, message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
 import "./adopterForm.less";
@@ -146,6 +147,8 @@ const AdopterForm = ({ accountID = null, editable = true }) => {
     }
   };
 
+  const breakpoint = Grid.useBreakpoint();
+
   return (
     <div className="adopter-form">
       {isLoading && (
@@ -164,13 +167,23 @@ const AdopterForm = ({ accountID = null, editable = true }) => {
           </>
         ) : (
           <>
-            <img
-              alt="image"
-              src={account.data.image}
-              onClick={() => window.open(account.data.image)}
-            />
+            <Col span={24} className="editable-form-item">
+              <div
+                className="image"
+                onClick={() => window.open(account.data.image)}
+              >
+                <Avatar
+                  size={breakpoint.sm ? 128 : 76}
+                  src={account.data.image}
+                  className="image"
+                />
+              </div>
+            </Col>
+
             <EditableForm
-              fields={accountFields.data}
+              fields={filter(accountFields.data, (v) => {
+                return v.name != "image" && v.value != null && v.value != "";
+              })}
               api={handleUpdateAccount}
               editable={false}
             />

@@ -1,3 +1,6 @@
+import lodash from "lodash";
+const { isEmpty } = lodash;
+
 const monthDifference = (date1, date2, roundUpFractionalMonths = true) => {
   //Months will be calculated between start and end dates.
   //Make sure start date is less than end date.
@@ -33,8 +36,14 @@ const monthDifference = (date1, date2, roundUpFractionalMonths = true) => {
   );
 };
 
-const formatDate = (givenDate) => {
-  const date = new Date(givenDate);
+const formatDate = (givenDate, showTime = false) => {
+  if(isEmpty(givenDate) || givenDate == "-" ){
+    return "-"
+  }
+
+  const malaysiaDate = new Date(givenDate).toLocaleString("en-US", {
+    timeZone: "Asia/Kuala_Lumpur",
+  });
   const monthNames = [
     "January",
     "February",
@@ -49,7 +58,26 @@ const formatDate = (givenDate) => {
     "November",
     "December",
   ];
-  return `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+
+  const date = malaysiaDate.split(",")[0];
+  const time = malaysiaDate.split(",")[1].trim();
+
+  const month = date.split("/")[0] - 1;
+  const day = date.split("/")[1];
+  const year = date.split("/")[2];
+
+  let formattedDate = `${day} ${monthNames[month]} ${year}`;
+
+  if (showTime) {
+    const hour = time.split(":")[0];
+    const minute = time.split(":")[1];
+    const second = time.split(":")[2];
+    const amOrPm = second.split(" ")[1];
+
+    formattedDate = `${formattedDate}, ${hour}:${minute} ${amOrPm}`;
+  }
+
+  return formattedDate;
 };
 
 export { monthDifference, formatDate };

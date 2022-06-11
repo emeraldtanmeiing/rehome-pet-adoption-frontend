@@ -119,7 +119,7 @@ function AddPet() {
       setIsLoading(false);
     } else {
       message.success("Create pet successful!");
-      navigate(`/rescuer/pets?rescuerID=${rescuerID}`);
+      navigate(`/rescuer/pets-listing?rescuerID=${rescuerID}`);
     }
   };
 
@@ -140,7 +140,7 @@ function AddPet() {
       <div className="add-pet-form-wrapper">
         <Row align="center">
           <Col span={24}>
-            <h1>Upload A Pet</h1>
+            <h1>Publish New Pet</h1>
           </Col>
           <Col span={20} offset={2}>
             <div className="add-pet-form">

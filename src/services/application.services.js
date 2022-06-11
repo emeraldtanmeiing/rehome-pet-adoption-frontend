@@ -5,40 +5,9 @@ import Cookies from "js-cookie";
 import lodash from "lodash";
 const { isEmpty } = lodash;
 
-export const createAdoptionForm = async ({ adoptionForm }) => {
-  const url = apiURL("/adopt/form");
-  const data = {adoptionForm};
-
-  const accessToken = Cookies.get("accessToken");
-  try {
-    const res = await axios({
-      method: "POST",
-      url: url,
-      data: data,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (res?.data?.data?.newAdoptionForm || res?.data?.data?.updatedAdoptionForm) {
-      return res?.data?.data?.newAdoptionForm || res?.data?.data?.updatedAdoptionForm;
-    }
-  } catch (err) {
-    const errorFromApi = err.response?.data;
-    const callback = async () => await createAdoptionForm({ adoptionForm });
-    const error = await errorHandler({
-      error: errorFromApi,
-      callback: callback,
-      redirect: null,
-    });
-    return { error };
-  }
-};
-
-export const createAdoptionApplication = async ({ adoptionApplication }) => {
+export const createApplication = async ({ adoptionApplication }) => {
   const url = apiURL("/adopt/application");
-  const data = {adoptionApplication};
+  const data = {adoptionApplication, sortMode: "desc"};
 
   const accessToken = Cookies.get("accessToken");
   try {
@@ -57,7 +26,7 @@ export const createAdoptionApplication = async ({ adoptionApplication }) => {
     }
   } catch (err) {
     const errorFromApi = err.response?.data;
-    const callback = async () => await createAdoptionApplication({ adoptionApplication });
+    const callback = async () => await createApplication({ adoptionApplication });
     const error = await errorHandler({
       error: errorFromApi,
       callback: callback,
@@ -66,3 +35,30 @@ export const createAdoptionApplication = async ({ adoptionApplication }) => {
     return { error };
   }
 };
+
+export const getApplications = async (params) => {
+  const queryString = new URLSearchParams(params).toString();
+  const url = apiURL(`/adopt/application?${queryString}&resultsPerPage=10000`);
+
+  const accessToken = Cookies.get("accessToken");
+  try {
+    const res = await axios({
+      method: "GET",
+      url: url,
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    if (res?.data?.data) {
+      return res.data.data;
+    }
+  } catch (err) {
+    const errorFromApi = err.response?.data;
+    const callback = async () => await getApplications(params);
+    const error = await errorHandler({
+      error: errorFromApi,
+      callback: callback,
+      redirect: null,
+    });
+    return { error };
+  }
+}

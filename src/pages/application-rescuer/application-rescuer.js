@@ -1,0 +1,62 @@
+import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import useAuthContext from "../../hooks/useAuthContext";
+import { getApplications } from "../../services/application.services";
+
+import { Col, Avatar, Grid, Spin, message } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import ApplicationsListing from "../../components/application/application";
+
+import "./application-rescuer.scss";
+import ApplicationStatus from "../../components/application-status/application-status";
+
+function ApplicationRescuer() {
+  const [applicationState, setApplicationState] = useState({
+    status: "idle",
+    data: null,
+  });
+  const isLoading = applicationState.status !== "success";
+
+  useEffect(()=>{
+    fetchApplications()
+  }, [])
+
+  const accountID = Cookies.get("accountID");
+  const fetchApplications = async () => {
+    setApplicationState({ ...applicationState, status: "loading" });
+
+    const params = { rescuerID: accountID }
+
+    const res = await getApplications({ rescuerID: accountID });
+
+    if (res?.error) {
+      message.error(res.error.description);
+    } else {
+      setApplicationState({
+        ...applicationState,
+        status: "success",
+        data: res,
+      });
+    }
+  };
+
+  return (
+    <div className="application-rescuer">
+      {isLoading && (
+        <>
+          <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+        </>
+      )}
+      {!isLoading && (
+        <>
+          <div className="application-rescuer-wrapper">
+            <ApplicationStatus />
+            
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default ApplicationRescuer;
