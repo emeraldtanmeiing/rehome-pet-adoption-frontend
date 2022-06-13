@@ -6,19 +6,19 @@ push latest code to main branch, then run `vercel`
 
 TODO:
 [/] - implement refresh token
-[ ] - do not show social media link icon if organization doesn't have that
+[/] - do not show social media link icon if organization doesn't have that
+[/] - open another tab when click on social media link
+[/] - edit adoption form page
 [ ] - change cookie key
 [ ] - add notification on homepage: This is a dummy website
 [ ] - footer
-[ ] - open another tab when click on social media link
 [ ] - pet page tags tooltip only show vaccinations in mobile view 
 [ ] - loading speed
 [ ] - food details in pet page
 [ ] - pet change age need to add date.now() to pet.updatedAt, not pet.createdAt (but modify other fields will trigger the updatedAt too, so maybe add another field call ageUpdatedAt)
-[ ] - edit adoption form page
 [ ] - format date to msia time
-[ ] - fix header in application listing
+[ ] - fix the header in application listing when scrolling
 [ ] - add today's interview&pick up in application listing (filter "To interview" and today's time?)
-[ ] - cant remove account image
+[ ] - cant remove image is user wish to
 [ ] - 
 [ ] - 
