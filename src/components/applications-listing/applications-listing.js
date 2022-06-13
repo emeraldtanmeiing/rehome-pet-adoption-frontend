@@ -7,9 +7,12 @@ import React, { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 
 import "./applications-listing.scss";
+import ApplicationStatus from "../application-status/application-status";
 
 const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
   let data = map(applicationsList, (a, index) => {
+    const interviewDate = a.interviewDate ? a.interviewDate : '-';
+    const interviewTime = a.interviewTime ? a.interviewTime : '-';
     return {
       applicationID: a._id,
       key: index,
@@ -21,10 +24,11 @@ const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
       adopterPhone: a.adopterID.phone,
       rescuer: a.rescuerID.name,
       rescuerPhone: a.rescuerID.phone,
-      appliedAt: a.createdAt,
+      appliedAt: formatDate(a.createdAt),
       status: a.status,
-      interviewTime: a.interviewTime || null,
-      note: a.note || null,
+      interview: `${interviewDate}, ${interviewTime}`,
+      interviewDate: a.interviewDate || null,
+      note: a.note || '-',
     };
   });
 
@@ -165,14 +169,8 @@ const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
       key: "appliedAt",
       sorter: (a, b) => new Date(a.appliedAt) - new Date(b.appliedAt),
       sortDirections: ["descend", "ascend"],
-      render: (date) => formatDate(date),
+      ...getColumnSearchProps("appliedAt"),
     },
-    // {
-    //   title: "Applicant",
-    //   dataIndex: "adopterImage",
-    //   key: "adopterImage",
-    //   render: (image) => <Avatar src={image} alt="image" size="large" />,
-    // },
     {
       title: "Applicant",
       dataIndex: "adopter",
@@ -191,43 +189,7 @@ const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
       dataIndex: "status",
       key: "status",
       render: (tag) => {
-        let color;
-        switch (tag) {
-          case "To Review":
-            color = "orange";
-            break;
-          case "To Interview":
-            color = "geekblue";
-            break;
-          case "To Approve":
-            color = "magenta";
-            break;
-          case "To Pay":
-            color = "cyan";
-            break;
-          case "To Pick up":
-            color = "purple";
-            break;
-          case "Completed":
-            color = "green";
-            break;
-          case "Rejected":
-            color = "red";
-            break;
-          case "Cancelled":
-            color = "red";
-            break;
-          case "Deactivated":
-            color = null;
-            break;
-          default:
-            color = null;
-        }
-        return (
-          <Tag color={color} key={tag}>
-            {tag}
-          </Tag>
-        );
+        return <ApplicationStatus tag={tag} />
       },
       filters: [
         { text: <span>To Review</span>, value: "To Review" },
@@ -245,11 +207,11 @@ const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
     },
     {
       title: "Interview",
-      dataIndex: "interviewTime",
-      key: "interviewTime",
-      render: (date) => formatDate(date, true),
-      sorter: (a, b) => new Date(a.interviewTime) - new Date(b.interviewTime),
+      dataIndex: "interview",
+      key: "interview",
+      sorter: (a, b) => new Date(a.interviewDate) - new Date(b.interviewDate),
       sortDirections: ["descend", "ascend"],
+      ...getColumnSearchProps("interview"),
     },
     {
       title: "Note",

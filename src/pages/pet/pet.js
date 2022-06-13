@@ -3,7 +3,7 @@ import { omitBy, isNil, map, sortBy, trim } from "lodash";
 import { useNavigate } from "react-router-dom";
 import useQuery from "../../hooks/useQuery";
 import useAuthContext from "../../hooks/useAuthContext";
-import { monthDifference, formatDate } from "../../helpers/date";
+import { monthDifference, formatDate, calculateAge } from "../../helpers/date";
 import { getPets } from "../../services/pet.services";
 import { getAccount } from "../../services/auth.services";
 import getColorCodes from "../../helpers/color";
@@ -55,7 +55,10 @@ function Pet() {
   const fetchPets = async () => {
     setPetState({ ...petState, status: "loading" });
 
-    const params = omitBy({ petID }, v => isNil(v) || v.toString().trim() === '');
+    const params = omitBy(
+      { petID },
+      (v) => isNil(v) || v.toString().trim() === ""
+    );
 
     const res = await getPets(params);
 
@@ -64,14 +67,8 @@ function Pet() {
     } else {
       const pet = res.petsList[0];
       const colorCodes = getColorCodes(pet.color);
-
-      const diffInMonths = monthDifference(
-        new Date(pet.createdAt),
-        new Date(Date.now())
-      );
-      const ageInMonths = parseInt(pet.ageInMonths) + diffInMonths;
-
-      const data = { ...pet, colorCodes: colorCodes, ageInMonths: ageInMonths };
+      const age = calculateAge(pet.ageInMonths, pet.createdAt);
+      const data = { ...pet, colorCodes: colorCodes, age: age };
 
       setPetState({ ...petState, status: "success", data: data });
       await fetchRescuer(res.petsList[0].rescuerID);
@@ -114,7 +111,7 @@ function Pet() {
       message.error(res.error.description);
       return;
     }
-    localStorage.setItem("toBeAppliedPet", JSON.stringify(petState.data._id))
+    localStorage.setItem("toBeAppliedPet", JSON.stringify(petState.data._id));
     if (!res.account.adoptionFormID) {
       navigate("/adopt/form/new");
     } else {
@@ -306,7 +303,7 @@ function Pet() {
                               {petState.data.colorCodes.map((c) => (
                                 <span
                                   class="dot outline"
-                                  style={{ "backgroundColor": c }}
+                                  style={{ backgroundColor: c }}
                                 ></span>
                               ))}
                             </div>
@@ -320,7 +317,7 @@ function Pet() {
                           <Col {...detailsProps}>
                             <div className="details outline">
                               <h3>Age</h3>
-                              <div>{petState.data.ageInMonths} month(s)</div>
+                              <div>{petState.data.age}</div>
                             </div>
                           </Col>
                           <Col {...detailsProps}>
@@ -364,7 +361,7 @@ function Pet() {
 
                 <Row className="rescuer" gutter={[32, 16]}>
                   <Col align="left" span={24}>
-                    <h2>Contact Person </h2>
+                    <h2>Contact person </h2>
                   </Col>
                   <Col
                     align="left"
@@ -412,18 +409,27 @@ function Pet() {
                     align="left"
                     span={{ xxl: 10, xl: 10, lg: 10, md: 10, sm: 24, xs: 24 }}
                   >
-                    <Button
-                      icon={<FacebookFilled style={{ color: "grey" }} />}
-                      href={rescuerState.data.facebookLink}
-                    />
-                    <Button
-                      icon={<InstagramFilled style={{ color: "grey" }} />}
-                      href={rescuerState.data.instagramLink}
-                    />
-                    <Button
-                      icon={<GlobalOutlined style={{ color: "grey" }} />}
-                      href={rescuerState.data.organizationWebsiteLink}
-                    />
+                    {rescuerState.data.facebookLink && (
+                      <Button
+                        icon={<FacebookFilled style={{ color: "grey" }} />}
+                        href={rescuerState.data.facebookLink}
+                      />
+                    )}
+
+                    {rescuerState.data.instagramLink && (
+                      <Button
+                        icon={<InstagramFilled style={{ color: "grey" }} />}
+                        href={rescuerState.data.instagramLink}
+                      />
+                    )}
+
+                    {rescuerState.data.organizationWebsiteLink && (
+                      <Button
+                        icon={<GlobalOutlined style={{ color: "grey" }} />}
+                        href={rescuerState.data.organizationWebsiteLink}
+                      />
+                    )}
+
                     {/* TODO: navigate to rescuer page */}
                     <Button disabled href={"/rescuer"}>
                       More pets from this org

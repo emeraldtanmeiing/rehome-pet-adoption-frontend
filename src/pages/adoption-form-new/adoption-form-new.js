@@ -19,11 +19,11 @@ import {
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
-import "./adoptionForm.less";
+import "./adoption-form-new.less";
 
 const { Option } = Select;
 
-function AdoptionForm() {
+function AdoptionFormNew() {
   const [isLoading, setIsLoading] = useState(false);
 
   const formItemLayout = {
@@ -54,19 +54,19 @@ function AdoptionForm() {
   }, []);
 
   const checkAdoptionForm = async () => {
-      const res = await getAccount({ accountID });
-      if (res.account?.adoptionFormID) {
-        message.info(
-          "You have filled in adoption form before. You can modify it here!"
-        );
-        navigate(`/adoptionForm/edit`);
-      }
+    const res = await getAccount({ accountID });
+    if (res.account?.adoptionFormID) {
+      navigate(`/adopt/form`);
+    }
   };
 
   const navigate = useNavigate();
   const onFinish = async (values) => {
     setIsLoading(true);
-    const adoptionForm = omitBy(values, v => isNil(v) || v.toString().trim() === '');
+    const adoptionForm = omitBy(
+      values,
+      (v) => isNil(v) || v.toString().trim() === ""
+    );
 
     const res = await createAdoptionForm({ adoptionForm });
 
@@ -96,7 +96,14 @@ function AdoptionForm() {
               housing situation etc.{" "}
             </div>
             <br />
-            <div>You only need to fill out this form once. </div>
+            <div>
+              You only need to fill out this form once, and can be edited at{" "}
+              <Button style={{ padding: 0 }} type="link" href="/adopt/form">
+                {" "}
+                My condition{" "}
+              </Button>{" "}
+              later.
+            </div>
             <br />
             <div>
               There's no right or wrong about these questions. Honest responses
@@ -372,11 +379,14 @@ function AdoptionForm() {
                   />
                 </Form.Item>
 
-                <Form.Item name="petLivingSituation" label="The pet will be?">
+                <Form.Item
+                  name="petLivingSituation"
+                  label="The pet will be living?"
+                >
                   <Select placeholder="Select your pet living situation">
                     <Option value="Indoor">Indoor</Option>
                     <Option value="Outdoor">Outdoor</Option>
-                    <Option value="IndoorAndOutdoor">
+                    <Option value="Indoor And Outdoor (Free Choice)">
                       Indoor And Outdoor (Free Choice)
                     </Option>
                   </Select>
@@ -396,13 +406,13 @@ function AdoptionForm() {
                   extra="According to research, cohabitants are one of the major reasons of pet abandonment."
                 >
                   <Select placeholder="Select your situation">
-                    <Option value="everyoneExcited">
+                    <Option value="Everyone in the household is excited about adopting">
                       Everyone in the household is excited about adopting
                     </Option>
-                    <Option value="someoneNotSure">
+                    <Option value="Someone in the household isn't sure about adopting">
                       Someone in the household isn't sure about adopting
                     </Option>
-                    <Option value="someoneDontKnow">
+                    <Option value="Not everyone in the household knows I am applying to adopt">
                       Not everyone in the household knows I am applying to adopt
                     </Option>
                   </Select>
@@ -421,7 +431,7 @@ function AdoptionForm() {
 
                 <Form.Item
                   name="remark"
-                  label="Write here if you have any questions or remark so that the rescuer can answer you in the interview later."
+                  label="Write here if you have any questions or remark so that the pet's contact person / organization can answer you in the interview later."
                 >
                   <Input.TextArea
                     rows={2}
@@ -450,4 +460,4 @@ function AdoptionForm() {
   );
 }
 
-export default AdoptionForm;
+export default AdoptionFormNew;

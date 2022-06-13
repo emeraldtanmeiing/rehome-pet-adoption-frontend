@@ -1,3 +1,30 @@
-.applications-listing {
-  padding-top: 30px;
+.application {
+  .outline {
+    border: 1px solid #d9d9d9;
+    box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
+    border-radius: 4px;
+  }
+
+  .detail {
+    padding: 10px 0;
+    margin: 0 10px;
+    background-color: #f6f6f6;
+  }
+
+  .pet-adopter-rescuer-details,
+  .application-details {
+    margin-top: 50px;
+  }
+
+  .application-details {
+    .title {
+      h2 {
+        margin: -3px;
+      }
+    }
+  }
+
+  .status-description {
+    padding-top: 10px;
+  }
 }

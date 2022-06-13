@@ -14,8 +14,13 @@ import Pet from "./pages/pet/pet";
 import PetsListing from "./pages/pets-listing/pets-listing";
 import AddPet from "./pages/add-pet/add-pet";
 import PetsListingSpecificRescuer from "./pages/pets-listing-rescuer/pets-listing-rescuer";
-import AdoptionForm from "./pages/adoptionForm/adoptionForm";
-import AdoptionApplication from "./pages/adoptionApplication/adoptionApplication";
+
+//form
+import AdoptionFormNew from "./pages/adoption-form-new/adoption-form-new";
+import AdoptionForm from "./components/adoptionForm/adoptionForm";
+
+//application
+import AdoptionApplicationNew from "./pages/adoption-application-new/adoption-application-new";
 import ApplicationsListingRescuer from "./pages/applications-listing-rescuer/applications-listing-rescuer";
 import ApplicationRescuer from "./pages/application-rescuer/application-rescuer";
 
@@ -36,7 +41,7 @@ export const AllRoutes = () => {
       {/* Only open to login user */}
       <Route exact path="/" element={<ProtectedRouteRequireLogin />}>
         <Route exact path="/unauthorized" element={<Unauthorized />} />
-        <Route exact path="/profile" element={accountType == "adopter" ? <AdopterForm /> : <RescuerForm />} />
+        <Route exact path="/profile" element={accountType == "adopter" ? <AdopterForm size="small" /> : <RescuerForm size="small"/>} />
       </Route>
 
       {/* Only open to adopter */}
@@ -45,8 +50,9 @@ export const AllRoutes = () => {
         path="/"
         element={<ProtectedRouteRequireType allowedTypes={["adopter"]} />}
       >
-        <Route exact path="/adopt/form/new" element={<AdoptionForm />} />
-        <Route exact path="/adopt/application/new" element={<AdoptionApplication />} />
+        <Route exact path="/adopt/form/new" element={<AdoptionFormNew />} />
+        <Route exact path="/adopt/form" element={<AdoptionForm showDescription={true} size="small" />} />
+        <Route exact path="/adopt/application/new" element={<AdoptionApplicationNew />} />
         {/* <Route exact path="/adopt/applications" element={<ApplicationsListing />} /> */}
       </Route>
 

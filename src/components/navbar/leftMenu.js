@@ -32,6 +32,9 @@ const LeftMenu = ({ mode }) => {
       <Menu.Item>
         <Link to={"/adopt/applications"}>My applications</Link>
       </Menu.Item>
+      <Menu.Item>
+        <Link to={"/adopt/form/new"}>My condition</Link>
+      </Menu.Item>
     </>
   );
 

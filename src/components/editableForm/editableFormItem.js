@@ -1,0 +1,531 @@
+import React, { useRef } from "react";
+import moment from "moment";
+
+import {
+  Row,
+  Col,
+  Input,
+  Button,
+  Form,
+  Upload,
+  Avatar,
+  Select,
+  Grid,
+  InputNumber,
+  Checkbox,
+  DatePicker,
+  TimePicker,
+  message,
+} from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+
+import "./editableForm.less";
+
+const { Option } = Select;
+
+const EditableFormItem = ({
+  key,
+  name,
+  label,
+  value,
+  extra,
+  type,
+  editable = false,
+  required,
+  editing,
+  addonAfter,
+  setImage,
+  setDate,
+  setTime,
+  ...restProps
+}) => {
+  const inputRef = useRef(value);
+
+  const normFile = (uploadEvent) => {
+    if (Array.isArray(uploadEvent)) {
+      return uploadEvent;
+    }
+  };
+
+  const validateFile = (value) => {
+    const file = value;
+
+    const fileTypes = ["image/png", "image/jpg", "image/jpeg", "image/svg+xml"];
+
+    if (!fileTypes.includes(file.type)) {
+      message.error(`${file.name} format is not accepted.`);
+      return Upload.LIST_IGNORE;
+    }
+
+    const isLt1M = file.size / 1024 / 1024 <= 1;
+    if (!isLt1M) {
+      message.error(`Image size should be smaller than 1MB.`);
+      return Upload.LIST_IGNORE;
+    }
+  };
+
+  const dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  };
+
+  const onImageChange = (value) => {
+    setImage(value.fileList[0]?.originFileObj);
+  };
+
+  function onDateChange(date, dateString) {
+    setDate(dateString);
+  }
+
+  function onTimeChange(time, timeString) {
+    setTime(timeString);
+  }
+
+  const breakpoint = Grid.useBreakpoint();
+  let formItem;
+  if (!editing || !editable) {
+    if (type == "image") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <div className="image">
+            <Avatar size={76} src={value} className="image" />
+          </div>
+        </Col>
+      );
+    } else if (type == "textArea") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item name={name} label={label} extra={extra} key={key}>
+            <Input.TextArea rows={20} disabled />
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "textArea-small") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item name={name} label={label} extra={extra} key={key}>
+            <Input.TextArea rows={3} disabled />
+          </Form.Item>
+        </Col>
+      );
+    } else {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item name={name} label={label} extra={extra} key={key}>
+            <Input disabled />
+          </Form.Item>
+        </Col>
+      );
+    }
+  } else {
+    //TODO: add boolean, healthCondition, images, color, date
+    if (type == "image") {
+      formItem = (
+        <Form.Item
+          name={name}
+          label={label}
+          valuePropName={name}
+          getValueFromEvent={normFile}
+          className="left"
+          required={required}
+        >
+          <Upload
+            name={name}
+            listType="picture"
+            maxCount={1}
+            beforeUpload={validateFile}
+            onChange={onImageChange}
+            customRequest={dummyRequest}
+            rules={[{ required: true }]}
+            accept="image/png, image/jpeg, image/svg+xml"
+          >
+            <Button icon={<UploadOutlined />}>
+              Upload image if you wish to change {name} (Max: 1)
+            </Button>
+          </Upload>
+        </Form.Item>
+      );
+    } else if (type == "textArea") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Input.TextArea rows={20} ref={inputRef} />
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "textArea-small") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Input.TextArea rows={3} ref={inputRef} />
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "integer" || type == "integer-full") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <InputNumber
+              min={0}
+              max={500}
+              addonAfter={addonAfter || ""}
+              style={{ width: "100%" }}
+            />
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "interestedPetTypes") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Checkbox.Group>
+              <Row type="flex" style={{ alignItems: "center" }}>
+                <Col align="left">
+                  <Checkbox
+                    value="Dog"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Dog(s)
+                  </Checkbox>
+                </Col>
+                <Col align="left">
+                  <Checkbox
+                    value="Cat"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Cat(s)
+                  </Checkbox>
+                </Col>
+              </Row>
+            </Checkbox.Group>
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "petTypes") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Checkbox.Group>
+              <Row type="flex" style={{ alignItems: "center" }}>
+                <Col align="left">
+                  <Checkbox
+                    value="Dog"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Dog(s)
+                  </Checkbox>
+                </Col>
+                <Col align="left">
+                  <Checkbox
+                    value="Cat"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Cat(s)
+                  </Checkbox>
+                </Col>
+                <Col align="left">
+                  <Checkbox
+                    value="Fish"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Fish(s)
+                  </Checkbox>
+                </Col>
+                <Col align="left">
+                  <Checkbox
+                    value="Bird"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Bird(s)
+                  </Checkbox>
+                </Col>
+                <Col align="left">
+                  <Checkbox
+                    value="Hamster"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Hamster(s)
+                  </Checkbox>
+                </Col>
+                <Col align="left">
+                  <Checkbox
+                    value="Rabbit"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Rabbit(s)
+                  </Checkbox>
+                </Col>
+                <Col align="left">
+                  <Checkbox
+                    value="Other"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Others
+                  </Checkbox>
+                </Col>
+              </Row>
+            </Checkbox.Group>
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "petLivingSituation") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Select placeholder="Select your pet living situation">
+              <Option value="Indoor">Indoor</Option>
+              <Option value="Outdoor">Outdoor</Option>
+              <Option value="Indoor And Outdoor (Free Choice)">
+                Indoor And Outdoor (Free Choice)
+              </Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "housemateAcknowledgement") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Select placeholder="Select your situation">
+              <Option value="Everyone in the household is excited about adopting">
+                Everyone in the household is excited about adopting
+              </Option>
+              <Option value="Someone in the household isn't sure about adopting">
+                Someone in the household isn't sure about adopting
+              </Option>
+              <Option value="Not everyone in the household knows I am applying to adopt">
+                Not everyone in the household knows I am applying to adopt
+              </Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "stateOrProvince") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Select placeholder="Select your state or province">
+              <Option value="Selangor">Selangor</Option>
+              <Option value="Kuala Lumpur">Kuala Lumpur</Option>
+              <Option value="Putrajaya">Putrajaya</Option>
+              <Option value="Negeri Sembilan">Negeri Sembilan</Option>
+              <Option value="Johor">Johor</Option>
+              <Option value="Melaka">Melaka</Option>
+              <Option value="Kedah">Kedah</Option>
+              <Option value="Kelantan">Kelantan</Option>
+              <Option value="Pahang">Pahang</Option>
+              <Option value="Perak">Perak</Option>
+              <Option value="Perlis">Perlis</Option>
+              <Option value="Pulau Pinang">Pulau Pinang</Option>
+              <Option value="Terengganu">Terengganu</Option>
+              <Option value="Sabah">Sabah</Option>
+              <Option value="Sarawak">Sarawak</Option>
+              <Option value="Labuan">Labuan</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "postcode") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            rules={[
+              {
+                required: required,
+              },
+              () => ({
+                validator(_, value) {
+                  if (
+                    !value ||
+                    (value.length == 5 && value.match(/^[0-9]+$/) != null)
+                  ) {
+                    return Promise.resolve();
+                  }
+
+                  return Promise.reject(
+                    new Error("Postcode should be five digit numeric.")
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "website") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            rules={[
+              {
+                required: required,
+              },
+              () => ({
+                validator(_, value) {
+                  if (
+                    !value ||
+                    value.match(
+                      /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/
+                    ) != null
+                  ) {
+                    return Promise.resolve();
+                  }
+
+                  return Promise.reject(new Error("Invalid website."));
+                },
+              }),
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "phone") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            rules={[
+              { required: required },
+              () => ({
+                validator(_, value) {
+                  if (!value || value.match(/^[0-9]+$/) != null) {
+                    return Promise.resolve();
+                  }
+
+                  return Promise.reject(new Error("Phone should be numeric."));
+                },
+              }),
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "date") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item name={name} label={label} extra={extra} key={key}>
+            <DatePicker onChange={onDateChange} format="DD MMMM YYYY" />
+          </Form.Item>
+        </Col>
+      );
+    } else if (type == "time") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item name={name} label={label} extra={extra} key={key}>
+            {/* <TimePicker defaultOpenValue={moment('13:00 ', 'HH:mm')} onChange={onTimeChange} /> */}
+
+            <TimePicker
+              use12Hours
+              format="h:mm a"
+              onChange={onTimeChange}
+              defaultOpenValue={moment("00.00", "h:mm a")}
+            />
+          </Form.Item>
+        </Col>
+      );
+    } else {
+      formItem = (
+        <Col>
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            rules={[
+              {
+                required: required,
+                message: `${label} is required.`,
+              },
+            ]}
+          >
+            <Input ref={inputRef} />
+          </Form.Item>
+        </Col>
+      );
+    }
+  }
+
+  return <div {...restProps}>{formItem}</div>;
+};
+
+export default EditableFormItem;

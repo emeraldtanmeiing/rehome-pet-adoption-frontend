@@ -19,6 +19,6 @@ TODO:
 [ ] - format date to msia time
 [ ] - fix header in application listing
 [ ] - add today's interview&pick up in application listing (filter "To interview" and today's time?)
-[ ] - 
+[ ] - cant remove account image
 [ ] - 
 [ ] - 

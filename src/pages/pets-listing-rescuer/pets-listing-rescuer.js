@@ -3,7 +3,7 @@ import { omitBy, isNil, sortBy, trim } from "lodash";
 import useQuery from "../../hooks/useQuery";
 import { getPets } from "../../services/pet.services";
 import useAuthContext from "../../hooks/useAuthContext";
-import { monthDifference } from "../../helpers/date";
+import { calculateAge } from "../../helpers/date";
 
 import { Row, Col, Skeleton, Card, Button, message } from "antd";
 import PetCard from "../../components/petCard/petCard";
@@ -40,12 +40,8 @@ function PetsListingSpecificRescuer() {
       message.error(res.error.description);
     } else {
       res.petsList.map((pet) => {
-        const diffInMonths = monthDifference(
-          new Date(pet.createdAt),
-          new Date(Date.now())
-        );
-        const ageInMonths = parseInt(pet.ageInMonths) + diffInMonths;
-        pet.ageInMonths = ageInMonths;
+        const age = calculateAge(pet.ageInMonths, pet.createdAt)
+        pet.age = age;
       });
       const data = {
         ...res,

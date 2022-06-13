@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import useAuthContext from "../../hooks/useAuthContext";
+import useQuery from "../../hooks/useQuery.js";
 import { getApplications } from "../../services/application.services";
 
 import { Col, Avatar, Grid, Spin, message } from "antd";
@@ -8,7 +9,8 @@ import { LoadingOutlined } from "@ant-design/icons";
 import ApplicationsListing from "../../components/application/application";
 
 import "./application-rescuer.scss";
-import ApplicationStatus from "../../components/application-status/application-status";
+import ApplicationStatusDesc from "../../components/application-status-desc/application-status-desc";
+import Application from "../../components/application/application";
 
 function ApplicationRescuer() {
   const [applicationState, setApplicationState] = useState({
@@ -21,21 +23,27 @@ function ApplicationRescuer() {
     fetchApplications()
   }, [])
 
-  const accountID = Cookies.get("accountID");
+  const query = useQuery();
+  const applicationID = query.get("applicationID");
+
   const fetchApplications = async () => {
+
+    if(!applicationID){
+      message.error("Invalid URL. No applicationID provided.")
+    }
     setApplicationState({ ...applicationState, status: "loading" });
 
-    const params = { rescuerID: accountID }
+    const params = { applicationID }
 
-    const res = await getApplications({ rescuerID: accountID });
-
+    const res = await getApplications(params);
+   
     if (res?.error) {
       message.error(res.error.description);
     } else {
       setApplicationState({
         ...applicationState,
         status: "success",
-        data: res,
+        data: res.applicationsList[0],
       });
     }
   };
@@ -50,8 +58,8 @@ function ApplicationRescuer() {
       {!isLoading && (
         <>
           <div className="application-rescuer-wrapper">
-            <ApplicationStatus />
-            
+            {/* <ApplicationStatusDesc /> */}
+            <Application data={applicationState.data} showAdopter={true} showRescuer={false} showSteps={true}/>
           </div>
         </>
       )}

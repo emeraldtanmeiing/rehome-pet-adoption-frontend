@@ -9,7 +9,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import "./rescuerForm.less";
 import EditableForm from "../editableForm/editableForm";
 
-const RescuerForm = ({ accountID = null, editable = true }) => {
+const RescuerForm = ({ accountID = null, editable = true, size = "default" }) => {
   const [account, setAccount] = useState({
     status: "idle",
     data: null,
@@ -198,7 +198,7 @@ const RescuerForm = ({ accountID = null, editable = true }) => {
       message.error(res.error.description);
       return false;
     } else {
-      message.success("Updated account successfully!.");
+      message.success("Updated account successfully!");
       return res;
     }
   };
@@ -219,6 +219,7 @@ const RescuerForm = ({ accountID = null, editable = true }) => {
               fields={accountFields.data}
               api={handleUpdateAccount}
               editable={true}
+              size={size}
             />
           </>
         ) : (
@@ -229,7 +230,7 @@ const RescuerForm = ({ accountID = null, editable = true }) => {
                 onClick={() => window.open(account.data.image)}
               >
                 <Avatar
-                  size={breakpoint.sm ? 128 : 76}
+                  size={76}
                   src={account.data.image}
                   className="image"
                 />
@@ -249,6 +250,7 @@ const RescuerForm = ({ accountID = null, editable = true }) => {
               })}
               api={handleUpdateAccount}
               editable={false}
+              size={size}
             />
           </>
         ))}

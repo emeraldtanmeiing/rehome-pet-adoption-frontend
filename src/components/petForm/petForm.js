@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { filter, map } from "lodash";
-import { monthDifference } from "../../helpers/date";
+import { calculateAge } from "../../helpers/date";
 import { getPets } from "../../services/pet.services.js";
 
 import { Spin, message } from "antd";
@@ -38,12 +38,8 @@ const PetForm = ({ petID, editable = true }) => {
       let fields = [];
       let pet = res.petsList[0];
 
-      const diffInMonths = monthDifference(
-        new Date(pet.createdAt),
-        new Date(Date.now())
-      );
-      const ageInMonths = parseInt(pet.ageInMonths) + diffInMonths;
-      pet = { ...pet, ageInMonths: ageInMonths };
+      const age = calculateAge(pet.ageInMonths, pet.createdAt)
+      pet = { ...pet, age: age };
 
       fields.push({
         name: "name",
@@ -69,10 +65,7 @@ const PetForm = ({ petID, editable = true }) => {
       fields.push({
         name: "ageInMonths",
         label: "Age",
-        value:
-          pet.ageInMonths > 1
-            ? `${pet.ageInMonths} months`
-            : `${pet.ageInMonths} month`,
+        value: pet.age,
         editable: true,
         required: true,
         type: "integer",

@@ -80,4 +80,21 @@ const formatDate = (givenDate, showTime = false) => {
   return formattedDate;
 };
 
-export { monthDifference, formatDate };
+const calculateAge = (age, updatedAt) => {
+  const diffInMonths = monthDifference(
+    new Date(updatedAt),
+    new Date(Date.now())
+  );
+  const ageInMonths = parseInt(age) + diffInMonths;
+  
+  const year = Math.floor(ageInMonths / 12);
+  const month = ageInMonths % 12;
+
+  let ageString = `${month} ${month > 1 ? "months" : "month"}`
+  if(year > 0) {
+    ageString = `${year} ${year > 1 ? "years" : "year"} ${ageString}`
+  }
+  return ageString
+} 
+
+export { monthDifference, formatDate, calculateAge };

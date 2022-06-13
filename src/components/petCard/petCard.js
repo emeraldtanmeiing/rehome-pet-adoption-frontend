@@ -53,7 +53,7 @@ const PetCard = ({ pet, accountType }) => {
                   {pet.name.toUpperCase()}
                 </Col>
                 <Col span={24}>
-                  {pet.type} &#8226; {pet.ageInMonths} months
+                  {pet.type} &#8226; {pet.age}
                 </Col>
                 <Col className="createdAt" span={24}>
                   <ClockCircleFilled style={{ color: "#abaaaa" }} />{" "}
@@ -70,7 +70,7 @@ const PetCard = ({ pet, accountType }) => {
                   {pet.name.toUpperCase()}
                 </Col>
                 <Col span={24}>
-                  {pet.type} &#8226; {pet.ageInMonths} months
+                  {pet.type} &#8226; {pet.age}
                 </Col>
                 <Col className="location" span={24}>
                   <EnvironmentFilled style={{ color: "#abaaaa" }} /> {pet.city},{" "}

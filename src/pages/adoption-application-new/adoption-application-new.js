@@ -9,10 +9,10 @@ import AdopterForm from "../../components/adopterForm/adopterForm.js";
 import RescuerForm from "../../components/rescuerForm/rescuerForm.js";
 import PetForm from "../../components/petForm/petForm.js";
 
-import "./adoptionApplication.less";
+import "./adoption-application-new.less";
 import useAuthContext from "../../hooks/useAuthContext.js";
 
-function AdoptionApplication() {
+function AdoptionApplicationNew() {
   const { Step } = Steps;
   const breakpoint = Grid.useBreakpoint();
 
@@ -227,4 +227,4 @@ function AdoptionApplication() {
   );
 }
 
-export default AdoptionApplication;
+export default AdoptionApplicationNew;
