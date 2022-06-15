@@ -15,6 +15,7 @@ import {
   Checkbox,
   DatePicker,
   TimePicker,
+  Switch,
   message,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
@@ -30,6 +31,8 @@ const EditableFormItem = ({
   value,
   extra,
   type,
+  checkedDesc,
+  uncheckedDesc,
   editable = false,
   required,
   editing,
@@ -85,7 +88,7 @@ const EditableFormItem = ({
   const breakpoint = Grid.useBreakpoint();
   let formItem;
   if (!editing || !editable) {
-    if (type == "image") {
+    if (type === "image") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <div className="image">
@@ -93,7 +96,7 @@ const EditableFormItem = ({
           </div>
         </Col>
       );
-    } else if (type == "textArea") {
+    } else if (type === "textArea") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item name={name} label={label} extra={extra} key={key}>
@@ -101,7 +104,7 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
-    } else if (type == "textArea-small") {
+    } else if (type === "textArea-small") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item name={name} label={label} extra={extra} key={key}>
@@ -112,15 +115,15 @@ const EditableFormItem = ({
     } else {
       formItem = (
         <Col span={24} className="editable-form-item">
-          <Form.Item name={name} label={label} extra={extra} key={key}>
+          <Form.Item name={name} label={label} extra={extra} key={key} >
             <Input disabled />
           </Form.Item>
         </Col>
       );
     }
   } else {
-    //TODO: add boolean, healthCondition, images, color, date
-    if (type == "image") {
+    //TODO: healthCondition, images, color
+    if (type === "image") {
       formItem = (
         <Form.Item
           name={name}
@@ -146,7 +149,7 @@ const EditableFormItem = ({
           </Upload>
         </Form.Item>
       );
-    } else if (type == "textArea") {
+    } else if (type === "textArea") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item
@@ -160,7 +163,7 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
-    } else if (type == "textArea-small") {
+    } else if (type === "textArea-small") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item
@@ -174,7 +177,7 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
-    } else if (type == "integer" || type == "integer-full") {
+    } else if (type === "integer" || type === "integer-full") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item
@@ -193,7 +196,25 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
-    } else if (type == "interestedPetTypes") {
+    } else if (type === "boolean") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+            valuePropName="checked"
+          >
+            <Switch
+              checkedChildren={checkedDesc}
+              unCheckedChildren={uncheckedDesc}
+            />
+          </Form.Item>
+        </Col>
+      );
+    } else if (type === "interestedPetTypes") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item
@@ -230,7 +251,7 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
-    } else if (type == "petTypes") {
+    } else if (type === "petTypes") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item
@@ -317,7 +338,7 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
-    } else if (type == "petLivingSituation") {
+    } else if (type === "petLivingSituation") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item
@@ -337,7 +358,7 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
-    } else if (type == "housemateAcknowledgement") {
+    } else if (type === "housemateAcknowledgement") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item
@@ -361,7 +382,7 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
-    } else if (type == "stateOrProvince") {
+    } else if (type === "stateOrProvince") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item
@@ -392,7 +413,7 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
-    } else if (type == "postcode") {
+    } else if (type === "postcode") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item
@@ -408,7 +429,7 @@ const EditableFormItem = ({
                 validator(_, value) {
                   if (
                     !value ||
-                    (value.length == 5 && value.match(/^[0-9]+$/) != null)
+                    (value.length === 5 && value.match(/^[0-9]+$/) != null)
                   ) {
                     return Promise.resolve();
                   }
@@ -424,7 +445,7 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
-    } else if (type == "website") {
+    } else if (type === "website") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item
@@ -456,7 +477,7 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
-    } else if (type == "phone") {
+    } else if (type === "phone") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item
@@ -481,7 +502,7 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
-    } else if (type == "date") {
+    } else if (type === "date") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item name={name} label={label} extra={extra} key={key}>
@@ -489,7 +510,7 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
-    } else if (type == "time") {
+    } else if (type === "time") {
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item name={name} label={label} extra={extra} key={key}>

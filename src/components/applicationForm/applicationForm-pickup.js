@@ -10,7 +10,7 @@ import EditableForm from "../editableForm/editableForm";
 
 import "./applicationForm.scss";
 
-const ApplicationFormInterview = ({
+const ApplicationFormPickUp = ({
   application = {},
   editable = true,
   size = "default",
@@ -39,39 +39,29 @@ const ApplicationFormInterview = ({
     let fields = [];
 
     fields.push({
-      name: "interviewDate",
-      label: "Interview Date",
-      value: a?.interviewDate
-        ? moment(a.interviewDate).format("DD MMMM YYYY")
-        : null,
+      name: "pickupDate",
+      label: "Pick Up Date",
+      value: a?.pickupDate ? moment(a.pickupDate).format("DD MMMM YYYY") : null,
       editable: true,
       required: false,
       type: "date",
     });
     fields.push({
-      name: "interviewTime",
-      label: "Interview Time",
-      value: a?.interviewTime ? a.interviewTime : null,
+      name: "pickupTime",
+      label: "Pick Up Time",
+      value: a?.pickupTime ? a.pickupTime : null,
       editable: true,
       required: false,
       type: "time",
     });
     fields.push({
-      name: "interviewLink",
-      label: "Interview Link (Zoom, Google meet etc.)",
-      value: a.interviewLink,
-      extra: "For online interview only",
-      editable: true,
-      type: "website",
-    });
-    fields.push({
-      name: "interviewed",
-      label: "Interviewed",
-      value: a.interviewed,
+      name: "pickedup",
+      label: "Picked up",
+      value: a.pickedup,
       editable: true,
       type: "boolean",
-      checkedDesc: "Interview completed",
-      uncheckedDesc: "Waiting for interview",
+      checkedDesc: "Picked up",
+      uncheckedDesc: "Waiting for pick up",
     });
 
     setApplicationFields({
@@ -82,19 +72,17 @@ const ApplicationFormInterview = ({
   };
 
   const handleUpdateApplication = async ({
-    interviewDate,
-    interviewTime,
-    interviewLink,
-    interviewed,
+    pickupDate,
+    pickupTime,
+    pickedup,
   }) => {
     const res = await updateApplications({
       adoptionApplication: omitBy(
         {
           ...application,
-          interviewDate,
-          interviewTime,
-          interviewLink,
-          interviewed,
+          pickupDate,
+          pickupTime,
+          pickedup,
 
           adopterID: application.adopterID._id,
           petID: application.petID._id,
@@ -139,7 +127,7 @@ const ApplicationFormInterview = ({
           <>
             <EditableForm
               fields={filter(applicationFields.data, (v) => {
-                return v.name != "image";
+                return v.name !== "image" && v.value !== null && v.value !== "";
               })}
               api={handleUpdateApplication}
               editable={false}
@@ -151,4 +139,4 @@ const ApplicationFormInterview = ({
   );
 };
 
-export default ApplicationFormInterview;
+export default ApplicationFormPickUp;

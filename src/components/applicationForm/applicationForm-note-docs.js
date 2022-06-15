@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
-import Cookies from "js-cookie";
 import { filter, isEmpty, omitBy, isNil } from "lodash";
 import { useNavigate } from "react-router-dom";
-import {
-  getApplications,
-  updateApplications,
-} from "../../services/application.services";
-import { getAccount } from "../../services/auth.services";
-import { formatDate } from "../../helpers/date";
+import { updateApplications } from "../../services/application.services";
 
-import { Row, Col, Grid, Spin, message } from "antd";
+import { Grid, Spin, Collapse, message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import EditableForm from "../editableForm/editableForm";
 
 import "./applicationForm.scss";
+
+const { Panel } = Collapse;
 
 const ApplicationFormNoteAndDocs = ({
   application = {},
@@ -46,8 +41,18 @@ const ApplicationFormNoteAndDocs = ({
 
     fields.push({
       name: "note",
-      label: "Note",
+      label: "Note (for applicant)",
       value: a.note,
+      extra: "Applicant is able to see this note on his/her side.",
+      editable: true,
+      required: false,
+      type: "textArea-small",
+    });
+    fields.push({
+      name: "noteInternal",
+      label: "Note (for internal staff)",
+      value: a.noteInternal,
+      extra: "Applicant is NOT able to see this note on his/her side.",
       editable: true,
       required: false,
       type: "textArea-small",
@@ -69,27 +74,16 @@ const ApplicationFormNoteAndDocs = ({
   };
 
   const handleUpdateApplication = async ({
-    status,
-    interviewDate,
-    interviewTime,
-    pickupDate,
-    pickupTime,
-    rejectReason,
     note,
+    noteInternal,
     documents,
-    // paymentID,
   }) => {
     const res = await updateApplications({
       adoptionApplication: omitBy(
         {
           ...application,
-          status,
-          interviewDate,
-          interviewTime,
-          pickupDate,
-          pickupTime,
-          rejectReason,
           note,
+          noteInternal,
           documents,
 
           adopterID: application.adopterID._id,
@@ -124,28 +118,35 @@ const ApplicationFormNoteAndDocs = ({
           </>
         )}
 
-        {!isLoading &&
-          (editable ? (
-            <>
-              <EditableForm
-                fields={applicationFields.data}
-                api={handleUpdateApplication}
-                editable={true}
-                size={size}
-              />
-            </>
-          ) : (
-            <>
-              <EditableForm
-                fields={filter(applicationFields.data, (v) => {
-                  return v.name != "image" && v.value != null && v.value != "";
-                })}
-                api={handleUpdateApplication}
-                editable={false}
-                size={size}
-              />
-            </>
-          ))}
+        {!isLoading && (
+          <Collapse defaultActiveKey={["1"]}>
+            <Panel header="Notes & Documents" key="1">
+              {(editable ? (
+              <>
+                <EditableForm
+                  fields={applicationFields.data}
+                  api={handleUpdateApplication}
+                  editable={true}
+                  size={size}
+                />
+              </>
+              ) : (
+              <>
+                <EditableForm
+                  fields={filter(applicationFields.data, (v) => {
+                    return (
+                      v.name !== "image" && v.value !== null && v.value !== ""
+                    );
+                  })}
+                  api={handleUpdateApplication}
+                  editable={false}
+                  size={size}
+                />
+              </>
+              ))}
+            </Panel>
+          </Collapse>
+        )}
       </div>
     </div>
   );

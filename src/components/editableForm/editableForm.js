@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { map } from "lodash";
 import moment from "moment";
 
-import { Row, Col, Button, Form, Upload, Avatar, Select, Grid } from "antd";
-import EditableFormItem from "./editableFormItem"
+import { Row, Col, Button, Form, Grid } from "antd";
+import EditableFormItem from "./editableFormItem";
 
 import "./editableForm.less";
 
@@ -33,6 +33,12 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
         }),
         ...(data.interviewTime && {
           interviewTime: moment("00:00", "HH:mm"),
+        }),
+        ...(data.pickupDate && {
+          pickupDate: moment(data.pickupDate),
+        }),
+        ...(data.pickupTime && {
+          pickupTime: moment("00:00", "HH:mm"),
         }),
       });
     }
@@ -69,10 +75,14 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
       ...data,
       ...validationResult,
       ...(image && { image }),
-      ...(data.interviewDate && { interviewDate: data.interviewDate }), //TODO: interviewDate / pickupDate
-      ...(date && { interviewDate: date }), //TODO: interviewDate / pickupDate
-      ...(data.interviewTime && { interviewTime: data.interviewTime }), //TODO: interviewTime / pickuptime
-      ...(time && { interviewTime: time }), //TODO: interviewTime / pickuptime
+
+      ...(data.interviewDate && { interviewDate: data.interviewDate }),
+      ...(data.pickupDate && { pickupDate: data.pickupDate }),
+      ...(date && { interviewDate: date, pickupDate: date }),
+
+      ...(data.interviewTime && { interviewTime: data.interviewTime }),
+      ...(data.pickupTime && { pickupTime: data.pickupTime }),
+      ...(time && { interviewTime: time, pickupTime: time }),
     });
     if (!res) {
       form.setFieldsValue(data);
@@ -84,6 +94,8 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
         ...(image && { image: res.image }),
         ...(res.interviewDate && { interviewDate: res.interviewDate }),
         ...(res.interviewDate && { interviewTime: res.interviewTime }),
+        ...(res.pickupDate && { pickupDate: res.pickupDate }),
+        ...(res.pickupDate && { pickupTime: res.pickupTime }),
       });
     }
 
@@ -107,7 +119,7 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
   return (
     <div className="editable-form">
       <Row align="center">
-        <Col align="right" span={size == "small" && breakpoint.md ? 18 : 24}>
+        <Col align="right" span={size === "small" && breakpoint.md ? 18 : 24}>
           {editing ? (
             <>
               <Button
@@ -144,7 +156,7 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
           )}
         </Col>
 
-        <Col span={size == "small" && breakpoint.md ? 18 : 24}>
+        <Col span={size === "small" && breakpoint.md ? 18 : 24}>
           <Form form={form} labelCol={{ span: 24 }}>
             <Row gutter={12}>
               <EditableContext.Provider value={form}>
@@ -152,16 +164,16 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
                   return (
                     <Col
                       span={
-                        field.type == "textArea" ||
-                        field.type == "textArea-small" ||
-                        field.type == "image" ||
-                        field.type == "images" ||
-                        field.type == "integer-full" ||
-                        field.type == "interestedPetTypes" ||
-                        field.type == "petTypes" ||
-                        field.type == "petLivingSituation" ||
-                        field.type == "petTypes" ||
-                        field.type == "housemateAcknowledgement" ||
+                        field.type === "textArea" ||
+                        field.type === "textArea-small" ||
+                        field.type === "image" ||
+                        field.type === "images" ||
+                        field.type === "integer-full" ||
+                        field.type === "interestedPetTypes" ||
+                        field.type === "petTypes" ||
+                        field.type === "petLivingSituation" ||
+                        field.type === "petTypes" ||
+                        field.type === "housemateAcknowledgement" ||
                         !breakpoint.md
                           ? 24
                           : 12
@@ -173,6 +185,8 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
                         label={field.label}
                         value={field.value}
                         extra={field.extra}
+                        checkedDesc={field.checkedDesc}
+                        uncheckedDesc={field.uncheckedDesc}
                         editable={field.editable}
                         type={field.type}
                         required={field.required || false}

@@ -1,35 +1,77 @@
-import { map } from "lodash";
-import { calculateAge, formatDate } from "../../helpers/date";
+import { omitBy, isNil } from "lodash";
+import { updateApplications } from "../../services/application.services";
+import { calculateAge } from "../../helpers/date";
 
-import { SearchOutlined } from "@ant-design/icons";
 import {
   Button,
-  Input,
-  Space,
-  Table,
   Avatar,
-  Tag,
   Grid,
   Row,
   Col,
-  Divider,
   Collapse,
+  Modal,
+  Tooltip,
+  message,
 } from "antd";
-import React, { useRef, useState } from "react";
-import Highlighter from "react-highlight-words";
+import React from "react";
+import { ExclamationCircleFilled } from '@ant-design/icons';
 import RescuerForm from "../rescuerForm/rescuerForm";
 import AdopterForm from "../adopterForm/adopterForm";
 import PetForm from "../petForm/petForm";
 import ApplicationSteps from "../application-steps/application-steps";
-
-import "./application.scss";
 import ApplicationStatusDesc from "../application-status-desc/application-status-desc";
 import ApplicationStatus from "../application-status/application-status";
 
-const { Panel } = Collapse;
+import "./application.scss";
 
-const Application = ({ data, showAdopter = false, showRescuer = false, showSteps = false }) => {
+const { Panel } = Collapse;
+const { confirm } = Modal;
+
+const Application = ({
+  data,
+  showAdopter = false,
+  showRescuer = false,
+  showSteps = false,
+}) => {
   const breakpoint = Grid.useBreakpoint();
+
+  const showDeleteConfirm = () => {
+    confirm({
+      title: 'Are you sure to reject this application?',
+      icon: <ExclamationCircleFilled style={{color: "red"}}/>,
+      content: "You can't unreject this application once you reject. You can still edit the details, but the status will remain as 'Rejected'. You can only ask the applicant to apply again if this was a mistake.",
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        handleRejectApplication();
+      },
+    });
+  };
+
+  const handleRejectApplication = async () => {
+    const res = await updateApplications({
+      adoptionApplication: omitBy(
+        {
+          ...data,
+          adopterID: data.adopterID._id,
+          petID: data.petID._id,
+          rescuerID: data.rescuerID._id,
+          paymentID: data.paymentID?._id ? data.paymentID._id : null,
+
+          status: "Rejected",
+        },
+        (v) => isNil(v) || v.toString().trim() === ""
+      ),
+    });
+    if (res?.error) {
+      message.error(res.error.description);
+      return false;
+    } else {
+      message.success("Updated adoption application successfully!");
+      return res;
+    }
+  };
 
   return (
     <div className="application">
@@ -100,14 +142,14 @@ const Application = ({ data, showAdopter = false, showRescuer = false, showSteps
             )}
           </Collapse>
           <div className="status-description">
-          <ApplicationStatusDesc ghost={false} />
+            <ApplicationStatusDesc ghost={false} />
           </div>
         </Col>
       </Row>
 
       <Row className="application-details">
         <Col span={breakpoint.md ? 12 : 24} align="left" className="title">
-          <Row align="bottom" gutter={[12,12]}>
+          <Row align="bottom" gutter={[12, 12]}>
             <Col>
               <h2>Adoption application</h2>
             </Col>
@@ -118,15 +160,20 @@ const Application = ({ data, showAdopter = false, showRescuer = false, showSteps
         </Col>
 
         <Col span={breakpoint.md ? 12 : 24} align="end">
-          <Button danger>
+        <Tooltip placement="top" title="You can't unreject this application once you reject. You can still edit the details, but the status will remain as 'Rejected'. You can only ask the applicant to apply again if this was a mistake.">
+          <Button danger onClick={showDeleteConfirm}>
             Reject application
           </Button>
+          </Tooltip>
         </Col>
 
         {showSteps && (
           <Col span={24} className="steps">
-          <ApplicationSteps adopterID={data.adopterID._id} application={data}/>
-        </Col>
+            <ApplicationSteps
+              adopterID={data.adopterID._id}
+              application={data}
+            />
+          </Col>
         )}
       </Row>
     </div>

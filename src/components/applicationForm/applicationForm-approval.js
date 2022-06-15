@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
 import { filter, isEmpty, omitBy, isNil } from "lodash";
 import { useNavigate } from "react-router-dom";
-import { updateApplications } from "../../services/application.services";
+import {
+  updateApplications
+} from "../../services/application.services";
 
 import { Grid, Spin, message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -10,7 +11,7 @@ import EditableForm from "../editableForm/editableForm";
 
 import "./applicationForm.scss";
 
-const ApplicationFormInterview = ({
+const ApplicationFormApproval = ({
   application = {},
   editable = true,
   size = "default",
@@ -39,39 +40,13 @@ const ApplicationFormInterview = ({
     let fields = [];
 
     fields.push({
-      name: "interviewDate",
-      label: "Interview Date",
-      value: a?.interviewDate
-        ? moment(a.interviewDate).format("DD MMMM YYYY")
-        : null,
-      editable: true,
-      required: false,
-      type: "date",
-    });
-    fields.push({
-      name: "interviewTime",
-      label: "Interview Time",
-      value: a?.interviewTime ? a.interviewTime : null,
-      editable: true,
-      required: false,
-      type: "time",
-    });
-    fields.push({
-      name: "interviewLink",
-      label: "Interview Link (Zoom, Google meet etc.)",
-      value: a.interviewLink,
-      extra: "For online interview only",
-      editable: true,
-      type: "website",
-    });
-    fields.push({
-      name: "interviewed",
-      label: "Interviewed",
-      value: a.interviewed,
+      name: "approved",
+      label: "Approval",
+      value: a.approved,
       editable: true,
       type: "boolean",
-      checkedDesc: "Interview completed",
-      uncheckedDesc: "Waiting for interview",
+      checkedDesc: "Approved",
+      uncheckedDesc: "Not approved",
     });
 
     setApplicationFields({
@@ -82,19 +57,13 @@ const ApplicationFormInterview = ({
   };
 
   const handleUpdateApplication = async ({
-    interviewDate,
-    interviewTime,
-    interviewLink,
-    interviewed,
+    approved,
   }) => {
     const res = await updateApplications({
       adoptionApplication: omitBy(
         {
           ...application,
-          interviewDate,
-          interviewTime,
-          interviewLink,
-          interviewed,
+          approved,
 
           adopterID: application.adopterID._id,
           petID: application.petID._id,
@@ -139,7 +108,7 @@ const ApplicationFormInterview = ({
           <>
             <EditableForm
               fields={filter(applicationFields.data, (v) => {
-                return v.name != "image";
+                return v.name !== "image" ;
               })}
               api={handleUpdateApplication}
               editable={false}
@@ -151,4 +120,4 @@ const ApplicationFormInterview = ({
   );
 };
 
-export default ApplicationFormInterview;
+export default ApplicationFormApproval;

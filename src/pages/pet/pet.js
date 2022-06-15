@@ -412,21 +412,21 @@ function Pet() {
                     {rescuerState.data.facebookLink && (
                       <Button
                         icon={<FacebookFilled style={{ color: "grey" }} />}
-                        href={rescuerState.data.facebookLink}
+                        onClick={()=>{ window.open(rescuerState.data.facebookLink)}}
                       />
                     )}
 
                     {rescuerState.data.instagramLink && (
                       <Button
                         icon={<InstagramFilled style={{ color: "grey" }} />}
-                        href={rescuerState.data.instagramLink}
+                        onClick={()=>{ window.open(rescuerState.data.instagramLink)}}
                       />
                     )}
 
                     {rescuerState.data.organizationWebsiteLink && (
                       <Button
                         icon={<GlobalOutlined style={{ color: "grey" }} />}
-                        href={rescuerState.data.organizationWebsiteLink}
+                        onClick={()=>{ window.open(rescuerState.data.organizationWebsiteLink)}}
                       />
                     )}
 
