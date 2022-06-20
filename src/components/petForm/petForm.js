@@ -43,9 +43,6 @@ const PetForm = ({ petID = null, editable = true }) => {
       let fields = [];
       let pet = res.petsList[0];
 
-      const age = calculateAge(pet.ageInMonths, pet.createdAt);
-      pet = { ...pet, age: age };
-
       fields.push({
         name: "mainImage",
         label: "Main Image",
@@ -59,23 +56,8 @@ const PetForm = ({ petID = null, editable = true }) => {
         label: "More images",
         value: pet.images,
         editable: true,
-        required: true,
+        required: false,
         type: "images",
-      });
-      fields.push({
-        name: "name",
-        label: "Name",
-        value: pet.name,
-        editable: true,
-        required: true,
-      });
-      fields.push({
-        name: "fee",
-        label: "Adoption Fee (in Ringgit Malaysia)",
-        value: pet.fee,
-        editable: true,
-        required: true,
-        type: "integer"
       });
       fields.push({
         name: "type",
@@ -86,12 +68,11 @@ const PetForm = ({ petID = null, editable = true }) => {
         type: "petType"
       });
       fields.push({
-        name: "ageInMonths",
-        label: "Age",
-        value: pet.ageInMonths,
+        name: "name",
+        label: "Name",
+        value: pet.name,
         editable: true,
         required: true,
-        type: "integer",
       });
       fields.push({
         name: "gender",
@@ -102,11 +83,12 @@ const PetForm = ({ petID = null, editable = true }) => {
         type: "petGender"
       });
       fields.push({
-        name: "breed",
-        label: "Breed",
-        value: pet.breed,
+        name: "petSize",
+        label: "Pet Size",
+        value: pet.petSize,
         editable: true,
         required: true,
+        type: "petSize",
       });
       fields.push({
         name: "color",
@@ -115,6 +97,30 @@ const PetForm = ({ petID = null, editable = true }) => {
         editable: true,
         required: true,
         type: "color",
+      });
+      fields.push({
+        name: "birthDate",
+        label: "Birth Date",
+        value: pet.birthDate,
+        editable: true,
+        required: true,
+        type: "date-month",
+      });
+      
+      fields.push({
+        name: "breed",
+        label: "Breed",
+        value: pet.breed,
+        editable: true,
+        required: true,
+      });
+      fields.push({
+        name: "healthCondition",
+        label: "Health Condition",
+        value: pet.healthCondition,
+        editable: true,
+        required: true,
+        type: "healthCondition",
       });
       fields.push({
         name: "vaccinated",
@@ -147,12 +153,28 @@ const PetForm = ({ petID = null, editable = true }) => {
         type: "boolean",
       });
       fields.push({
-        name: "healthCondition",
-        label: "Health Condition",
-        value: pet.healthCondition,
+        name: "foodSize",
+        label: "Food Size (per day)",
+        value: pet.foodSize,
         editable: true,
         required: true,
-        type: "healthCondition",
+        type: "foodSize",
+      });
+      fields.push({
+        name: "foodFee",
+        label: "Food Fee (per month)",
+        value: pet.foodFee,
+        editable: true,
+        required: true,
+        type: "foodFee",
+      });
+      fields.push({
+        name: "fee",
+        label: "Adoption Fee (in Ringgit Malaysia)",
+        value: pet.fee,
+        editable: true,
+        required: true,
+        type: "integer"
       });
       fields.push({
         name: "stateOrProvince",
@@ -176,6 +198,14 @@ const PetForm = ({ petID = null, editable = true }) => {
         editable: true,
         required: true,
         type: "postcode",
+      });
+      fields.push({
+        name: "country",
+        label: "Country",
+        value: pet.country,
+        editable: false,
+        required: true,
+        type: "country",
       });
       fields.push({
         name: "adopted",
@@ -219,7 +249,6 @@ const PetForm = ({ petID = null, editable = true }) => {
     name,
     fee,
     type,
-    ageInMonths,
     gender,
     breed,
     color,
@@ -242,7 +271,6 @@ const PetForm = ({ petID = null, editable = true }) => {
         name,
         fee,
         type,
-        ageInMonths,
         gender,
         breed,
         color,

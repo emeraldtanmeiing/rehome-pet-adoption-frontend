@@ -67,7 +67,7 @@ function Pet() {
     } else {
       const pet = res.petsList[0];
       const colorCodes = getColorCodes(pet.color);
-      const age = calculateAge(pet.ageInMonths, pet.createdAt);
+      const age = calculateAge(pet.birthDate);
       const data = { ...pet, colorCodes: colorCodes, age: age };
 
       setPetState({ ...petState, status: "success", data: data });

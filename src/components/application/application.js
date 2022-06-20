@@ -86,7 +86,7 @@ const Application = ({
               <strong>Pet</strong>
               <br />
               {data.petID.name},{" "}
-              {calculateAge(data.petID.ageInMonths, data.petID.createdAt)}
+              {calculateAge(data.petID.birthDate)}
             </Col>
           </Row>
         </Col>

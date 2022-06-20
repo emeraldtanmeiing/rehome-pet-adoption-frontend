@@ -18,7 +18,7 @@ function PetsListing() {
   const petID = query.get("petID");
   const type = query.get("type");
   const name = query.get("name");
-  const ageInMonths = query.get("ageInMonths");
+  // const ageInMonths = query.get("ageInMonths");
   const rescuerID = query.get("rescuerID");
   const resultsPerPage = query.get("resultsPerPage");
   const page = query.get("page");
@@ -29,7 +29,7 @@ function PetsListing() {
     setPetState({ ...petState, status: "loading" });
 
     const params = omitBy(
-      { petID, type, name, ageInMonths, rescuerID, resultsPerPage, page },
+      { petID, type, name, rescuerID, resultsPerPage, page },
       v => isNil(v) || v.toString().trim() === ''
     );
 
@@ -40,7 +40,7 @@ function PetsListing() {
       message.error(res.error.description);
     } else {
       res.petsList.map((pet) => {
-        const age = calculateAge(pet.ageInMonths, pet.createdAt)
+        const age = calculateAge(pet.birthDate)
         pet.age = age;
       });
       const data = {

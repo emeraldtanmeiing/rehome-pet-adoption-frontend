@@ -1,17 +1,30 @@
 .add-pet {
-  .left {
-    .ant-radio-group,
-    .ant-form-item-control-input-content,
-    .ant-select-selection-item,
-    .ant-form-item-extra {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-    }
+
+  form > .ant-row {
+    padding-bottom: 10px;
+  }
+  .ant-radio-group,
+  .ant-form-item-control-input-content,
+  .ant-select-selection-item,
+  .ant-form-item-extra {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .ant-input-textarea, .ant-picker {
+    width: 100%;
+  }
+
+  .ant-collapse-content {
+    padding: 10px;
+  }
+
+  .submit-btn {
+    padding-top: 20px;
   }
 
   h1 {
     margin-bottom: 30px;
   }
-
 }

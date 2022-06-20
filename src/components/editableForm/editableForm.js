@@ -18,6 +18,7 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [date, setDate] = useState(null);
+  const [dateMonth, setDateMonth] = useState(null);
   const [time, setTime] = useState(null);
 
   useEffect(() => {
@@ -39,6 +40,9 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
         }),
         ...(data.pickupTime && {
           pickupTime: moment("00:00", "HH:mm"),
+        }),
+        ...(data.birthDate && {
+          birthDate: moment(data.birthDate),
         }),
       });
     }
@@ -70,7 +74,7 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
       setIsLoading(false);
       return;
     }
-
+    console.log({dateMonth})
     const res = await api({
       ...data,
       ...validationResult,
@@ -83,6 +87,9 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
       ...(data.interviewTime && { interviewTime: data.interviewTime }),
       ...(data.pickupTime && { pickupTime: data.pickupTime }),
       ...(time && { interviewTime: time, pickupTime: time }),
+
+      ...(data.birthDate && { birthDate: data.birthDate }),
+      ...(dateMonth && { birthDate: dateMonth }),
     });
     if (!res) {
       form.setFieldsValue(data);
@@ -93,9 +100,10 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
         ...validationResult,
         ...(image && { image: res.image }),
         ...(res.interviewDate && { interviewDate: res.interviewDate }),
-        ...(res.interviewDate && { interviewTime: res.interviewTime }),
+        ...(res.interviewTime && { interviewTime: res.interviewTime }),
         ...(res.pickupDate && { pickupDate: res.pickupDate }),
-        ...(res.pickupDate && { pickupTime: res.pickupTime }),
+        ...(res.pickupTime && { pickupTime: res.pickupTime }),
+        ...(res.birthDate && { birthDate: res.birthDate }),
       });
     }
 
@@ -193,6 +201,7 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
                         editing={editing}
                         setImage={setImage}
                         setDate={setDate}
+                        setDateMonth={setDateMonth}
                         setTime={setTime}
                       />
                     </Col>

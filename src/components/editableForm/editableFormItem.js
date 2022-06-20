@@ -40,6 +40,7 @@ const EditableFormItem = ({
   addonAfter,
   setImage,
   setDate,
+  setDateMonth,
   setTime,
   ...restProps
 }) => {
@@ -80,6 +81,11 @@ const EditableFormItem = ({
 
   function onDateChange(date, dateString) {
     setDate(dateString);
+  }
+
+  function onDateMonthChange(date, dateString) {
+    setDateMonth(dateString);
+    console.log({dateString})
   }
 
   function onTimeChange(time, timeString) {
@@ -436,6 +442,66 @@ const EditableFormItem = ({
           </Form.Item>
         </Col>
       );
+    } else if (type === "petSize") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Select>
+              <Option value="Small">Small</Option>
+              <Option value="Medium">Medium</Option>
+              <Option value="Large">Large</Option>
+              <Option value="Giant">Giant</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      );
+    } else if (type === "foodSize") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Select>
+              <Option value="<= 0.5 cups">{`<= 0.5 cups`}</Option>
+              <Option value="0.5 - 1 cups">0.5 - 1 cups</Option>
+              <Option value="1 - 2 cups">1 - 2 cups</Option>
+              <Option value="2 - 3 cups">2 - 3 cups</Option>
+              <Option value="3 - 5 cups">3 - 5 cups</Option>
+              <Option value=">= 5 cups">{`>= 5 cups`}</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      );
+    } else if (type === "foodFee") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Select>
+              <Option value="<= RM100">{`<= RM100`}</Option>
+              <Option value="RM100 - RM300">RM100 - RM300</Option>
+              <Option value="RM300 - RM500">RM300 - RM500</Option>
+              <Option value="RM500 - RM700">RM500 - RM700</Option>
+              <Option value=">= RM700">{`>= RM700`}</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      );
     } else if (type === "color") {
       formItem = (
         <Col span={24} className="editable-form-item">
@@ -638,6 +704,14 @@ const EditableFormItem = ({
         <Col span={24} className="editable-form-item">
           <Form.Item name={name} label={label} extra={extra} key={key}>
             <DatePicker onChange={onDateChange} format="DD MMMM YYYY" />
+          </Form.Item>
+        </Col>
+      );
+    } else if (type === "date-month") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item name={name} label={label} extra={extra} key={key}>
+            <DatePicker onChange={onDateMonthChange} picker="month" format="MMMM YYYY" />
           </Form.Item>
         </Col>
       );

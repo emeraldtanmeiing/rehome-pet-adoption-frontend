@@ -80,12 +80,11 @@ const formatDate = (givenDate, showTime = false) => {
   return formattedDate;
 };
 
-const calculateAge = (age, updatedAt) => {
-  const diffInMonths = monthDifference(
-    new Date(updatedAt),
+const calculateAge = (birthDate) => {
+  const ageInMonths = monthDifference(
+    new Date(birthDate),
     new Date(Date.now())
   );
-  const ageInMonths = parseInt(age) + diffInMonths;
   
   const year = Math.floor(ageInMonths / 12);
   const month = ageInMonths % 12;
