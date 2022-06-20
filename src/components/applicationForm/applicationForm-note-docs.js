@@ -15,6 +15,7 @@ const ApplicationFormNoteAndDocs = ({
   application = {},
   editable = true,
   size = "default",
+  showNoteForStaff = true,
 }) => {
   const navigate = useNavigate();
 
@@ -41,26 +42,31 @@ const ApplicationFormNoteAndDocs = ({
 
     fields.push({
       name: "note",
-      label: "Note (for applicant)",
+      label: editable ? "Notes (for applicant)" : "Notes",
       value: a.note,
-      extra: "Applicant is able to see this note on his/her side.",
+      extra: editable ? "Applicant is able to see this note on his/her side." : null,
       editable: true,
       required: false,
       type: "textArea-small",
-    });
-    fields.push({
-      name: "noteInternal",
-      label: "Note (for internal staff)",
-      value: a.noteInternal,
-      extra: "Applicant is NOT able to see this note on his/her side.",
-      editable: true,
-      required: false,
-      type: "textArea-small",
-    });
+    })
+
+    if(showNoteForStaff){
+      fields.push({
+        name: "noteInternal",
+        label: "Notes (for internal staff)",
+        value: a.noteInternal,
+        extra: "Applicant is NOT able to see this note on his/her side.",
+        editable: true,
+        required: false,
+        type: "textArea-small",
+      });
+    }
+
     fields.push({
       name: "documents",
       label: "Documents",
       value: a?.documents ? a.documents : null,
+      extra: editable ? "Applicant is able to see the documents." : null,
       editable: true,
       required: false,
       type: "document",

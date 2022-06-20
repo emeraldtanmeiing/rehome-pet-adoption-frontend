@@ -11,8 +11,8 @@ import ApplicationStatus from "../application-status/application-status";
 
 const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
   let data = map(applicationsList, (a, index) => {
-    const interviewDate = a.interviewDate ? a.interviewDate : '-';
-    const interviewTime = a.interviewTime ? a.interviewTime : '-';
+    const interviewDate = a.interviewDate ? a.interviewDate : "-";
+    const interviewTime = a.interviewTime ? a.interviewTime : "-";
     return {
       applicationID: a._id,
       key: index,
@@ -28,7 +28,9 @@ const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
       status: a.status,
       interview: `${interviewDate}, ${interviewTime}`,
       interviewDate: a.interviewDate || null,
-      note: a.note || '-',
+      note: showRescuer
+        ? a.note
+        : `For staff: ${a.noteInternal}. For applicant: ${a.note}`,
     };
   });
 
@@ -172,24 +174,11 @@ const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
       ...getColumnSearchProps("appliedAt"),
     },
     {
-      title: "Applicant",
-      dataIndex: "adopter",
-      key: "adopter",
-      ellipsis: true,
-      ...getColumnSearchProps("adopter"),
-    },
-    {
-      title: "Applicant Phone",
-      dataIndex: "adopterPhone",
-      key: "adopterPhone",
-      ...getColumnSearchProps("adopterPhone"),
-    },
-    {
       title: "Status",
       dataIndex: "status",
       key: "status",
       render: (tag) => {
-        return <ApplicationStatus tag={tag} />
+        return <ApplicationStatus tag={tag} />;
       },
       filters: [
         { text: <span>To Review</span>, value: "To Review" },
@@ -237,12 +226,37 @@ const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
   }
   if (!showRescuer) {
     columns.push({
+      title: "Applicant",
+      dataIndex: "adopter",
+      key: "adopter",
+      ellipsis: true,
+      ...getColumnSearchProps("adopter"),
+    });
+    columns.push({
+      title: "Applicant Phone",
+      dataIndex: "adopterPhone",
+      key: "adopterPhone",
+      ...getColumnSearchProps("adopterPhone"),
+    });
+    columns.push({
       title: "Action",
       key: "operation",
       width: 100,
       render: (record) => (
         <a href={`/rescuer/application?applicationID=${record.applicationID}`}>
           Edit
+        </a>
+      ),
+    });
+  }
+  if (showRescuer) {
+    columns.push({
+      title: "Action",
+      key: "operation",
+      width: 100,
+      render: (record) => (
+        <a href={`/adopt/application?applicationID=${record.applicationID}`}>
+          View
         </a>
       ),
     });

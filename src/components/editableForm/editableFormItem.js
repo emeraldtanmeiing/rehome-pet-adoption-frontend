@@ -16,6 +16,7 @@ import {
   DatePicker,
   TimePicker,
   Switch,
+  Radio,
   message,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
@@ -115,14 +116,14 @@ const EditableFormItem = ({
     } else {
       formItem = (
         <Col span={24} className="editable-form-item">
-          <Form.Item name={name} label={label} extra={extra} key={key} >
+          <Form.Item name={name} label={label} extra={extra} key={key}>
             <Input disabled />
           </Form.Item>
         </Col>
       );
     }
   } else {
-    //TODO: healthCondition, images, color
+    //TODO: images
     if (type === "image") {
       formItem = (
         <Form.Item
@@ -379,6 +380,136 @@ const EditableFormItem = ({
                 Not everyone in the household knows I am applying to adopt
               </Option>
             </Select>
+          </Form.Item>
+        </Col>
+      );
+    } else if (type === "healthCondition") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Select placeholder="Select your situation">
+              <Option value="Healthy">Healthy</Option>
+              <Option value="Minor injury">Minor injury</Option>
+              <Option value="Serious injury">Serious injury</Option>
+              <Option value="Chronic disease">Chronic disease</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      );
+    } else if (type === "petType") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Select placeholder="Select your situation">
+              <Option value="Dog">Dog</Option>
+              <Option value="Cat">Cat</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      );
+    } else if (type === "petGender") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Select placeholder="Select pet's gender">
+              <Option value="Male">Male</Option>
+              <Option value="Female">Female</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      );
+    } else if (type === "color") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item
+            name={name}
+            label={label}
+            extra={extra}
+            key={key}
+            required={required}
+          >
+            <Checkbox.Group>
+              <Row type="flex" style={{ alignItems: "center" }}>
+                <Col span={4}>
+                  <Checkbox
+                    value="White"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    White
+                  </Checkbox>
+                </Col>
+                <Col span={4}>
+                  <Checkbox
+                    value="Brown"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Brown
+                  </Checkbox>
+                </Col>
+                <Col span={4}>
+                  <Checkbox
+                    value="Black"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Black
+                  </Checkbox>
+                </Col>
+                <Col span={4}>
+                  <Checkbox
+                    value="Grey"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Grey
+                  </Checkbox>
+                </Col>
+                <Col span={4}>
+                  <Checkbox
+                    value="Golden"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Golden
+                  </Checkbox>
+                </Col>
+                <Col span={4}>
+                  <Checkbox
+                    value="Cream"
+                    style={{
+                      lineHeight: "32px",
+                    }}
+                  >
+                    Cream
+                  </Checkbox>
+                </Col>
+              </Row>
+            </Checkbox.Group>
           </Form.Item>
         </Col>
       );

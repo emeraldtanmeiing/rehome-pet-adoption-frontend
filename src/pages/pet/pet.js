@@ -411,22 +411,33 @@ function Pet() {
                   >
                     {rescuerState.data.facebookLink && (
                       <Button
+                        style={{ marginRight: "20px" }}
                         icon={<FacebookFilled style={{ color: "grey" }} />}
-                        onClick={()=>{ window.open(rescuerState.data.facebookLink)}}
+                        onClick={() => {
+                          window.open(rescuerState.data.facebookLink);
+                        }}
                       />
                     )}
 
                     {rescuerState.data.instagramLink && (
                       <Button
+                        style={{ marginRight: "20px" }}
                         icon={<InstagramFilled style={{ color: "grey" }} />}
-                        onClick={()=>{ window.open(rescuerState.data.instagramLink)}}
+                        onClick={() => {
+                          window.open(rescuerState.data.instagramLink);
+                        }}
                       />
                     )}
 
                     {rescuerState.data.organizationWebsiteLink && (
                       <Button
+                        style={{ marginRight: "20px" }}
                         icon={<GlobalOutlined style={{ color: "grey" }} />}
-                        onClick={()=>{ window.open(rescuerState.data.organizationWebsiteLink)}}
+                        onClick={() => {
+                          window.open(
+                            rescuerState.data.organizationWebsiteLink
+                          );
+                        }}
                       />
                     )}
 

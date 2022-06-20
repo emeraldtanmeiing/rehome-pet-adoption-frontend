@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { filter, map } from "lodash";
+import { filter, map, omit } from "lodash";
+import useQuery from "../../hooks/useQuery";
 import { calculateAge } from "../../helpers/date";
-import { getPets } from "../../services/pet.services.js";
+import { getPets, updatePet } from "../../services/pet.services.js";
 
 import { Spin, message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -9,8 +10,8 @@ import EditableForm from "../editableForm/editableForm";
 
 import "./petForm.less";
 
-const PetForm = ({ petID, editable = true }) => {
-  const [petState, setPetState] = useState({
+const PetForm = ({ petID = null, editable = true }) => {
+  const [pet, setPet] = useState({
     status: "idle",
     data: null,
   });
@@ -21,14 +22,18 @@ const PetForm = ({ petID, editable = true }) => {
   });
 
   const isLoading =
-    petState.status !== "success" || petFields.status !== "success";
+    pet.status !== "success" || petFields.status !== "success";
 
+  const query = useQuery();
   useEffect(() => {
+    if (!petID) {
+      petID = query.get("petID");
+    }
     fetchPet();
   }, []);
 
   const fetchPet = async () => {
-    setPetState({ ...petState, status: "loading" });
+    setPet({ ...pet, status: "loading" });
     setPetFields({ ...petFields, status: "loading" });
 
     const res = await getPets({ petID });
@@ -38,9 +43,25 @@ const PetForm = ({ petID, editable = true }) => {
       let fields = [];
       let pet = res.petsList[0];
 
-      const age = calculateAge(pet.ageInMonths, pet.createdAt)
+      const age = calculateAge(pet.ageInMonths, pet.createdAt);
       pet = { ...pet, age: age };
 
+      fields.push({
+        name: "mainImage",
+        label: "Main Image",
+        value: pet.mainImage,
+        editable: true,
+        required: true,
+        type: "image",
+      });
+      fields.push({
+        name: "images",
+        label: "More images",
+        value: pet.images,
+        editable: true,
+        required: true,
+        type: "images",
+      });
       fields.push({
         name: "name",
         label: "Name",
@@ -50,10 +71,11 @@ const PetForm = ({ petID, editable = true }) => {
       });
       fields.push({
         name: "fee",
-        label: "Adoption Fee",
-        value: pet.fee == 0 ? `Free` : `RM ${pet.fee}`,
+        label: "Adoption Fee (in Ringgit Malaysia)",
+        value: pet.fee,
         editable: true,
         required: true,
+        type: "integer"
       });
       fields.push({
         name: "type",
@@ -61,11 +83,12 @@ const PetForm = ({ petID, editable = true }) => {
         value: pet.type,
         editable: true,
         required: true,
+        type: "petType"
       });
       fields.push({
         name: "ageInMonths",
         label: "Age",
-        value: pet.age,
+        value: pet.ageInMonths,
         editable: true,
         required: true,
         type: "integer",
@@ -76,6 +99,7 @@ const PetForm = ({ petID, editable = true }) => {
         value: pet.gender,
         editable: true,
         required: true,
+        type: "petGender"
       });
       fields.push({
         name: "breed",
@@ -95,7 +119,9 @@ const PetForm = ({ petID, editable = true }) => {
       fields.push({
         name: "vaccinated",
         label: "Vaccination",
-        value: pet.vaccinated ? "Vaccinated" : "Not Vaccinated",
+        value: pet.vaccinated,
+        checkedDesc: "Vaccinated",
+        uncheckedDesc: "Not Vaccinated",
         editable: true,
         required: true,
         type: "boolean",
@@ -103,9 +129,9 @@ const PetForm = ({ petID, editable = true }) => {
       fields.push({
         name: "spayedOrNeutered",
         label: "Spayed / Neutered",
-        value: pet.spayedOrNeutered
-          ? "Spayed / Neutered"
-          : "Not Spayed / Neutered",
+        value: pet.spayedOrNeutered,
+        checkedDesc: "Spayed / Neutered",
+        uncheckedDesc: "Not Spayed / Neutered",
         editable: true,
         required: true,
         type: "boolean",
@@ -113,7 +139,9 @@ const PetForm = ({ petID, editable = true }) => {
       fields.push({
         name: "dewormed",
         label: "Deworming",
-        value: pet.dewormed ? "Dewormed" : "Not Dewormed",
+        value: pet.dewormed,
+        checkedDesc: "Dewormed",
+        uncheckedDesc: "Not Dewormed",
         editable: true,
         required: true,
         type: "boolean",
@@ -152,15 +180,17 @@ const PetForm = ({ petID, editable = true }) => {
       fields.push({
         name: "adopted",
         label: "Adopted",
-        value: pet.adopted ? "Adopted" : "Not adopted",
-        editable: true,
+        value: pet.adopted,
+        editable: false,
         required: true,
         type: "boolean",
       });
       fields.push({
         name: "active",
         label: "Active",
-        value: pet.active ? "Active" : "Deactivated",
+        value: pet.active,
+        checkedDesc: "Active",
+        uncheckedDesc: "Not Active",
         editable: true,
         required: true,
         type: "boolean",
@@ -173,26 +203,10 @@ const PetForm = ({ petID, editable = true }) => {
         required: true,
         type: "textArea",
       });
-      fields.push({
-        name: "mainImage",
-        label: "Main Image",
-        value: pet.mainImage,
-        editable: true,
-        required: true,
-        type: "image",
-      });
-      fields.push({
-        name: "images",
-        label: "More images",
-        value: pet.images,
-        editable: true,
-        required: true,
-        type: "images",
-      });
 
       setPetFields({ ...petFields, status: "success", data: fields });
-      setPetState({
-        ...petState,
+      setPet({
+        ...pet,
         status: "success",
         data: pet,
       });
@@ -200,33 +214,57 @@ const PetForm = ({ petID, editable = true }) => {
   };
 
   const handleUpdatePet = async ({
+    mainImage,
+    images,
     name,
-    phone,
-    address,
+    fee,
+    type,
+    ageInMonths,
+    gender,
+    breed,
+    color,
+    vaccinated,
+    spayedOrNeutered,
+    dewormed,
+    healthCondition,
     stateOrProvince,
     city,
     postcode,
-    image,
+    // adopted,
+    active,
+    description,
   }) => {
-    // const res = await updatePet({
-    //   pet: {
-    //     ...pet.data,
-    //     name,
-    //     phone,
-    //     address,
-    //     stateOrProvince,
-    //     city,
-    //     postcode,
-    //     image,
-    //   },
-    // });
-    // if (res?.error) {
-    //   message.error(res.error.description);
-    //   return false;
-    // } else {
-    //   message.success("Updated pet successfully!");
-    //   return res;
-    // }
+    const res = await updatePet({
+      pet: omit({
+        ...pet.data,
+        mainImage,
+        images,
+        name,
+        fee,
+        type,
+        ageInMonths,
+        gender,
+        breed,
+        color,
+        vaccinated,
+        spayedOrNeutered,
+        dewormed,
+        healthCondition,
+        stateOrProvince,
+        city,
+        postcode,
+        // adopted,
+        active,
+        description,
+      }, ['age']),
+    });
+    if (res?.error) {
+      message.error(res.error.description);
+      return false;
+    } else {
+      message.success("Updated pet successfully!");
+      return res;
+    }
   };
 
   return (
@@ -249,7 +287,7 @@ const PetForm = ({ petID, editable = true }) => {
           <>
             <div className="sliders">
               {map(
-                [petState.data.mainImage, ...petState.data.images],
+                [pet.data.mainImage, ...pet.data.images],
                 (image, index) => {
                   return (
                     <img

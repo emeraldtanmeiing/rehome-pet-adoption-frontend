@@ -77,6 +77,10 @@ const ApplicationFormApproval = ({
     });
     if (res?.error) {
       message.error(res.error.description);
+      if(res.error.errorCode === 4106){
+        const approvedApplicant = res.error.errorObject.map(a => a.adopterID.name)
+        message.error(`Approved applicant: ${approvedApplicant}`, 8)
+      }
       return false;
     } else {
       message.success("Updated adoption application successfully!");

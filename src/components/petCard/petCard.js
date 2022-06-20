@@ -14,9 +14,9 @@ const PetCard = ({ pet, accountType }) => {
 
   const handleOnClick = () => {
     if (accountType === "rescuer") {
-      navigate(`/rescuer/pets-listing?petID=${pet._id}`);
+      navigate(`/rescuer/pet?petID=${pet._id}`);
     } else {
-      navigate(`/pets?petID=${pet._id}`);
+      navigate(`/pet?petID=${pet._id}`);
     }
   };
 

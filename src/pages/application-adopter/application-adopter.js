@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import useAuthContext from "../../hooks/useAuthContext";
 import useQuery from "../../hooks/useQuery.js";
 import { getApplications } from "../../services/application.services";
 
-import { Spin, message } from "antd";
+import { Col, Avatar, Grid, Spin, message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import ApplicationsListing from "../../components/application/application";
+
+import "./application-adopter.scss";
+import ApplicationStatusDesc from "../../components/application-status-desc/application-status-desc";
 import Application from "../../components/application/application";
 
-import "./application-rescuer.scss";
-
-function ApplicationRescuer() {
+function ApplicationAdopter() {
   const [applicationState, setApplicationState] = useState({
     status: "idle",
     data: null,
@@ -45,7 +49,7 @@ function ApplicationRescuer() {
   };
 
   return (
-    <div className="application-rescuer">
+    <div className="application-adopter">
       {isLoading && (
         <>
           <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
@@ -53,8 +57,9 @@ function ApplicationRescuer() {
       )}
       {!isLoading && (
         <>
-          <div className="application-rescuer-wrapper">
-            <Application data={applicationState.data} isRescuer={true}/>
+          <div className="application-adopter-wrapper">
+            {/* <ApplicationStatusDesc /> */}
+            <Application data={applicationState.data} isAdopter={true}/>
           </div>
         </>
       )}
@@ -62,4 +67,4 @@ function ApplicationRescuer() {
   );
 }
 
-export default ApplicationRescuer;
+export default ApplicationAdopter;

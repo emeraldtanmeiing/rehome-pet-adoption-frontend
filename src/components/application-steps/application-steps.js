@@ -9,7 +9,13 @@ import ApplicationFormNoteAndDocs from "../applicationForm/applicationForm-note-
 
 import "./application-steps.scss";
 
-function ApplicationSteps({ adopterID, application }) {
+function ApplicationSteps({
+  adopterID,
+  application,
+  isAdopter = false,
+  isRescuer = false,
+  isAdmin = false,
+}) {
   const { Step } = Steps;
   const [current, setCurrent] = useState(0);
   const onChange = (value) => {
@@ -34,86 +40,184 @@ function ApplicationSteps({ adopterID, application }) {
 
   const applicantConditionInfo = (
     <>
-      <AdoptionForm
-        adopterID={adopterID}
-        editable={false}
-        showDescription={false}
-      />
+      {isAdopter && (
+        <>
+          <div>
+            The pet's rescuer/contact person/organization will take a look on your condition
+            to see how to help you during adoption.
+            <br />
+            <br />
+            <br />
+          </div>
+          <AdoptionForm
+            adopterID={adopterID}
+            editable={true}
+            showDescription={false}
+          />
+        </>
+      )}
+      {(isRescuer || isAdmin) && (
+        <>
+          <AdoptionForm
+            adopterID={adopterID}
+            editable={false}
+            showDescription={false}
+          />
+        </>
+      )}
     </>
   );
 
   const interviewInfo = (
     <>
-      <ApplicationFormInterview application={application} />
+      {isAdopter && (
+        <>
+          <div>
+            An offline or online interview with you will be arranged by the
+            pet's rescuer/contact person/organization. If it's an online interview (via
+            Zoom, Google Meet etc), you will be able to get the link here.
+            <br />
+            <br />
+            <br />
+          </div>
+          <ApplicationFormInterview
+            application={application}
+            editable={false}
+          />
+        </>
+      )}
+      {(isRescuer || isAdmin) && (
+        <>
+          <ApplicationFormInterview application={application} />
+        </>
+      )}
     </>
   );
 
   const approvalInfo = (
     <>
-      {application.status === "To Review" ||
-      application.status === "To Interview" ? (
+      {isAdopter && (
         <>
-          Please review applicant's condition and/or arrange interview before
-          approve the application.
+          <div>
+            After review and interview, the pet's rescuer/contact person/organization will
+            approve the application by setting the 'Approval' to 'true' if
+            you're the suitable applicant!
+            <br />
+            <br />
+            <br />
+          </div>
+          <ApplicationFormApproval application={application} editable={false}/>
         </>
-      ) : (
+      )}
+      {(isRescuer || isAdmin) && (
         <>
-          <Row align="center">
-            <Col span={20}>
-              Approve the application means you allowed the applicant to pay and
-              arrange for picking up.
-              <br />
-              <br />
-              After approval, ReHome will notify the applicant to pay the
-              adoption fee. Hence, please make sure you only approve one
-              applicant per pet at the same time to prevent duplication of
-              payments for the same pet from different applicant. <br />
-              <br />
-              If you think that the applicant is not suitable to adopt the pet,
-              please use the 'Reject application' button above to reject the
-              application.
-            </Col>
-          </Row>
-          <ApplicationFormApproval application={application} />
+          {application.status === "To Review" ||
+          application.status === "To Interview" ? (
+            <>
+              Please review applicant's condition and/or arrange interview
+              before approve the application.
+            </>
+          ) : (
+            <>
+              <Row align="center">
+                <Col span={20}>
+                  Approve the application means you allowed the applicant to pay
+                  and arrange for picking up.
+                  <br />
+                  <br />
+                  After approval, ReHome will allow the applicant to pay the
+                  adoption fee. Hence, please make sure you only approve one
+                  applicant per pet at the same time to prevent duplication of
+                  payments for the same pet from different applicant. <br />
+                  <br />
+                  If you think that the applicant is not suitable to adopt the
+                  pet, please use the 'Reject application' button above to
+                  reject the application.
+                </Col>
+              </Row>
+              <ApplicationFormApproval application={application} />
+            </>
+          )}
         </>
       )}
     </>
   );
+
   const paymentInfo = (
     <>
-      {application.status === "To Review" ||
-      application.status === "To Interview" ||
-      application.status === "To Approve" ? (
+      {isAdopter && (
         <>
-          Please approve the application before ReHome notify the applicant
-          about the adoption fee payment.
+          <div>
+            Adoption fee:{" "}
+            {application.petID.fee === 0
+              ? "FREE"
+              : `RM ${application.petID.fee}`}
+            <br />
+            <br />
+            After approval, you will be able to make a payment of adoption fee
+            via ReHome if it's needed.
+            <br />
+            <br />
+            <br />
+          </div>
         </>
-      ) : (
-        <>Notified the applicant about payment / FREE</>
+      )}
+      {(isRescuer || isAdmin) && (
+        <>
+          {application.status === "To Review" ||
+          application.status === "To Interview" ||
+          application.status === "To Approve" ? (
+            <>
+              Please approve the application before the applicant is able to pay
+              the adoption fee.
+            </>
+          ) : (
+            <>Notified the applicant about payment / FREE</>
+          )}
+        </>
       )}
     </>
   );
+
   const pickupInfo = (
     <>
-      {application.status === "To Review" ||
-      application.status === "To Interview" ||
-      application.status === "To Approve" ||
-      application.status === "To Pay" ? (
+      {isAdopter && (
         <>
-          The applicant haven't do payment. Pick up can be scheduled after the
-          payment is done.
+          <div>
+            A pick up date and time will be scheduled after payment (if the
+            adoption fee is not free).
+            <br />
+            <br />
+            <br />
+          </div>
+          <ApplicationFormPickUp application={application} editable={false} />
         </>
-      ) : (
+      )}
+      {(isRescuer || isAdmin) && (
         <>
-          After you click this button, other adoption applicants will be
-          rejected and their applications will be stated as 'Rejected'. Hence,
-          only click this button after the pet is picked up and make sure the
-          adoption is fully completed.
-          <br />
-          <br />
-          Reminder: upload all necessary documents or record the details 'note'
-          section above.
-          <ApplicationFormPickUp application={application} />
+          <>
+            {application.status === "To Review" ||
+            application.status === "To Interview" ||
+            application.status === "To Approve" ||
+            application.status === "To Pay" ? (
+              <>
+                The applicant haven't do payment. Pick up can be scheduled after
+                the payment is done.
+              </>
+            ) : (
+              <>
+                After you click this button, other adoption applicants will be
+                rejected and their applications will be stated as 'Rejected'.
+                Hence, only click this button after the pet is picked up and
+                make sure the adoption is fully completed.
+                <br />
+                <br />
+                Reminder: upload all necessary documents or record the details
+                'note' section above.
+                <ApplicationFormPickUp application={application} />
+              </>
+            )}
+          </>
         </>
       )}
     </>
@@ -150,7 +254,7 @@ function ApplicationSteps({ adopterID, application }) {
   return (
     <div className="applicationStep">
       <div className="applicationStep-wrapper">
-        <ApplicationFormNoteAndDocs application={application} />
+        <ApplicationFormNoteAndDocs application={application} showNoteForStaff={isRescuer || isAdmin} editable={isRescuer}/>
 
         <Row align="center">
           <Col span={24}>

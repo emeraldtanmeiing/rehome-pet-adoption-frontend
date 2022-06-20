@@ -14,7 +14,7 @@ import {
   message,
 } from "antd";
 import React from "react";
-import { ExclamationCircleFilled } from '@ant-design/icons';
+import { ExclamationCircleFilled } from "@ant-design/icons";
 import RescuerForm from "../rescuerForm/rescuerForm";
 import AdopterForm from "../adopterForm/adopterForm";
 import PetForm from "../petForm/petForm";
@@ -29,20 +29,21 @@ const { confirm } = Modal;
 
 const Application = ({
   data,
-  showAdopter = false,
-  showRescuer = false,
-  showSteps = false,
+  isAdopter = false,
+  isRescuer = false,
+  isAdmin = false,
 }) => {
   const breakpoint = Grid.useBreakpoint();
 
   const showDeleteConfirm = () => {
     confirm({
-      title: 'Are you sure to reject this application?',
-      icon: <ExclamationCircleFilled style={{color: "red"}}/>,
-      content: "You can't unreject this application once you reject. You can still edit the details, but the status will remain as 'Rejected'. You can only ask the applicant to apply again if this was a mistake.",
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      title: "Are you sure to reject this application?",
+      icon: <ExclamationCircleFilled style={{ color: "red" }} />,
+      content:
+        "You can't unreject this application once you reject. You can still edit the details, but the status will remain as 'Rejected'. You can only ask the applicant to apply again if this was a mistake.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
       onOk() {
         handleRejectApplication();
       },
@@ -76,7 +77,7 @@ const Application = ({
   return (
     <div className="application">
       <Row align="center" className="brief-info">
-        <Col span={breakpoint.md ? 7 : 24} className="detail outline">
+        <Col span={breakpoint.md ? 9 : 24} className="detail outline">
           <Row align="middle">
             <Col span={6}>
               <Avatar src={data.petID.mainImage} size="large" />
@@ -90,8 +91,8 @@ const Application = ({
           </Row>
         </Col>
 
-        {showAdopter && (
-          <Col span={breakpoint.md ? 7 : 24} className="detail outline">
+        {(isRescuer || isAdmin) && (
+          <Col span={breakpoint.md ? 9 : 24} className="detail outline">
             <Row align="middle">
               <Col span={6}>
                 <Avatar src={data.adopterID.image} size="large" />
@@ -105,14 +106,14 @@ const Application = ({
           </Col>
         )}
 
-        {showRescuer && (
-          <Col span={breakpoint.md ? 8 : 24} className="detail outline">
+        {(isAdopter || isAdmin) && (
+          <Col span={breakpoint.md ? 9 : 24} className="detail outline">
             <Row align="middle">
               <Col span={6}>
                 <Avatar src={data.rescuerID.image} size="large" />
               </Col>
               <Col span={18} align="left">
-                <strong>Contact person</strong>
+                <strong>Pet's rescuer/contact person/organization</strong>
                 <br />
                 {data.rescuerID.name}
               </Col>
@@ -128,10 +129,16 @@ const Application = ({
             <Panel header="Pet details" key="1" className="pet-info">
               <PetForm petID={data.petID._id} editable={false} />
             </Panel>
-            <Panel header="Applicant details" key="2" className="adopter-info">
-              <AdopterForm accountID={data.adopterID._id} editable={false} />
-            </Panel>
-            {showRescuer && (
+            {(isRescuer || isAdmin) && (
+              <Panel
+                header="Applicant details"
+                key="2"
+                className="adopter-info"
+              >
+                <AdopterForm accountID={data.adopterID._id} editable={false} />
+              </Panel>
+            )}
+            {(isAdopter || isAdmin) && (
               <Panel
                 header="Contact person details"
                 key="3"
@@ -159,22 +166,28 @@ const Application = ({
           </Row>
         </Col>
 
-        <Col span={breakpoint.md ? 12 : 24} align="end">
-        <Tooltip placement="top" title="You can't unreject this application once you reject. You can still edit the details, but the status will remain as 'Rejected'. You can only ask the applicant to apply again if this was a mistake.">
-          <Button danger onClick={showDeleteConfirm}>
-            Reject application
-          </Button>
-          </Tooltip>
-        </Col>
+        {isRescuer && (
+          <Col span={breakpoint.md ? 12 : 24} align="end">
+            <Tooltip
+              placement="top"
+              title="You can't unreject this application once you reject. You can still edit the details, but the status will remain as 'Rejected'. You can only ask the applicant to apply again if this was a mistake."
+            >
+              <Button danger onClick={showDeleteConfirm}>
+                Reject application
+              </Button>
+            </Tooltip>
+          </Col>
+        )}
 
-        {showSteps && (
           <Col span={24} className="steps">
             <ApplicationSteps
               adopterID={data.adopterID._id}
               application={data}
+              isAdopter={isAdopter}
+              isRescuer={isRescuer}
+              isAdmin={isAdmin}
             />
           </Col>
-        )}
       </Row>
     </div>
   );

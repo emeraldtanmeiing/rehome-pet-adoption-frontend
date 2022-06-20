@@ -22,7 +22,10 @@ import AdoptionForm from "./components/adoptionForm/adoptionForm";
 //application
 import AdoptionApplicationNew from "./pages/adoption-application-new/adoption-application-new";
 import ApplicationsListingRescuer from "./pages/applications-listing-rescuer/applications-listing-rescuer";
+import ApplicationsListingAdopter from "./pages/applications-listing-adopter/applications-listing-adopter";
 import ApplicationRescuer from "./pages/application-rescuer/application-rescuer";
+import ApplicationAdopter from "./pages/application-adopter/application-adopter";
+import PetForm from "./components/petForm/petForm";
 
 export const AllRoutes = () => {
   const accessToken = Cookies.get("accessToken");
@@ -35,7 +38,7 @@ export const AllRoutes = () => {
       <Route exact path="/login" element={<Login />} />
       <Route exact path="/signup" element={<SignupAdopter />} />
       <Route exact path="/rescuer/signup" element={<SignupRescuer />} />
-      <Route exact path="/pets" element={<Pet />} />
+      <Route exact path="/pet" element={<Pet />} />
       <Route exact path="/pets-listing" element={<PetsListing />} />
 
       {/* Only open to login user */}
@@ -52,8 +55,9 @@ export const AllRoutes = () => {
       >
         <Route exact path="/adopt/form/new" element={<AdoptionFormNew />} />
         <Route exact path="/adopt/form" element={<AdoptionForm showDescription={true} size="small" />} />
+        <Route exact path="/adopt/applications" element={<ApplicationsListingAdopter />} />
         <Route exact path="/adopt/application/new" element={<AdoptionApplicationNew />} />
-        {/* <Route exact path="/adopt/applications" element={<ApplicationsListing />} /> */}
+        <Route exact path="/adopt/application" element={<ApplicationAdopter />} />
       </Route>
 
       {/* Only open to rescuer */}
@@ -63,7 +67,8 @@ export const AllRoutes = () => {
         element={<ProtectedRouteRequireType allowedTypes={["rescuer"]} />}
       >
         <Route exact path="/rescuer/pets-listing" element={<PetsListingSpecificRescuer />} />
-        <Route exact path="/rescuer/pets/upload" element={<AddPet />} />
+        <Route exact path="/rescuer/pet/new" element={<AddPet />} />
+        <Route exact path="/rescuer/pet" element={<PetForm editable={true} />} />
         <Route exact path="/rescuer/applications" element={<ApplicationsListingRescuer />} />
         <Route exact path="/rescuer/application" element={<ApplicationRescuer />} />
       </Route>

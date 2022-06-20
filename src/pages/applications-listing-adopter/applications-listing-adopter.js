@@ -7,10 +7,10 @@ import { Col, Avatar, Grid, Spin, message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import ApplicationsListing from "../../components/applications-listing/applications-listing";
 
-import "./applications-listing-rescuer.scss";
+import "./applications-listing-adopter.scss";
 import ApplicationStatusDesc from "../../components/application-status-desc/application-status-desc";
 
-function ApplicationsListingRescuer() {
+function ApplicationsListingAdopter() {
   const [applicationState, setApplicationState] = useState({
     status: "idle",
     data: null,
@@ -25,9 +25,7 @@ function ApplicationsListingRescuer() {
   const fetchApplications = async () => {
     setApplicationState({ ...applicationState, status: "loading" });
 
-    const params = { rescuerID: accountID }
-
-    const res = await getApplications({ rescuerID: accountID });
+    const res = await getApplications({ adopterID: accountID });
 
     if (res?.error) {
       message.error(res.error.description);
@@ -41,7 +39,7 @@ function ApplicationsListingRescuer() {
   };
 
   return (
-    <div className="applications-listing-rescuer">
+    <div className="applications-listing-adopter">
       {isLoading && (
         <>
           <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
@@ -49,9 +47,9 @@ function ApplicationsListingRescuer() {
       )}
       {!isLoading && (
         <>
-          <div className="applications-listing-rescuer-wrapper">
+          <div className="applications-listing-adopter-wrapper">
             <ApplicationStatusDesc />
-            <ApplicationsListing applicationsList={applicationState.data.applicationsList} showRescuer={false}/>
+            <ApplicationsListing applicationsList={applicationState.data.applicationsList} showRescuer={true}/>
           </div>
         </>
       )}
@@ -59,4 +57,4 @@ function ApplicationsListingRescuer() {
   );
 }
 
-export default ApplicationsListingRescuer;
+export default ApplicationsListingAdopter;
