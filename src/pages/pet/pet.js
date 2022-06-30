@@ -132,7 +132,7 @@ function Pet() {
 
   const leftColProps = { xxl: 16, xl: 16, lg: 16, md: 16, sm: 24, xs: 24 };
   const rightColProps = { xxl: 8, xl: 8, lg: 8, md: 8, sm: 24, xs: 24 };
-  const detailsProps = { xxl: 6, xl: 6, lg: 6, md: 12, sm: 12, xs: 12 };
+  const detailsProps = { xxl: 8, xl: 8, lg: 8, md: 12, sm: 12, xs: 12 };
 
   return (
     <div className="pet">
@@ -195,59 +195,53 @@ function Pet() {
                           </Tooltip>
                         )}
 
-                        {petState.data.vaccinated ? (
-                          <Tooltip placement="top" title={descForVaccinated}>
+                        <Tooltip placement="top" title={descForVaccinated}>
+                          {petState.data.vaccinated ? (
                             <Tag icon={<CheckCircleOutlined />} color="green">
                               Vaccinated
                             </Tag>
-                          </Tooltip>
-                        ) : (
-                          <Tooltip placement="top" title={descForVaccinated}>
+                          ) : (
                             <Tag
                               icon={<ExclamationCircleOutlined />}
                               color="red"
                             >
                               Not Vaccinated
                             </Tag>
-                          </Tooltip>
-                        )}
+                          )}
+                        </Tooltip>
 
-                        {petState.data.dewormed ? (
-                          <Tooltip placement="top" title={descForVaccinated}>
-                            <Tag icon={<CheckCircleOutlined />} color="green">
-                              Dewormed
-                            </Tag>
-                          </Tooltip>
-                        ) : (
-                          <Tooltip placement="top" title={descForDewormed}>
-                            <Tag
-                              icon={<ExclamationCircleOutlined />}
-                              color="red"
-                            >
-                              Not Dewormed
-                            </Tag>
-                          </Tooltip>
-                        )}
-
-                        {petState.data.dewormed ? (
-                          <Tooltip placement="top" title={descForVaccinated}>
+                        <Tooltip
+                          placement="top"
+                          title={descForSpayedOrNeutered}
+                        >
+                          {petState.data.spayedOrNeutered ? (
                             <Tag icon={<CheckCircleOutlined />} color="green">
                               Spayed/Neutered
                             </Tag>
-                          </Tooltip>
-                        ) : (
-                          <Tooltip
-                            placement="top"
-                            title={descForSpayedOrNeutered}
-                          >
+                          ) : (
                             <Tag
                               icon={<ExclamationCircleOutlined />}
                               color="red"
                             >
                               Not Spayed/Neutered
                             </Tag>
-                          </Tooltip>
-                        )}
+                          )}
+                        </Tooltip>
+
+                        <Tooltip placement="top" title={descForDewormed}>
+                          {petState.data.dewormed ? (
+                            <Tag icon={<CheckCircleOutlined />} color="green">
+                              Dewormed
+                            </Tag>
+                          ) : (
+                            <Tag
+                              icon={<ExclamationCircleOutlined />}
+                              color="red"
+                            >
+                              Not Dewormed
+                            </Tag>
+                          )}
+                        </Tooltip>
                       </Col>
 
                       <Col span={24} align="left" className="location">
@@ -291,6 +285,24 @@ function Pet() {
                           <h2>More details</h2>
                         </Row>
                         <Row gutter={[16, 16]}>
+                        <Col {...detailsProps}>
+                            <div className="details outline">
+                              <h3>Gender</h3>
+                              <div>{petState.data.gender}</div>
+                            </div>
+                          </Col>
+                          <Col {...detailsProps}>
+                            <div className="details outline">
+                              <h3>Age</h3>
+                              <div>{petState.data.age}</div>
+                            </div>
+                          </Col>
+                          <Col {...detailsProps}>
+                            <div className="details outline">
+                              <h3>Pet Size</h3>
+                              <div>{petState.data.petSize}</div>
+                            </div>
+                          </Col>
                           <Col {...detailsProps}>
                             <div className="details outline">
                               <h3>Breed</h3>
@@ -310,20 +322,14 @@ function Pet() {
                           </Col>
                           <Col {...detailsProps}>
                             <div className="details outline">
-                              <h3>Gender</h3>
-                              <div>{petState.data.gender}</div>
+                              <h3>Food Size</h3>
+                              <div>{petState.data.foodSize} per day</div>
                             </div>
                           </Col>
                           <Col {...detailsProps}>
                             <div className="details outline">
-                              <h3>Age</h3>
-                              <div>{petState.data.age}</div>
-                            </div>
-                          </Col>
-                          <Col {...detailsProps}>
-                            <div className="details outline">
-                              <h3>Food</h3>
-                              <div>Approximate -kgs per month, around RM-</div>
+                              <h3>Food Fee</h3>
+                              <div>{petState.data.foodFee} per month</div>
                             </div>
                           </Col>
                         </Row>

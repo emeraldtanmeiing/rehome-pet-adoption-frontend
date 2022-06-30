@@ -92,10 +92,10 @@ function PetsListing() {
                     <Button href={`/pets-listing`}>All</Button>
                   </div>
                   <div>
-                    <Button href={`/pets-listing?type=cat`}>Cats</Button>
+                    <Button href={`/pets-listing?type=Cat`}>Cats</Button>
                   </div>
                   <div>
-                    <Button href={`/pets-listing?type=dog`}>Dogs</Button>
+                    <Button href={`/pets-listing?type=Dog`}>Dogs</Button>
                   </div>
                 </Col>
               </Row>

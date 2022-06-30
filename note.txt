@@ -10,18 +10,21 @@ TODO:
 [/] - open another tab when click on social media link
 [/] - edit adoption form page
 [/] - format date to msia time
+[/] - pet's tag not showing correctly
 [ ] - change cookie key
+[/] - pet change age need to add date.now() to pet.updatedAt, not pet.createdAt (but modify other fields will trigger the updatedAt too, so maybe add another field call ageUpdatedAt)
+[/] - pet page tags tooltip only show vaccinations in mobile view 
+[/] - food details in pet page
 [ ] - add notification on homepage: This is a dummy website
 [ ] - footer
-[ ] - pet page tags tooltip only show vaccinations in mobile view 
 [ ] - loading speed
-[ ] - food details in pet page
-[ ] - pet change age need to add date.now() to pet.updatedAt, not pet.createdAt (but modify other fields will trigger the updatedAt too, so maybe add another field call ageUpdatedAt)
 [ ] - fix the header in application listing when scrolling
 [ ] - add today's interview&pick up in application listing (filter "To interview" and today's time?)
 [ ] - cant remove image is user wish to
 [ ] - add reject reason when rejecting application
 [ ] - edit pet's birthDate not working
-[ ] - 
-[ ] - 
+[ ] - pet's description cant go to next line
+[ ] - click on ? can trigger on/off (in add pet and edit pet)
+![ ] - dont allow user to reject application once its completed
+[ ] - ask rescuer to double check before checking "picked up" button
 [ ] - 

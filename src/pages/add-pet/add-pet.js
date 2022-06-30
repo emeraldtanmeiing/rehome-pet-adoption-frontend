@@ -390,7 +390,7 @@ function AddPet() {
                       tooltip={descForDewormed}
                     >
                       <Switch
-                        checkedChildren="dewormed"
+                        checkedChildren="Dewormed"
                         unCheckedChildren="Not dewormed"
                       />
                     </Form.Item>

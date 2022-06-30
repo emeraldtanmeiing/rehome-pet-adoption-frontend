@@ -3,7 +3,7 @@ import useAuthContext from "../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 
 import { Drawer, Button } from "antd";
-import { AlignRightOutlined } from "@ant-design/icons";
+import { MenuOutlined } from "@ant-design/icons";
 import LeftMenu from "./leftMenu";
 import RightMenu from "./rightMenu";
 import logo from "../../images/logo.png";
@@ -59,9 +59,10 @@ const Navbar = () => {
         <Button
           className="menu__mobile-button"
           type="primary"
+          size="large"
           onClick={showDrawer}
         >
-          <AlignRightOutlined />
+          <MenuOutlined />
         </Button>
         <Drawer
           title="Rehome: Adopt a pet"

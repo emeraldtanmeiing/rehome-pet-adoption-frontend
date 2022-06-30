@@ -85,7 +85,7 @@ const EditableFormItem = ({
 
   function onDateMonthChange(date, dateString) {
     setDateMonth(dateString);
-    console.log({dateString})
+
   }
 
   function onTimeChange(time, timeString) {

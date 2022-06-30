@@ -16,8 +16,9 @@ const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
     return {
       applicationID: a._id,
       key: index,
+      pet: a.petID,
       petImage: a.petID.mainImage,
-      pet: a.petID.name,
+      petName: a.petID.name,
       petType: a.petID.type,
       adopterImage: a.adopterID.image,
       adopter: a.adopterID.name,
@@ -149,10 +150,10 @@ const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
     },
     {
       title: "Pet",
-      dataIndex: "pet",
-      key: "pet",
+      dataIndex: "petName",
+      key: "petName",
       fixed: breakpoint.md ? "left" : false,
-      ...getColumnSearchProps("pet"),
+      ...getColumnSearchProps("petName"),
     },
     {
       title: "Type",
@@ -177,8 +178,12 @@ const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (tag) => {
-        return <ApplicationStatus tag={tag} />;
+      render: (status, record) => {
+        return (
+          <>
+            <ApplicationStatus status={status} pet={record.pet}/>
+          </>
+        );
       },
       filters: [
         { text: <span>To Review</span>, value: "To Review" },
@@ -189,7 +194,7 @@ const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
         { text: <span>Completed</span>, value: "Completed" },
         { text: <span>Rejected</span>, value: "Rejected" },
         { text: <span>Cancelled</span>, value: "Cancelled" },
-        { text: <span>Deactivated</span>, value: "Deactivated" },
+        { text: <span>Not Available</span>, value: "Not Available" },
       ],
       onFilter: (value, record) => record.status.startsWith(value),
       filterSearch: true,

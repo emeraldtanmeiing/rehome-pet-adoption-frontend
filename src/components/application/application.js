@@ -161,7 +161,7 @@ const Application = ({
               <h2>Adoption application</h2>
             </Col>
             <Col>
-              <ApplicationStatus tag={data.status} />
+              <ApplicationStatus status={data.status} pet={data.petID}/>
             </Col>
           </Row>
         </Col>
@@ -172,7 +172,7 @@ const Application = ({
               placement="top"
               title="You can't unreject this application once you reject. You can still edit the details, but the status will remain as 'Rejected'. You can only ask the applicant to apply again if this was a mistake."
             >
-              <Button danger onClick={showDeleteConfirm}>
+              <Button danger onClick={showDeleteConfirm} disabled={data.status === "Completed" || !data.petID.active || data.petID.adopted}>
                 Reject application
               </Button>
             </Tooltip>

@@ -4,9 +4,16 @@ import { Tag } from "antd";
 
 import "./application-status.less";
 
-const ApplicationStatus = ({ tag }) => {
+const ApplicationStatus = ({ status, pet = null }) => {
+  
+  if(pet){
+    if(!pet?.active || (status != "Completed" && pet?.adopted)){
+      status = "Not Available"
+    } 
+  }
+
   let color;
-  switch (tag) {
+  switch (status) {
     case "To Review":
       color = "orange";
       break;
@@ -31,15 +38,15 @@ const ApplicationStatus = ({ tag }) => {
     case "Cancelled":
       color = "red";
       break;
-    case "Deactivated":
+    case "Not Available":
       color = null;
       break;
     default:
       color = null;
   }
   return (
-    <Tag color={color} key={tag}>
-      {tag}
+    <Tag color={color} key={status}>
+      {status}
     </Tag>
   );
 };

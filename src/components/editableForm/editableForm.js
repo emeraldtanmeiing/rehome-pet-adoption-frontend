@@ -74,11 +74,11 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
       setIsLoading(false);
       return;
     }
-    console.log({dateMonth})
+   
     const res = await api({
       ...data,
       ...validationResult,
-      ...(image && { image }),
+      ...(image && { image, mainImage: image }),
 
       ...(data.interviewDate && { interviewDate: data.interviewDate }),
       ...(data.pickupDate && { pickupDate: data.pickupDate }),
@@ -98,7 +98,7 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
       setData({
         ...data,
         ...validationResult,
-        ...(image && { image: res.image }),
+        ...(image && { image: res.image, mainImage: res?.mainImage, images: res?.images }),
         ...(res.interviewDate && { interviewDate: res.interviewDate }),
         ...(res.interviewTime && { interviewTime: res.interviewTime }),
         ...(res.pickupDate && { pickupDate: res.pickupDate }),
@@ -110,7 +110,7 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
     setIsLoading(false);
     toggleEdit();
 
-    if (image && res?.image) {
+    if (image && (res?.image|| res?.mainImage || res?.images)) {
       window.location.href = window.location.href; //force refresh page to update image
     }
   };

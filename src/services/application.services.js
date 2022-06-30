@@ -2,7 +2,7 @@ import apiURL from "../helpers/url";
 import axios from "axios";
 import errorHandler from "../helpers/errorHandler";
 import Cookies from "js-cookie";
-import lodash from "lodash";
+import lodash, { forEach } from "lodash";
 const { isEmpty } = lodash;
 
 export const createApplication = async ({ adoptionApplication }) => {

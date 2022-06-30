@@ -68,7 +68,7 @@ export const AllRoutes = () => {
       >
         <Route exact path="/rescuer/pets-listing" element={<PetsListingSpecificRescuer />} />
         <Route exact path="/rescuer/pet/new" element={<AddPet />} />
-        <Route exact path="/rescuer/pet" element={<PetForm editable={true} />} />
+        <Route exact path="/rescuer/pet" element={<PetForm editable={true} size="small"/>} />
         <Route exact path="/rescuer/applications" element={<ApplicationsListingRescuer />} />
         <Route exact path="/rescuer/application" element={<ApplicationRescuer />} />
       </Route>

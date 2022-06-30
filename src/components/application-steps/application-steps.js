@@ -43,8 +43,8 @@ function ApplicationSteps({
       {isAdopter && (
         <>
           <div>
-            The pet's rescuer/contact person/organization will take a look on your condition
-            to see how to help you during adoption.
+            The pet's rescuer/contact person/organization will take a look on
+            your condition to see how to help you during adoption.
             <br />
             <br />
             <br />
@@ -70,12 +70,13 @@ function ApplicationSteps({
 
   const interviewInfo = (
     <>
-      {isAdopter && (
+      {(isAdopter) && (
         <>
           <div>
             An offline or online interview with you will be arranged by the
-            pet's rescuer/contact person/organization. If it's an online interview (via
-            Zoom, Google Meet etc), you will be able to get the link here.
+            pet's rescuer/contact person/organization. If it's an online
+            interview (via Zoom, Google Meet etc), you will be able to get the
+            link here.
             <br />
             <br />
             <br />
@@ -88,7 +89,7 @@ function ApplicationSteps({
       )}
       {(isRescuer || isAdmin) && (
         <>
-          <ApplicationFormInterview application={application} />
+          <ApplicationFormInterview application={application} editable={application.petID.active && !application.petID.adopted}/>
         </>
       )}
     </>
@@ -96,17 +97,17 @@ function ApplicationSteps({
 
   const approvalInfo = (
     <>
-      {isAdopter && (
+      {(isAdopter) && (
         <>
           <div>
-            After review and interview, the pet's rescuer/contact person/organization will
-            approve the application by setting the 'Approval' to 'true' if
-            you're the suitable applicant!
+            After review and interview, the pet's rescuer/contact
+            person/organization will approve the application by setting the
+            'Approval' to 'true' if you're the suitable applicant!
             <br />
             <br />
             <br />
           </div>
-          <ApplicationFormApproval application={application} editable={false}/>
+          <ApplicationFormApproval application={application} editable={false} />
         </>
       )}
       {(isRescuer || isAdmin) && (
@@ -135,7 +136,7 @@ function ApplicationSteps({
                   reject the application.
                 </Col>
               </Row>
-              <ApplicationFormApproval application={application} />
+              <ApplicationFormApproval application={application} editable={application.petID.active && !application.petID.adopted}/>
             </>
           )}
         </>
@@ -144,6 +145,7 @@ function ApplicationSteps({
   );
 
   const paymentInfo = (
+    //TODO: dun allow adopter to pay if the pet is adopted / not active
     <>
       {isAdopter && (
         <>
@@ -206,15 +208,22 @@ function ApplicationSteps({
               </>
             ) : (
               <>
-                After you click this button, other adoption applicants will be
-                rejected and their applications will be stated as 'Rejected'.
-                Hence, only click this button after the pet is picked up and
-                make sure the adoption is fully completed.
+                After you mark the pet as picked up, ReHome will consider this
+                pet as <b>adopted</b>. <br /><br />
+                You will no longer able to edit the application except the{" "}
+                <b>Notes & Documents</b> fields.
                 <br />
+                Other adoption applications for this pet will be stated as{" "}
+                <b>Not Available</b>.
                 <br />
-                Reminder: upload all necessary documents or record the details
-                'note' section above.
-                <ApplicationFormPickUp application={application} />
+                The pet will no longer show on listing for <b>PUBLIC</b> for
+                adoption.
+                <br />
+                Hence, only mark the pet as <b>"Picked up"</b> after the pet is
+                picked up and make sure the adoption is fully completed.
+                <br /><br /><br />
+               
+                <ApplicationFormPickUp application={application} editable={application.petID.active && !application.petID.adopted}/>
               </>
             )}
           </>
@@ -254,7 +263,11 @@ function ApplicationSteps({
   return (
     <div className="applicationStep">
       <div className="applicationStep-wrapper">
-        <ApplicationFormNoteAndDocs application={application} showNoteForStaff={isRescuer || isAdmin} editable={isRescuer}/>
+        <ApplicationFormNoteAndDocs
+          application={application}
+          showNoteForStaff={isRescuer || isAdmin}
+          editable={isRescuer}
+        />
 
         <Row align="center">
           <Col span={24}>

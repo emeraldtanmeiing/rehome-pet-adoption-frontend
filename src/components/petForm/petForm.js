@@ -10,7 +10,7 @@ import EditableForm from "../editableForm/editableForm";
 
 import "./petForm.less";
 
-const PetForm = ({ petID = null, editable = true }) => {
+const PetForm = ({ petID = null, editable = true, size = "default" }) => {
   const [pet, setPet] = useState({
     status: "idle",
     data: null,
@@ -262,6 +262,10 @@ const PetForm = ({ petID = null, editable = true }) => {
     // adopted,
     active,
     description,
+    birthDate,
+    petSize,
+    foodSize,
+    foodFee,
   }) => {
     const res = await updatePet({
       pet: omit({
@@ -284,6 +288,10 @@ const PetForm = ({ petID = null, editable = true }) => {
         // adopted,
         active,
         description,
+        birthDate,
+        petSize,
+        foodSize,
+        foodFee,
       }, ['age']),
     });
     if (res?.error) {
@@ -309,6 +317,7 @@ const PetForm = ({ petID = null, editable = true }) => {
               fields={petFields.data}
               api={handleUpdatePet}
               editable={true}
+              size={size}
             />
           </>
         ) : (
@@ -342,6 +351,7 @@ const PetForm = ({ petID = null, editable = true }) => {
               })}
               api={handleUpdatePet}
               editable={false}
+              size={size}
             />
           </>
         ))}

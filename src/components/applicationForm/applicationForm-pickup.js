@@ -4,11 +4,13 @@ import { filter, isEmpty, omitBy, isNil } from "lodash";
 import { useNavigate } from "react-router-dom";
 import { updateApplications } from "../../services/application.services";
 
-import { Grid, Spin, message } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+import { Grid, Spin, Modal, message } from "antd";
+import { LoadingOutlined, ExclamationCircleFilled } from "@ant-design/icons";
 import EditableForm from "../editableForm/editableForm";
 
 import "./applicationForm.scss";
+
+const { confirm } = Modal;
 
 const ApplicationFormPickUp = ({
   application = {},
