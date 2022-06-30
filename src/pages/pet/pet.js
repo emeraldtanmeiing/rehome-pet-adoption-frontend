@@ -345,7 +345,7 @@ function Pet() {
                       </Button>
                     </Row>
                   </Col>
-                  <Col className="adoption outline" {...rightColProps}>
+                  {(petState.data.active && !petState.data.adopted) ? (<Col className="adoption outline" {...rightColProps}>
                     <h4>Adoption fee</h4>
                     <h2>
                       {petState.data.fee === 0
@@ -360,7 +360,24 @@ function Pet() {
                     >
                       Adopt
                     </Button>
+                  </Col>):(
+                    <Col className="not-available outline" {...rightColProps}>
+                    <h3>
+                    {petState.data.name} is not available for adoption.
+                    </h3>
+                    <Button
+                      type="primary"
+                      size="large"
+                      style={{ width: "100%" }}
+                      disabled
+                    >
+                      Adopt
+                    </Button>
                   </Col>
+                  ) 
+
+                  }
+                  
                 </Row>
 
                 <Divider />

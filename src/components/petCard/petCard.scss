@@ -1,18 +1,29 @@
-.pet-card-details {
-    padding-top: 10px;
+.pet-card {
+  .ant-card-body {
+    padding: 0 !important;
+  }
+
+  .not-available {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .pet-card-details {
+    padding: 16px;
 
     .petName {
-        font-size: 18px;
-        font-weight: 800;
+      font-size: 18px;
+      font-weight: 800;
     }
 
-    .createdAt, .location {
-        font-size: 12px;
-        color: #9e9d9d;
+    .active-adopted,
+    .createdAt,
+    .location {
+      font-size: 12px;
+      color: #9e9d9d;
     }
 
-    .createdAt {
-        padding-top: 10px;
+    .more-details {
+      padding-top: 10px;
     }
-    
+  }
 }

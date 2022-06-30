@@ -29,7 +29,7 @@ function PetsListing() {
     setPetState({ ...petState, status: "loading" });
 
     const params = omitBy(
-      { petID, type, name, rescuerID, resultsPerPage, page },
+      { petID, type, name, rescuerID, resultsPerPage, page, active: true, adopted: false },
       v => isNil(v) || v.toString().trim() === ''
     );
 

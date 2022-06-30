@@ -77,7 +77,7 @@ const Application = ({
   return (
     <div className="application">
       <Row align="center" className="brief-info">
-        <Col span={breakpoint.md ? 9 : 24} className="detail outline">
+        <Col span={breakpoint.md ? 9 : 24} className="detail outline" onClick={()=>window.open(`/pet?petID=${data.petID._id}`)}>
           <Row align="middle">
             <Col span={6}>
               <Avatar src={data.petID.mainImage} size="large" />
@@ -113,7 +113,7 @@ const Application = ({
                 <Avatar src={data.rescuerID.image} size="large" />
               </Col>
               <Col span={18} align="left">
-                <strong>Pet's rescuer/contact person/organization</strong>
+                <strong>Pet's rescuer/Contact person/Organization</strong>
                 <br />
                 {data.rescuerID.name}
               </Col>
