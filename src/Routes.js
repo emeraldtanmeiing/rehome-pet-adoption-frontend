@@ -11,8 +11,9 @@ import AdopterForm from "./components/adopterForm/adopterForm";
 import RescuerForm from "./components/rescuerForm/rescuerForm";
 
 import Pet from "./pages/pet/pet";
-import PetsListing from "./pages/pets-listing/pets-listing";
 import AddPet from "./pages/add-pet/add-pet";
+import PetForm from "./components/petForm/petForm";
+import PetsListing from "./pages/pets-listing/pets-listing";
 import PetsListingSpecificRescuer from "./pages/pets-listing-rescuer/pets-listing-rescuer";
 
 //form
@@ -25,7 +26,6 @@ import ApplicationsListingRescuer from "./pages/applications-listing-rescuer/app
 import ApplicationsListingAdopter from "./pages/applications-listing-adopter/applications-listing-adopter";
 import ApplicationRescuer from "./pages/application-rescuer/application-rescuer";
 import ApplicationAdopter from "./pages/application-adopter/application-adopter";
-import PetForm from "./components/petForm/petForm";
 
 export const AllRoutes = () => {
   const accessToken = Cookies.get("accessToken");

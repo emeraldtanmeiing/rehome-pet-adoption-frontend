@@ -85,12 +85,25 @@ export const getPets = async (params) => {
   }
 };
 
-export const updatePet = async ({ pet, image }) => {
+export const updatePet = async ({ pet, mainImage, images, existingImages }) => {
   const url = apiURL("/pet");
 
   const data = new FormData();
-  if (image) {
-    data.append("image", image);
+  if (mainImage) {
+    data.append("mainImage", mainImage);
+  }
+  if(!isEmpty(images)){
+    const lengthOfimages = images.length;
+    for (let i = 0; i < lengthOfimages; i++) {
+      data.append("images", images[i]);
+    }
+  }
+  console.log({existingImages})
+  if(!isEmpty(existingImages)){
+    const lengthOfexistingImages = existingImages.length;
+    for (let i = 0; i < lengthOfexistingImages; i++) {
+      data.append("existingImages", existingImages[i]);
+    }
   }
   for (const i in pet) {
     data.append(i, pet[i]);

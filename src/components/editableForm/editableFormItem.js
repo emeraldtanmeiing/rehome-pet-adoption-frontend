@@ -19,7 +19,9 @@ import {
   Radio,
   message,
 } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined, PlusOutlined } from "@ant-design/icons";
+import ImageForm from "./image-form";
+import ImagesForm from "./images-form";
 
 import "./editableForm.less";
 
@@ -34,11 +36,14 @@ const EditableFormItem = ({
   type,
   checkedDesc,
   uncheckedDesc,
+  maxNumberOfImages,
   editable = false,
   required,
   editing,
   addonAfter,
   setImage,
+  setImages,
+  setExistingImages,
   setDate,
   setDateMonth,
   setTime,
@@ -85,7 +90,6 @@ const EditableFormItem = ({
 
   function onDateMonthChange(date, dateString) {
     setDateMonth(dateString);
-
   }
 
   function onTimeChange(time, timeString) {
@@ -98,9 +102,35 @@ const EditableFormItem = ({
     if (type === "image") {
       formItem = (
         <Col span={24} className="editable-form-item">
-          <div className="image">
-            <Avatar size={76} src={value} className="image" />
-          </div>
+          <Form.Item name={name} label={label} valuePropName={name} key={key}>
+            <Upload
+              listType="picture-card"
+              fileList={[
+                {
+                  url: value,
+                },
+              ] || []}
+            />
+          </Form.Item>
+        </Col>
+      );
+    } else if (type === "images") {
+      formItem = (
+        <Col span={24} className="editable-form-item">
+          <Form.Item name={name} label={label} valuePropName={name} key={key}>
+            <Upload
+              listType="picture-card"
+              fileList={
+                value?.map((image, index) => {
+                  return {
+                    uid: index,
+                    status: "done",
+                    url: image,
+                  };
+                }) || []
+              }
+            />
+          </Form.Item>
         </Col>
       );
     } else if (type === "textArea") {
@@ -129,32 +159,29 @@ const EditableFormItem = ({
       );
     }
   } else {
-    //TODO: images
     if (type === "image") {
       formItem = (
-        <Form.Item
+        <ImageForm
+          key={key}
           name={name}
           label={label}
-          valuePropName={name}
-          getValueFromEvent={normFile}
-          className="left"
+          image={value}
           required={required}
-        >
-          <Upload
-            name={name}
-            listType="picture"
-            maxCount={1}
-            beforeUpload={validateFile}
-            onChange={onImageChange}
-            customRequest={dummyRequest}
-            rules={[{ required: true }]}
-            accept="image/png, image/jpeg, image/svg+xml"
-          >
-            <Button icon={<UploadOutlined />}>
-              Upload image if you wish to change {name} (Max: 1)
-            </Button>
-          </Upload>
-        </Form.Item>
+          setImage={setImage}
+        />
+      );
+    } else if (type === "images") {
+      formItem = (
+        <ImagesForm
+          key={key}
+          name={name}
+          label={label}
+          maxNumberOfImages={maxNumberOfImages}
+          existingImages={value}
+          required={required}
+          setImages={setImages}
+          setExistingImages={setExistingImages}
+        />
       );
     } else if (type === "textArea") {
       formItem = (
@@ -711,7 +738,11 @@ const EditableFormItem = ({
       formItem = (
         <Col span={24} className="editable-form-item">
           <Form.Item name={name} label={label} extra={extra} key={key}>
-            <DatePicker onChange={onDateMonthChange} picker="month" format="MMMM YYYY" />
+            <DatePicker
+              onChange={onDateMonthChange}
+              picker="month"
+              format="MMMM YYYY"
+            />
           </Form.Item>
         </Col>
       );

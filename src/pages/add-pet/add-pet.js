@@ -28,7 +28,7 @@ import "./add-pet.scss";
 const { Option } = Select;
 const { Panel } = Collapse;
 
-function AddPet() {
+const AddPet = () => {
   const [date, setDate] = useState(null);
   const [images, setImages] = useState(null);
   const [mainImage, setMainImage] = useState(null);

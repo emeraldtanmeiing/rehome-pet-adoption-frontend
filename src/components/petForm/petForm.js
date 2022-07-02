@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { filter, map, omit } from "lodash";
 import useQuery from "../../hooks/useQuery";
-import { calculateAge } from "../../helpers/date";
 import { getPets, updatePet } from "../../services/pet.services.js";
 
 import { Spin, message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import EditableForm from "../editableForm/editableForm";
+import ImagesForm from "../editableForm/images-form";
 
 import "./petForm.less";
 
@@ -21,8 +21,7 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
     data: null,
   });
 
-  const isLoading =
-    pet.status !== "success" || petFields.status !== "success";
+  const isLoading = pet.status !== "success" || petFields.status !== "success";
 
   const query = useQuery();
   useEffect(() => {
@@ -58,6 +57,7 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
         editable: true,
         required: false,
         type: "images",
+        maxNumberOfImages: 10,
       });
       fields.push({
         name: "type",
@@ -65,7 +65,7 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
         value: pet.type,
         editable: true,
         required: true,
-        type: "petType"
+        type: "petType",
       });
       fields.push({
         name: "name",
@@ -80,7 +80,7 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
         value: pet.gender,
         editable: true,
         required: true,
-        type: "petGender"
+        type: "petGender",
       });
       fields.push({
         name: "petSize",
@@ -106,7 +106,7 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
         required: true,
         type: "date-month",
       });
-      
+
       fields.push({
         name: "breed",
         label: "Breed",
@@ -174,7 +174,7 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
         value: pet.fee,
         editable: true,
         required: true,
-        type: "integer"
+        type: "integer",
       });
       fields.push({
         name: "stateOrProvince",
@@ -246,6 +246,7 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
   const handleUpdatePet = async ({
     mainImage,
     images,
+    existingImages,
     name,
     fee,
     type,
@@ -268,31 +269,35 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
     foodFee,
   }) => {
     const res = await updatePet({
-      pet: omit({
-        ...pet.data,
-        mainImage,
-        images,
-        name,
-        fee,
-        type,
-        gender,
-        breed,
-        color,
-        vaccinated,
-        spayedOrNeutered,
-        dewormed,
-        healthCondition,
-        stateOrProvince,
-        city,
-        postcode,
-        // adopted,
-        active,
-        description,
-        birthDate,
-        petSize,
-        foodSize,
-        foodFee,
-      }, ['age']),
+      pet: omit(
+        {
+          ...pet.data,
+          name,
+          fee,
+          type,
+          gender,
+          breed,
+          color,
+          vaccinated,
+          spayedOrNeutered,
+          dewormed,
+          healthCondition,
+          stateOrProvince,
+          city,
+          postcode,
+          // adopted,
+          active,
+          description,
+          birthDate,
+          petSize,
+          foodSize,
+          foodFee,
+        },
+        ["age", "mainImage", "images", "existingImages"]
+      ),
+      mainImage,
+      images,
+      existingImages,
     });
     if (res?.error) {
       message.error(res.error.description);
@@ -323,19 +328,16 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
         ) : (
           <>
             <div className="sliders">
-              {map(
-                [pet.data.mainImage, ...pet.data.images],
-                (image, index) => {
-                  return (
-                    <img
-                      alt="pet"
-                      src={image}
-                      key={index}
-                      onClick={() => window.open(image)}
-                    />
-                  );
-                }
-              )}
+              {map([pet.data.mainImage, ...pet.data.images], (image, index) => {
+                return (
+                  <img
+                    alt="pet"
+                    src={image}
+                    key={index}
+                    onClick={() => window.open(image)}
+                  />
+                );
+              })}
             </div>
             <EditableForm
               fields={filter(petFields.data, (v) => {

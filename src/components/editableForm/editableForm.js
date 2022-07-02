@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { map } from "lodash";
+import { map, isEqual, isEmpty, find } from "lodash";
 import moment from "moment";
 
-import { Row, Col, Button, Form, Grid } from "antd";
+import { Row, Col, Button, Form, Grid, message } from "antd";
 import EditableFormItem from "./editableFormItem";
 
 import "./editableForm.less";
@@ -17,6 +17,8 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
   const [data, setData] = useState(formattedFields);
   const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
   const [date, setDate] = useState(null);
   const [dateMonth, setDateMonth] = useState(null);
   const [time, setTime] = useState(null);
@@ -74,11 +76,13 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
       setIsLoading(false);
       return;
     }
-   
+    
     const res = await api({
       ...data,
       ...validationResult,
       ...(image && { image, mainImage: image }),
+      ...(images && { images }),
+      ...(existingImages && { existingImages: existingImages }),
 
       ...(data.interviewDate && { interviewDate: data.interviewDate }),
       ...(data.pickupDate && { pickupDate: data.pickupDate }),
@@ -98,7 +102,8 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
       setData({
         ...data,
         ...validationResult,
-        ...(image && { image: res.image, mainImage: res?.mainImage, images: res?.images }),
+        ...(image && { image: res.image, mainImage: res?.mainImage }),
+        ...(images && { images: res.images }),
         ...(res.interviewDate && { interviewDate: res.interviewDate }),
         ...(res.interviewTime && { interviewTime: res.interviewTime }),
         ...(res.pickupDate && { pickupDate: res.pickupDate }),
@@ -110,7 +115,11 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
     setIsLoading(false);
     toggleEdit();
 
-    if (image && (res?.image|| res?.mainImage || res?.images)) {
+    if ((image || !isEmpty(images)) && (res?.image || res?.mainImage || res?.images)) {
+      window.location.href = window.location.href; //force refresh page to update image
+    }
+    
+    if(!isEqual(find(fields, f => f.type=="images").value, existingImages)){
       window.location.href = window.location.href; //force refresh page to update image
     }
   };
@@ -195,11 +204,14 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
                         extra={field.extra}
                         checkedDesc={field.checkedDesc}
                         uncheckedDesc={field.uncheckedDesc}
+                        maxNumberOfImages={field.maxNumberOfImages}
                         editable={field.editable}
                         type={field.type}
                         required={field.required || false}
                         editing={editing}
                         setImage={setImage}
+                        setImages={setImages}
+                        setExistingImages={setExistingImages}
                         setDate={setDate}
                         setDateMonth={setDateMonth}
                         setTime={setTime}
