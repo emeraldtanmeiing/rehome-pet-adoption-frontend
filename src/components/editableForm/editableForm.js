@@ -175,7 +175,7 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
 
         <Col span={size === "small" && breakpoint.md ? 18 : 24}>
           <Form form={form} labelCol={{ span: 24 }}>
-            <Row gutter={12}>
+            <Row gutter={24}>
               <EditableContext.Provider value={form}>
                 {map(fields, (field, index) => {
                   return (

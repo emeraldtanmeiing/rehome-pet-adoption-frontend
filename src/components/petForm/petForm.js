@@ -6,7 +6,6 @@ import { getPets, updatePet } from "../../services/pet.services.js";
 import { Spin, message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import EditableForm from "../editableForm/editableForm";
-import ImagesForm from "../editableForm/images-form";
 
 import "./petForm.less";
 
@@ -55,7 +54,6 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
         label: "More images",
         value: pet.images,
         editable: true,
-        required: false,
         type: "images",
         maxNumberOfImages: 10,
       });
@@ -220,10 +218,11 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
         label: "Active",
         value: pet.active,
         checkedDesc: "Active",
-        uncheckedDesc: "Not Active",
+        uncheckedDesc: "Inactive",
         editable: true,
         required: true,
         type: "boolean",
+        extra: "If pet is inactivated, it's not available for adoption."
       });
       fields.push({
         name: "description",

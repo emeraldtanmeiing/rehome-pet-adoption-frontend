@@ -224,24 +224,12 @@ const RescuerForm = ({ accountID = null, editable = true, size = "default" }) =>
           </>
         ) : (
           <>
-          <Col span={24} className="editable-form-item">
-              <div
-                className="image"
-                onClick={() => window.open(account.data.image)}
-              >
-                <Avatar
-                  size={76}
-                  src={account.data.image}
-                  className="image"
-                />
-              </div>
-            </Col>
+
             <EditableForm
               fields={filter(accountFields.data, (v) => {
                 return (
                   v.name != "description" &&
                   v.name != "licenseNo" &&
-                  v.name != "image" &&
                   v.name != "verified" &&
                   v.name != "active" &&
                   v.value != null &&

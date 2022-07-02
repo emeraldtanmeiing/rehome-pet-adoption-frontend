@@ -363,7 +363,11 @@ function Pet() {
                   </Col>):(
                     <Col className="not-available outline" {...rightColProps}>
                     <h3>
-                    {petState.data.name} is not available for adoption.
+                    {petState.data.adopted ?
+                    <>{petState.data.name} is adopted.</>:
+                    <>{petState.data.name} is not available for adoption.</>
+
+                    }
                     </h3>
                     <Button
                       type="primary"

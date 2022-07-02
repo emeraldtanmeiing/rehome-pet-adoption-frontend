@@ -115,14 +115,13 @@ const ImagesForm = ({
   return (
     <div className="images-form">
       <Form.Item
-        required={required}
         name={name}
         label={label}
         valuePropName={name}
         getValueFromEvent={normFile}
         rules={[
           {
-            required: {required},
+            required: required,
             message: "${label} is required.",
           },
         ]}

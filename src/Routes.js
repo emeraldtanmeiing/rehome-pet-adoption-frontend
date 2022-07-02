@@ -11,6 +11,7 @@ import AdopterForm from "./components/adopterForm/adopterForm";
 import RescuerForm from "./components/rescuerForm/rescuerForm";
 
 import Pet from "./pages/pet/pet";
+import PetRescuer from "./pages/pet-rescuer/pet-rescuer";
 import AddPet from "./pages/add-pet/add-pet";
 import PetForm from "./components/petForm/petForm";
 import PetsListing from "./pages/pets-listing/pets-listing";
@@ -68,7 +69,7 @@ export const AllRoutes = () => {
       >
         <Route exact path="/rescuer/pets-listing" element={<PetsListingSpecificRescuer />} />
         <Route exact path="/rescuer/pet/new" element={<AddPet />} />
-        <Route exact path="/rescuer/pet" element={<PetForm editable={true} size="small"/>} />
+        <Route exact path="/rescuer/pet" element={<PetRescuer />} />
         <Route exact path="/rescuer/applications" element={<ApplicationsListingRescuer />} />
         <Route exact path="/rescuer/application" element={<ApplicationRescuer />} />
       </Route>

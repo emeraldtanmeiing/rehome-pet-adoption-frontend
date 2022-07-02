@@ -168,22 +168,9 @@ const AdopterForm = ({ accountID = null, editable = true, size = "default" }) =>
           </>
         ) : (
           <>
-            <Col span={24} className="editable-form-item">
-              <div
-                className="image"
-                onClick={() => window.open(account.data.image)}
-              >
-                <Avatar
-                  size={76}
-                  src={account.data.image}
-                  className="image"
-                />
-              </div>
-            </Col>
-
             <EditableForm
               fields={filter(accountFields.data, (v) => {
-                return v.name != "image" && v.value != null && v.value != "";
+                return v.value != null && v.value != "";
               })}
               api={handleUpdateAccount}
               editable={false}
