@@ -185,7 +185,7 @@ const AdoptionForm = ({
       fields.push({
         name: "remark",
         label:
-          "Write here if you have any questions or remark so that the pet's contact person / organization can answer you in the interview later.",
+          "Write here if you have any questions or remark so that the pet's contact person/rescuer/organization can answer you in the interview later.",
         value: a.remark,
         editable: true,
         required: false,
@@ -251,7 +251,7 @@ const AdoptionForm = ({
   const breakpoint = Grid.useBreakpoint();
 
   return (
-    <div className="adopter-form">
+    <div className="adoption-form">
       {isLoading && (
         <>
           <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />

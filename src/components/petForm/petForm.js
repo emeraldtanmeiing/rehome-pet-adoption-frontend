@@ -157,6 +157,7 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
         editable: true,
         required: true,
         type: "foodSize",
+        extra: "1 cup = 224 grams",
       });
       fields.push({
         name: "foodFee",
@@ -173,6 +174,7 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
         editable: true,
         required: true,
         type: "integer",
+        extra: "Enter 0 if the adoption fee is free.",
       });
       fields.push({
         name: "stateOrProvince",

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { isEmpty } from "lodash";
+import { isEmpty, last, slice } from "lodash";
 
 import { PlusOutlined } from "@ant-design/icons";
-import { Modal, Upload, Form, message } from "antd";
+import { Modal, Upload, Form, Button, Col, message } from "antd";
 
 import "./editableForm.less";
 
@@ -16,7 +16,7 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-const ImagesForm = ({
+const DocumentsForm = ({
   name,
   label,
   maxNumberOfImages,
@@ -28,11 +28,16 @@ const ImagesForm = ({
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState(
-    existingImages?.map((image, index) => {
+    existingImages?.map((doc, index) => {
+      const filename = last(doc.split("/"))
+      const filenameCodeLength = last(filename.split("_")).length + 1
+      const originalFilename = filename.slice(0, -filenameCodeLength)
+      const fileExtension = last(filename.split("."))
       return {
         uid: index,
         status: "done",
-        url: image,
+        url: doc,
+        name: `${originalFilename}.${fileExtension}`
       };
     }) || []
   );
@@ -45,8 +50,8 @@ const ImagesForm = ({
 
   const validateFile = (value) => {
     const file = value;
-
-    const fileTypes = ["image/png", "image/jpg", "image/jpeg", "image/svg+xml"];
+    
+    const fileTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
 
     if (!fileTypes.includes(file.type)) {
       message.error(`${file.name} format is not accepted.`);
@@ -55,7 +60,7 @@ const ImagesForm = ({
 
     const isLt1M = file.size / 1024 / 1024 <= 1;
     if (!isLt1M) {
-      message.error(`Image size should be smaller than 1MB.`);
+      message.error(`Document size should be smaller than 1MB.`);
       return Upload.LIST_IGNORE;
     }
   };
@@ -101,19 +106,13 @@ const ImagesForm = ({
   };
 
   const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 5,
-        }}
-      >
-        Upload image only (Max: {maxNumberOfImages})
-      </div>
-    </div>
+    <Button icon={<PlusOutlined />}>Upload word or pdf only (Max: {maxNumberOfImages})</Button>
+
   );
   return (
-    <div className="images-form">
+    <div className="documents-form">
+    <Col span={24}>
+
       <Form.Item
         name={name}
         label={label}
@@ -122,7 +121,8 @@ const ImagesForm = ({
         rules={rules}
       >
         <Upload
-          listType="picture-card"
+          className="upload-list-inline"
+          listType="picture"
           fileList={fileList}
           beforeUpload={validateFile}
           customRequest={dummyRequest}
@@ -141,8 +141,9 @@ const ImagesForm = ({
           src={previewImage}
         />
       </Modal>
+    </Col>
     </div>
   );
 };
 
-export default ImagesForm;
+export default DocumentsForm;

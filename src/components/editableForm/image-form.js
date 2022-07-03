@@ -16,17 +16,19 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-const ImageForm = ({ name, label, image, setImage, required }) => {
+const ImageForm = ({ name, label, image, setImage, rules }) => {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState(
     [
       {
+        uid: 1,
+        status: "done",
         url: image,
       },
     ] || []
   );
-
+  
   const normFile = (uploadEvent) => {
     if (Array.isArray(uploadEvent)) {
       return uploadEvent;
@@ -98,12 +100,7 @@ const ImageForm = ({ name, label, image, setImage, required }) => {
         label={label}
         valuePropName={name}
         getValueFromEvent={normFile}
-        rules={[
-          {
-            required: required,
-            message: "${label} is required.",
-          },
-        ]}
+        rules={rules}
       >
         <Upload
           listType="picture-card"

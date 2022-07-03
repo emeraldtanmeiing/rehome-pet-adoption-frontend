@@ -81,8 +81,8 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
       ...data,
       ...validationResult,
       ...(image && { image, mainImage: image }),
-      ...(images && { images }),
-      ...(existingImages && { existingImages: existingImages }),
+      ...(images && { images, documents: images }),
+      ...(existingImages && { existingImages: existingImages, existingDocuments: existingImages }),
 
       ...(data.interviewDate && { interviewDate: data.interviewDate }),
       ...(data.pickupDate && { pickupDate: data.pickupDate }),
@@ -103,7 +103,7 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
         ...data,
         ...validationResult,
         ...(image && { image: res.image, mainImage: res?.mainImage }),
-        ...(images && { images: res.images }),
+        ...(images && { images: res.images, documents: res.documents }),
         ...(res.interviewDate && { interviewDate: res.interviewDate }),
         ...(res.interviewTime && { interviewTime: res.interviewTime }),
         ...(res.pickupDate && { pickupDate: res.pickupDate }),
@@ -120,6 +120,10 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
     }
     
     if(!isEqual(find(fields, f => f.type=="images").value, existingImages)){
+      window.location.href = window.location.href; //force refresh page to update image
+    }
+    
+    if(!isEqual(find(fields, f => f.type=="documents").value, existingImages)){
       window.location.href = window.location.href; //force refresh page to update image
     }
   };
@@ -191,6 +195,7 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
                         field.type === "petLivingSituation" ||
                         field.type === "petTypes" ||
                         field.type === "housemateAcknowledgement" ||
+                        field.type === "documents" ||
                         !breakpoint.md
                           ? 24
                           : 12

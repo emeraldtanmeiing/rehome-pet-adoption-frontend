@@ -25,7 +25,6 @@
     width: 100%;
   }
 
-  // .ant-radio-group,
   .ant-form-item-control-input-content,
   .ant-select-selection-item,
   .ant-select-selection-placeholder,
@@ -37,22 +36,44 @@
     text-align: left;
   }
 
-  .ant-form-vertical .ant-form-item-label, .ant-col-24.ant-form-item-label, .ant-col-xl-24.ant-form-item-label {
-    padding-bottom: 0;
+  .ant-form-vertical .ant-form-item-label,
+  .ant-col-24.ant-form-item-label,
+  .ant-col-xl-24.ant-form-item-label {
+    padding-bottom: 5px;
   }
 
-  .ant-input-disabled, .ant-input[disabled] {
+  .ant-input-disabled,
+  .ant-input[disabled] {
     color: black;
-}
+  }
 
   label {
     font-weight: bold;
     color: gray;
   }
 
+  .ant-checkbox-group span {
+    font-weight: normal;
+    color: black;
+  }
+
   .images-form {
-    .ant-upload.ant-upload-select-picture-card:hover{
-        border-color: gray;
+    .ant-upload.ant-upload-select-picture-card:hover {
+      border-color: gray;
     }
-}
+  }
+
+  .upload-list-inline {
+    width: 100%;
+
+    .ant-upload-list-item {
+      margin-right: 8px;
+    }
+  }
+
+  .display-mode {
+    .anticon-delete {
+      display: none !important;
+    }
+  }
 }

@@ -15,9 +15,10 @@ TODO:
 [/] - food details in pet page
 [/] - pet change age need to add date.now() to pet.updatedAt, not pet.createdAt (but modify other fields will trigger the updatedAt too, so maybe add another field call ageUpdatedAt)
 [/] - dont allow user to reject application once its completed
-
-![ ] - cant remove image is user wish to
-![ ] - edit multiple image
+[/] - cant remove image is user wish to
+[/] - edit multiple image
+[/] - edit documents
+![ ] - cancel application
 ![ ] - payment gateway
 ![ ] - admin review rescuer
 [ ] - change cookie key
@@ -31,4 +32,14 @@ TODO:
 [ ] - pet's description cant go to next line
 [ ] - click on ? can trigger on/off (in add pet and edit pet)
 [ ] - ask rescuer to double check before checking "picked up" button
+[ ] - redirect back to sign up adopter in sign up rescuer page
 [ ] - 
+[ ] - 
+[ ] - 
+[ ] - 
+[ ] - 
+
+Future Enhancements:
+Add video
+Add donation
+copy email, phone and address when clicked

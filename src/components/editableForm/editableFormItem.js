@@ -1,14 +1,13 @@
 import React, { useRef } from "react";
+import { last } from "lodash";
 import moment from "moment";
 
 import {
   Row,
   Col,
   Input,
-  Button,
   Form,
   Upload,
-  Avatar,
   Select,
   Grid,
   InputNumber,
@@ -16,12 +15,10 @@ import {
   DatePicker,
   TimePicker,
   Switch,
-  Radio,
-  message,
 } from "antd";
-import { UploadOutlined, PlusOutlined } from "@ant-design/icons";
 import ImageForm from "./image-form";
 import ImagesForm from "./images-form";
+import DocumentsForm from "./documents-form";
 
 import "./editableForm.less";
 
@@ -51,734 +48,577 @@ const EditableFormItem = ({
 }) => {
   const inputRef = useRef(value);
 
-  const normFile = (uploadEvent) => {
-    if (Array.isArray(uploadEvent)) {
-      return uploadEvent;
-    }
-  };
-
-  const validateFile = (value) => {
-    const file = value;
-
-    const fileTypes = ["image/png", "image/jpg", "image/jpeg", "image/svg+xml"];
-
-    if (!fileTypes.includes(file.type)) {
-      message.error(`${file.name} format is not accepted.`);
-      return Upload.LIST_IGNORE;
-    }
-
-    const isLt1M = file.size / 1024 / 1024 <= 1;
-    if (!isLt1M) {
-      message.error(`Image size should be smaller than 1MB.`);
-      return Upload.LIST_IGNORE;
-    }
-  };
-
-  const dummyRequest = ({ file, onSuccess }) => {
-    setTimeout(() => {
-      onSuccess("ok");
-    }, 0);
-  };
-
-  const onImageChange = (value) => {
-    setImage(value.fileList[0]?.originFileObj);
-  };
-
-  function onDateChange(date, dateString) {
+  const onDateChange = (date, dateString) => {
     setDate(dateString);
-  }
+  };
 
-  function onDateMonthChange(date, dateString) {
+  const onDateMonthChange = (date, dateString) => {
     setDateMonth(dateString);
-  }
+  };
 
-  function onTimeChange(time, timeString) {
+  const onTimeChange = (time, timeString) => {
     setTime(timeString);
-  }
+  };
+
+  const props = {
+    name: name,
+    label: label,
+    extra: extra,
+    key: key,
+    rules: [
+      {
+        required: required,
+        message: `${label} is required.`,
+      },
+    ],
+  };
+
+  const checkBox = (value) => {
+    return (
+      <Col align="left">
+        <Checkbox value={value} style={{ lineHeight: "32px" }}>
+          {value}
+        </Checkbox>
+      </Col>
+    );
+  };
+
+  const option = (value) => {
+    <Option value={value}>{value}</Option>;
+  };
 
   const breakpoint = Grid.useBreakpoint();
   let formItem;
+
   if (!editing || !editable) {
-    if (type === "image") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item name={name} label={label} valuePropName={name} key={key}>
-            <Upload
-              listType="picture-card"
-              fileList={[
-                {
-                  url: value,
-                },
-              ] || []}
-            />
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "images") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item name={name} label={label} valuePropName={name} key={key}>
-            <Upload
-              listType="picture-card"
-              fileList={
-                value?.map((image, index) => {
-                  return {
-                    uid: index,
-                    status: "done",
-                    url: image,
-                  };
-                }) || []
-              }
-            />
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "textArea") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item name={name} label={label} extra={extra} key={key}>
-            <Input.TextArea rows={20} disabled />
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "textArea-small") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item name={name} label={label} extra={extra} key={key}>
-            <Input.TextArea rows={3} disabled />
-          </Form.Item>
-        </Col>
-      );
-    } else {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item name={name} label={label} extra={extra} key={key}>
-            <Input disabled />
-          </Form.Item>
-        </Col>
-      );
+    switch (type) {
+      case "image":
+        formItem = (
+          <div className="editable-form-item display-mode">
+            <Form.Item {...props}>
+              <Upload
+                listType="picture-card"
+                fileList={
+                  [
+                    {
+                      url: value,
+                    },
+                  ] || []
+                }
+              />
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "images":
+        formItem = (
+          <div className="editable-form-item display-mode">
+            <Form.Item {...props}>
+              <Upload
+                listType="picture-card"
+                fileList={
+                  value?.map((image, index) => {
+                    return {
+                      uid: index,
+                      status: "done",
+                      url: image,
+                    };
+                  }) || []
+                }
+              />
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "documents":
+        formItem = (
+          <div className="editable-form-item display-mode">
+            <Form.Item {...props}>
+              <Upload
+                className="upload-list-inline"
+                listType="picture"
+                fileList={
+                  value?.map((doc, index) => {
+                    const filename = last(doc.split("/"));
+                    const filenameCodeLength =
+                      last(filename.split("_")).length + 1;
+                    const originalFilename = filename.slice(
+                      0,
+                      -filenameCodeLength
+                    );
+                    const fileExtension = last(filename.split("."));
+                    return {
+                      uid: index,
+                      status: "done",
+                      url: doc,
+                      name: `${originalFilename}.${fileExtension}`,
+                    };
+                  }) || []
+                }
+              />
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "textArea":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Input.TextArea rows={20} disabled />
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "textArea-small":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Input.TextArea rows={3} disabled />
+            </Form.Item>
+          </div>
+        );
+        break;
+      default:
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Input disabled />
+            </Form.Item>
+          </div>
+        );
     }
   } else {
-    if (type === "image") {
-      formItem = (
-        <ImageForm
-          key={key}
-          name={name}
-          label={label}
-          image={value}
-          required={required}
-          setImage={setImage}
-        />
-      );
-    } else if (type === "images") {
-      formItem = (
-        <ImagesForm
-          key={key}
-          name={name}
-          label={label}
-          maxNumberOfImages={maxNumberOfImages}
-          existingImages={value}
-          required={required}
-          setImages={setImages}
-          setExistingImages={setExistingImages}
-        />
-      );
-    } else if (type === "textArea") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Input.TextArea rows={20} ref={inputRef} />
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "textArea-small") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Input.TextArea rows={3} ref={inputRef} />
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "integer" || type === "integer-full") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <InputNumber
-              min={0}
-              max={500}
-              addonAfter={addonAfter || ""}
-              style={{ width: "100%" }}
-            />
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "boolean") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-            valuePropName="checked"
-          >
-            <Switch
-              checkedChildren={checkedDesc}
-              unCheckedChildren={uncheckedDesc}
-            />
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "interestedPetTypes") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Checkbox.Group>
-              <Row type="flex" style={{ alignItems: "center" }}>
-                <Col align="left">
-                  <Checkbox
-                    value="Dog"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Dog(s)
-                  </Checkbox>
-                </Col>
-                <Col align="left">
-                  <Checkbox
-                    value="Cat"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Cat(s)
-                  </Checkbox>
-                </Col>
-              </Row>
-            </Checkbox.Group>
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "petTypes") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Checkbox.Group>
-              <Row type="flex" style={{ alignItems: "center" }}>
-                <Col align="left">
-                  <Checkbox
-                    value="Dog"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Dog(s)
-                  </Checkbox>
-                </Col>
-                <Col align="left">
-                  <Checkbox
-                    value="Cat"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Cat(s)
-                  </Checkbox>
-                </Col>
-                <Col align="left">
-                  <Checkbox
-                    value="Fish"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Fish(s)
-                  </Checkbox>
-                </Col>
-                <Col align="left">
-                  <Checkbox
-                    value="Bird"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Bird(s)
-                  </Checkbox>
-                </Col>
-                <Col align="left">
-                  <Checkbox
-                    value="Hamster"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Hamster(s)
-                  </Checkbox>
-                </Col>
-                <Col align="left">
-                  <Checkbox
-                    value="Rabbit"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Rabbit(s)
-                  </Checkbox>
-                </Col>
-                <Col align="left">
-                  <Checkbox
-                    value="Other"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Others
-                  </Checkbox>
-                </Col>
-              </Row>
-            </Checkbox.Group>
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "petLivingSituation") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Select placeholder="Select your pet living situation">
-              <Option value="Indoor">Indoor</Option>
-              <Option value="Outdoor">Outdoor</Option>
-              <Option value="Indoor And Outdoor (Free Choice)">
-                Indoor And Outdoor (Free Choice)
-              </Option>
-            </Select>
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "housemateAcknowledgement") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Select placeholder="Select your situation">
-              <Option value="Everyone in the household is excited about adopting">
-                Everyone in the household is excited about adopting
-              </Option>
-              <Option value="Someone in the household isn't sure about adopting">
-                Someone in the household isn't sure about adopting
-              </Option>
-              <Option value="Not everyone in the household knows I am applying to adopt">
-                Not everyone in the household knows I am applying to adopt
-              </Option>
-            </Select>
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "healthCondition") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Select placeholder="Select your situation">
-              <Option value="Healthy">Healthy</Option>
-              <Option value="Minor injury">Minor injury</Option>
-              <Option value="Serious injury">Serious injury</Option>
-              <Option value="Chronic disease">Chronic disease</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "petType") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Select placeholder="Select your situation">
-              <Option value="Dog">Dog</Option>
-              <Option value="Cat">Cat</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "petGender") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Select placeholder="Select pet's gender">
-              <Option value="Male">Male</Option>
-              <Option value="Female">Female</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "petSize") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Select>
-              <Option value="Small">Small</Option>
-              <Option value="Medium">Medium</Option>
-              <Option value="Large">Large</Option>
-              <Option value="Giant">Giant</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "foodSize") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Select>
-              <Option value="<= 0.5 cups">{`<= 0.5 cups`}</Option>
-              <Option value="0.5 - 1 cups">0.5 - 1 cups</Option>
-              <Option value="1 - 2 cups">1 - 2 cups</Option>
-              <Option value="2 - 3 cups">2 - 3 cups</Option>
-              <Option value="3 - 5 cups">3 - 5 cups</Option>
-              <Option value=">= 5 cups">{`>= 5 cups`}</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "foodFee") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Select>
-              <Option value="<= RM100">{`<= RM100`}</Option>
-              <Option value="RM100 - RM300">RM100 - RM300</Option>
-              <Option value="RM300 - RM500">RM300 - RM500</Option>
-              <Option value="RM500 - RM700">RM500 - RM700</Option>
-              <Option value=">= RM700">{`>= RM700`}</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "color") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Checkbox.Group>
-              <Row type="flex" style={{ alignItems: "center" }}>
-                <Col span={4}>
-                  <Checkbox
-                    value="White"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    White
-                  </Checkbox>
-                </Col>
-                <Col span={4}>
-                  <Checkbox
-                    value="Brown"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Brown
-                  </Checkbox>
-                </Col>
-                <Col span={4}>
-                  <Checkbox
-                    value="Black"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Black
-                  </Checkbox>
-                </Col>
-                <Col span={4}>
-                  <Checkbox
-                    value="Grey"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Grey
-                  </Checkbox>
-                </Col>
-                <Col span={4}>
-                  <Checkbox
-                    value="Golden"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Golden
-                  </Checkbox>
-                </Col>
-                <Col span={4}>
-                  <Checkbox
-                    value="Cream"
-                    style={{
-                      lineHeight: "32px",
-                    }}
-                  >
-                    Cream
-                  </Checkbox>
-                </Col>
-              </Row>
-            </Checkbox.Group>
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "stateOrProvince") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            required={required}
-          >
-            <Select placeholder="Select your state or province">
-              <Option value="Selangor">Selangor</Option>
-              <Option value="Kuala Lumpur">Kuala Lumpur</Option>
-              <Option value="Putrajaya">Putrajaya</Option>
-              <Option value="Negeri Sembilan">Negeri Sembilan</Option>
-              <Option value="Johor">Johor</Option>
-              <Option value="Melaka">Melaka</Option>
-              <Option value="Kedah">Kedah</Option>
-              <Option value="Kelantan">Kelantan</Option>
-              <Option value="Pahang">Pahang</Option>
-              <Option value="Perak">Perak</Option>
-              <Option value="Perlis">Perlis</Option>
-              <Option value="Pulau Pinang">Pulau Pinang</Option>
-              <Option value="Terengganu">Terengganu</Option>
-              <Option value="Sabah">Sabah</Option>
-              <Option value="Sarawak">Sarawak</Option>
-              <Option value="Labuan">Labuan</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "postcode") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            rules={[
-              {
-                required: required,
-              },
-              () => ({
-                validator(_, value) {
-                  if (
-                    !value ||
-                    (value.length === 5 && value.match(/^[0-9]+$/) != null)
-                  ) {
-                    return Promise.resolve();
-                  }
+    switch (type) {
+      case "image":
+        formItem = <ImageForm {...props} image={value} setImage={setImage} />;
+        break;
 
-                  return Promise.reject(
-                    new Error("Postcode should be five digit numeric.")
-                  );
+      case "images":
+        formItem = (
+          <ImagesForm
+            {...props}
+            images
+            maxNumberOfImages={maxNumberOfImages}
+            existingImages={value}
+            setImages={setImages}
+            setExistingImages={setExistingImages}
+          />
+        );
+        break;
+
+      case "documents":
+        formItem = (
+          <DocumentsForm
+            {...props}
+            maxNumberOfImages={maxNumberOfImages}
+            existingImages={value}
+            setImages={setImages}
+            setExistingImages={setExistingImages}
+          />
+        );
+        break;
+
+      case "textArea":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Input.TextArea rows={20} ref={inputRef} />
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "textArea-small":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Input.TextArea rows={3} ref={inputRef} />
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "integer":
+      case "integer-full":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <InputNumber
+                min={0}
+                max={500}
+                addonAfter={addonAfter || ""}
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "boolean":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props} valuePropName="checked">
+              <Switch
+                checkedChildren={checkedDesc}
+                unCheckedChildren={uncheckedDesc}
+              />
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "interestedPetTypes":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Checkbox.Group>
+                <Row type="flex" style={{ alignItems: "center" }}>
+                  {checkBox("Dog")}
+                  {checkBox("Cat")}
+                </Row>
+              </Checkbox.Group>
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "petTypes":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Checkbox.Group>
+                <Row type="flex" style={{ alignItems: "center" }}>
+                  {checkBox("Dog")}
+                  {checkBox("Cat")}
+                  {checkBox("Fish")}
+                  {checkBox("Bird")}
+                  {checkBox("Hamster")}
+                  {checkBox("Rabbit")}
+                  {checkBox("Other")}
+                </Row>
+              </Checkbox.Group>
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "petLivingSituation":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Select placeholder="Select your pet living situation">
+                {option("Indoor")}
+                {option("Outdoor")}
+                {option("Indoor And Outdoor (Free Choice)")}
+              </Select>
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "housemateAcknowledgement":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Select placeholder="Select your situation">
+                {option(
+                  "  Everyone in the household is excited about adopting"
+                )}
+                {option("  Someone in the household isn't sure about adopting")}
+                {option(
+                  "  Not everyone in the household knows I am applying to adopt"
+                )}
+              </Select>
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "healthCondition":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Select placeholder="Select your situation">
+                {option("Healthy")}
+                {option("Minor injury")}
+                {option("Serious injury")}
+                {option("Chronic disease")}
+              </Select>
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "petType":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Select placeholder="Select your situation">
+                {option("Dog")}
+                {option("Cat")}
+              </Select>
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "petGender":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Select placeholder="Select pet's gender">
+                {option("Male")}
+                {option("Female")}
+              </Select>
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "petSize":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Select>
+                {option("Small")}
+                {option("Medium")}
+                {option("Large")}
+                {option("Giant")}
+              </Select>
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "foodSize":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Select>
+                {option("<= 0.5 cups")}
+                {option("0.5 - 1 cups")}
+                {option("1 - 2 cups")}
+                {option("2 - 3 cups")}
+                {option("3 - 5 cups")}
+                {option("{`>= 5 cups`}")}
+              </Select>
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "foodFee":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Select>
+                {option("<= RM100")}
+                {option("RM100 - RM300")}
+                {option("RM300 - RM500")}
+                {option("RM500 - RM700")}
+                {option(">= RM700")}
+              </Select>
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "color":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Checkbox.Group>
+                <Row type="flex" style={{ alignItems: "center" }}>
+                  {checkBox("White")}
+                  {checkBox("Brown")}
+                  {checkBox("Black")}
+                  {checkBox("Grey")}
+                  {checkBox("Golden")}
+                  {checkBox("Cream")}
+                </Row>
+              </Checkbox.Group>
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "stateOrProvince":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Select placeholder="Select your state or province">
+                {option("Selangor")}
+                {option("Kuala Lumpur")}
+                {option("Putrajaya")}
+                {option("Negeri Sembilan")}
+                {option("Johor")}
+                {option("Melaka")}
+                {option("Kedah")}
+                {option("Kelantan")}
+                {option("Pahang")}
+                {option("Perak")}
+                {option("Perlis")}
+                {option("Pulau Pinang")}
+                {option("Terengganu")}
+                {option("Sabah")}
+                {option("Sarawak")}
+                {option("Labuan")}
+              </Select>
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "postcode":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item
+              name={name}
+              label={label}
+              extra={extra}
+              key={key}
+              rules={[
+                {
+                  required: required,
+                  message: `${label} is required.`,
                 },
-              }),
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "website") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            rules={[
-              {
-                required: required,
-              },
-              () => ({
-                validator(_, value) {
-                  if (
-                    !value ||
-                    value.match(
-                      /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/
-                    ) != null
-                  ) {
-                    return Promise.resolve();
-                  }
+                () => ({
+                  validator(_, value) {
+                    if (
+                      !value ||
+                      (value.length === 5 && value.match(/^[0-9]+$/) != null)
+                    ) {
+                      return Promise.resolve();
+                    }
 
-                  return Promise.reject(new Error("Invalid website."));
+                    return Promise.reject(
+                      new Error("Postcode should be five digit numeric.")
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "website":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item
+              name={name}
+              label={label}
+              extra={extra}
+              key={key}
+              rules={[
+                {
+                  required: required,
+                  message: `${label} is required.`,
                 },
-              }),
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "phone") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            key={key}
-            rules={[
-              { required: required },
-              () => ({
-                validator(_, value) {
-                  if (!value || value.match(/^[0-9]+$/) != null) {
-                    return Promise.resolve();
-                  }
+                () => ({
+                  validator(_, value) {
+                    if (
+                      !value ||
+                      value.match(
+                        /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/
+                      ) != null
+                    ) {
+                      return Promise.resolve();
+                    }
 
-                  return Promise.reject(new Error("Phone should be numeric."));
-                },
-              }),
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "date") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item name={name} label={label} extra={extra} key={key}>
-            <DatePicker onChange={onDateChange} format="DD MMMM YYYY" />
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "date-month") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item name={name} label={label} extra={extra} key={key}>
-            <DatePicker
-              onChange={onDateMonthChange}
-              picker="month"
-              format="MMMM YYYY"
-            />
-          </Form.Item>
-        </Col>
-      );
-    } else if (type === "time") {
-      formItem = (
-        <Col span={24} className="editable-form-item">
-          <Form.Item name={name} label={label} extra={extra} key={key}>
-            {/* <TimePicker defaultOpenValue={moment('13:00 ', 'HH:mm')} onChange={onTimeChange} /> */}
+                    return Promise.reject(new Error("Invalid website."));
+                  },
+                }),
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </div>
+        );
+        break;
 
-            <TimePicker
-              use12Hours
-              format="h:mm a"
-              onChange={onTimeChange}
-              defaultOpenValue={moment("00.00", "h:mm a")}
-            />
-          </Form.Item>
-        </Col>
-      );
-    } else {
-      formItem = (
-        <Col>
-          <Form.Item
-            name={name}
-            label={label}
-            extra={extra}
-            rules={[
-              {
-                required: required,
-                message: `${label} is required.`,
-              },
-            ]}
-          >
-            <Input ref={inputRef} />
-          </Form.Item>
-        </Col>
-      );
+      case "phone":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item
+              name={name}
+              label={label}
+              extra={extra}
+              key={key}
+              rules={[
+                { required: required, message: `${label} is required.` },
+                () => ({
+                  validator(_, value) {
+                    if (!value || value.match(/^[0-9]+$/) != null) {
+                      return Promise.resolve();
+                    }
+
+                    return Promise.reject(
+                      new Error("Phone should be numeric.")
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "date":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <DatePicker onChange={onDateChange} format="DD MMMM YYYY" />
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "date-month":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <DatePicker
+                onChange={onDateMonthChange}
+                picker="month"
+                format="MMMM YYYY"
+              />
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      case "time":
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <TimePicker
+                use12Hours
+                format="h:mm a"
+                onChange={onTimeChange}
+                defaultOpenValue={moment("00.00", "h:mm a")}
+              />
+            </Form.Item>
+          </div>
+        );
+        break;
+
+      default:
+        formItem = (
+          <div className="editable-form-item">
+            <Form.Item {...props}>
+              <Input ref={inputRef} />
+            </Form.Item>
+          </div>
+        );
     }
   }
 

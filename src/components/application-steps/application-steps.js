@@ -129,7 +129,7 @@ function ApplicationSteps({
                   After approval, ReHome will allow the applicant to pay the
                   adoption fee. Hence, please make sure you only approve one
                   applicant per pet at the same time to prevent duplication of
-                  payments for the same pet from different applicant. <br />
+                  payments for the same pet from different applicants. <br />
                   <br />
                   If you think that the applicant is not suitable to adopt the
                   pet, please use the 'Reject application' button above to

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { filter, isEmpty, omitBy, isNil } from "lodash";
+import { filter, isEmpty, omitBy, omit, isNil } from "lodash";
 import { useNavigate } from "react-router-dom";
 import { updateApplications } from "../../services/application.services";
 
@@ -44,13 +44,15 @@ const ApplicationFormNoteAndDocs = ({
       name: "note",
       label: editable ? "Notes (for applicant)" : "Notes",
       value: a.note,
-      extra: editable ? "Applicant is able to see this note on his/her side." : null,
+      extra: editable
+        ? "Applicant is able to see this note on his/her side."
+        : null,
       editable: true,
       required: false,
       type: "textArea-small",
-    })
+    });
 
-    if(showNoteForStaff){
+    if (showNoteForStaff) {
       fields.push({
         name: "noteInternal",
         label: "Notes (for internal staff)",
@@ -66,10 +68,11 @@ const ApplicationFormNoteAndDocs = ({
       name: "documents",
       label: "Documents",
       value: a?.documents ? a.documents : null,
-      extra: editable ? "Applicant is able to see the documents." : null,
+      extra: editable ? "Applicant is able to see the documents but not uploading documents. (eg. your official adoption form)" : null,
       editable: true,
       required: false,
-      type: "document",
+      type: "documents",
+      maxNumberOfImages: 5,
     });
 
     setApplicationFields({
@@ -83,25 +86,32 @@ const ApplicationFormNoteAndDocs = ({
     note,
     noteInternal,
     documents,
+    existingDocuments,
   }) => {
+    const adoptionApplication = omitBy(
+      {
+        ...application,
+        note,
+        noteInternal,
+        adopterID: application.adopterID._id,
+        petID: application.petID._id,
+        rescuerID: application.rescuerID._id,
+        paymentID: application.paymentID?._id
+          ? application.paymentID._id
+          : null,
+      },
+      (v) => isNil(v) || v.toString().trim() === ""
+    );
+    
     const res = await updateApplications({
-      adoptionApplication: omitBy(
-        {
-          ...application,
-          note,
-          noteInternal,
-          documents,
-
-          adopterID: application.adopterID._id,
-          petID: application.petID._id,
-          rescuerID: application.rescuerID._id,
-          paymentID: application.paymentID?._id
-            ? application.paymentID._id
-            : null,
-        },
-        (v) => isNil(v) || v.toString().trim() === ""
-      ),
+      adoptionApplication: omit(adoptionApplication, [
+        "documents",
+        "existingDocuments",
+      ]),
+      documents,
+      existingDocuments,
     });
+
     if (res?.error) {
       message.error(res.error.description);
       return false;
@@ -109,6 +119,7 @@ const ApplicationFormNoteAndDocs = ({
       message.success("Updated adoption application successfully!");
       return res;
     }
+
   };
 
   const breakpoint = Grid.useBreakpoint();
@@ -127,29 +138,29 @@ const ApplicationFormNoteAndDocs = ({
         {!isLoading && (
           <Collapse defaultActiveKey={["1"]}>
             <Panel header="Notes & Documents" key="1">
-              {(editable ? (
-              <>
-                <EditableForm
-                  fields={applicationFields.data}
-                  api={handleUpdateApplication}
-                  editable={true}
-                  size={size}
-                />
-              </>
+              {editable ? (
+                <>
+                  <EditableForm
+                    fields={applicationFields.data}
+                    api={handleUpdateApplication}
+                    editable={true}
+                    size={size}
+                  />
+                </>
               ) : (
-              <>
-                <EditableForm
-                  fields={filter(applicationFields.data, (v) => {
-                    return (
-                      v.name !== "image" && v.value !== null && v.value !== ""
-                    );
-                  })}
-                  api={handleUpdateApplication}
-                  editable={false}
-                  size={size}
-                />
-              </>
-              ))}
+                <>
+                  <EditableForm
+                    fields={filter(applicationFields.data, (v) => {
+                      return (
+                        v.name !== "image" && v.value !== null && v.value !== ""
+                      );
+                    })}
+                    api={handleUpdateApplication}
+                    editable={false}
+                    size={size}
+                  />
+                </>
+              )}
             </Panel>
           </Collapse>
         )}

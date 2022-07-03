@@ -101,6 +101,7 @@ const ApplicationFormPickUp = ({
       return false;
     } else {
       message.success("Updated adoption application successfully!");
+      window.location.href = window.location.href; //force refresh page to prevent future editing
       return res;
     }
   };

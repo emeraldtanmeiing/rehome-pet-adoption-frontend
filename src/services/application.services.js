@@ -63,17 +63,23 @@ export const getApplications = async (params) => {
   }
 }
 
-export const updateApplications = async ({ adoptionApplication, docs }) => {
+export const updateApplications = async ({ adoptionApplication, documents, existingDocuments }) => {
   const url = apiURL("/adopt/application");
 
   const data = new FormData();
-  if(!isEmpty(docs)){
-    const lengthOfDocs = docs.length;
+  if(!isEmpty(documents)){
+    const lengthOfDocs = documents.length;
     for (let i = 0; i < lengthOfDocs; i++) {
-      data.append("docs", docs[i]);
+      data.append("documents", documents[i]);
     }
   }
-
+  if(!isEmpty(existingDocuments)){
+    const lengthOfDocs = existingDocuments.length;
+    for (let i = 0; i < lengthOfDocs; i++) {
+      data.append("existingDocuments", existingDocuments[i]);
+    }
+  }
+  console.log("in service:", adoptionApplication)
   for (const i in adoptionApplication) {
     data.append(i, adoptionApplication[i]);
   }

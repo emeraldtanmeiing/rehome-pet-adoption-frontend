@@ -40,7 +40,7 @@ const Application = ({
       title: "Are you sure to reject this application?",
       icon: <ExclamationCircleFilled style={{ color: "red" }} />,
       content:
-        "You can't unreject this application once you reject. You can still edit the details, but the status will remain as 'Rejected'. You can only ask the applicant to apply again if this was a mistake.",
+        "You can't unreject this application once you reject. You can still edit the details, but the status will remain as 'Rejected'. You can only ask the applicant to apply again if this was a mistake. You're encourage to specify your reject reason under 'Notes (for applicant)' field.",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
@@ -172,7 +172,7 @@ const Application = ({
               placement="top"
               title="You can't unreject this application once you reject. You can still edit the details, but the status will remain as 'Rejected'. You can only ask the applicant to apply again if this was a mistake."
             >
-              <Button danger onClick={showDeleteConfirm} disabled={data.status === "Completed" || !data.petID.active || data.petID.adopted}>
+              <Button danger onClick={showDeleteConfirm} disabled={data.status === "Completed" || data.status === "Rejected" || !data.petID.active || data.petID.adopted}>
                 Reject application
               </Button>
             </Tooltip>
