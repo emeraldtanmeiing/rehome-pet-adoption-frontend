@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { last } from "lodash";
+import { isEmpty, last } from "lodash";
 import moment from "moment";
 
 import {
@@ -157,7 +157,11 @@ const EditableFormItem = ({
                     };
                   }) || []
                 }
-              />
+              >
+                {isEmpty(value) && (
+                  <>No document.</>
+                )}
+              </Upload>
             </Form.Item>
           </div>
         );

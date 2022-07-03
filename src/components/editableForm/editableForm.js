@@ -119,11 +119,11 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
       window.location.href = window.location.href; //force refresh page to update image
     }
     
-    if(!isEqual(find(fields, f => f.type=="images").value, existingImages)){
+    if(!isEqual(find(fields, f => f.type=="images")?.value, existingImages)){
       window.location.href = window.location.href; //force refresh page to update image
     }
     
-    if(!isEqual(find(fields, f => f.type=="documents").value, existingImages)){
+    if(!isEqual(find(fields, f => f.type=="documents")?.value, existingImages)){
       window.location.href = window.location.href; //force refresh page to update image
     }
   };

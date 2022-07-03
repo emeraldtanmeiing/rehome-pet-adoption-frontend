@@ -29,15 +29,15 @@ const DocumentsForm = ({
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState(
     existingImages?.map((doc, index) => {
-      const filename = last(doc.split("/"))
-      const filenameCodeLength = last(filename.split("_")).length + 1
-      const originalFilename = filename.slice(0, -filenameCodeLength)
-      const fileExtension = last(filename.split("."))
+      const filename = last(doc.split("/"));
+      const filenameCodeLength = last(filename.split("_")).length + 1;
+      const originalFilename = filename.slice(0, -filenameCodeLength);
+      const fileExtension = last(filename.split("."));
       return {
         uid: index,
         status: "done",
         url: doc,
-        name: `${originalFilename}.${fileExtension}`
+        name: `${originalFilename}.${fileExtension}`,
       };
     }) || []
   );
@@ -50,8 +50,8 @@ const DocumentsForm = ({
 
   const validateFile = (value) => {
     const file = value;
-    
-    const fileTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+
+    const fileTypes = ["application/pdf"];
 
     if (!fileTypes.includes(file.type)) {
       message.error(`${file.name} format is not accepted.`);
@@ -106,13 +106,13 @@ const DocumentsForm = ({
   };
 
   const uploadButton = (
-    <Button icon={<PlusOutlined />}>Upload word or pdf only (Max: {maxNumberOfImages})</Button>
-
+    <Button icon={<PlusOutlined />}>
+      Upload pdf only (Max: {maxNumberOfImages})
+    </Button>
   );
+
   return (
     <div className="documents-form">
-    <Col span={24}>
-
       <Form.Item
         name={name}
         label={label}
@@ -141,7 +141,6 @@ const DocumentsForm = ({
           src={previewImage}
         />
       </Modal>
-    </Col>
     </div>
   );
 };

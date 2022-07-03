@@ -79,7 +79,7 @@ export const updateApplications = async ({ adoptionApplication, documents, exist
       data.append("existingDocuments", existingDocuments[i]);
     }
   }
-  console.log("in service:", adoptionApplication)
+
   for (const i in adoptionApplication) {
     data.append(i, adoptionApplication[i]);
   }

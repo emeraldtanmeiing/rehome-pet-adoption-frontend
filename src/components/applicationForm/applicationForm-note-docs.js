@@ -68,7 +68,7 @@ const ApplicationFormNoteAndDocs = ({
       name: "documents",
       label: "Documents",
       value: a?.documents ? a.documents : null,
-      extra: editable ? "Applicant is able to see the documents but not uploading documents. (eg. your official adoption form)" : null,
+      extra: editable ? "Applicant is able to see and download these documents. (eg. your official adoption form)" : null,
       editable: true,
       required: false,
       type: "documents",
@@ -102,7 +102,7 @@ const ApplicationFormNoteAndDocs = ({
       },
       (v) => isNil(v) || v.toString().trim() === ""
     );
-    
+
     const res = await updateApplications({
       adoptionApplication: omit(adoptionApplication, [
         "documents",

@@ -43,3 +43,6 @@ Future Enhancements:
 Add video
 Add donation
 copy email, phone and address when clicked
+change password
+undo adopted state
+support more document type
