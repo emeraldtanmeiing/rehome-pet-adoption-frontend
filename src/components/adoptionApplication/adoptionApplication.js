@@ -29,7 +29,7 @@ function AdoptionApplication() {
   const navigate = useNavigate();
   const getToBeAppliedPetID = () => {
     const petIDInJson = localStorage.getItem("toBeAppliedPet");
-    if (petIDInJson == null) {
+    if (petIDInJson === null) {
       return null;
     } else {
       return JSON.parse(petIDInJson);
@@ -38,7 +38,7 @@ function AdoptionApplication() {
 
   useEffect(() => {
     const petID = getToBeAppliedPetID();
-    if (petID == null) {
+    if (petID === null) {
       message.warning(
         "You haven't select the pet you wish to adopt. Please click the 'Adopt' Button on your interested pet before applying an adoption application.",
         10

@@ -1,8 +1,14 @@
 import React, { useState } from "react";
-import { omitBy, isNil, isEmpty, trim } from "lodash";
-import { createPet } from "../../services/pet.services.js";
 import { useNavigate } from "react-router-dom";
+import { omitBy, isNil, isEmpty } from "lodash";
+import { createPet } from "../../services/pet.services.js";
 import useAuthContext from "../../hooks/useAuthContext.js";
+import {
+  getBase64,
+  dummyRequest,
+  validateFile,
+  normFile,
+} from "../../helpers/image";
 
 import {
   Form,
@@ -17,11 +23,11 @@ import {
   Col,
   Upload,
   DatePicker,
-  Divider,
+  Modal,
   Collapse,
   message,
 } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 
 import "./add-pet.scss";
 
@@ -30,9 +36,11 @@ const { Panel } = Collapse;
 
 const AddPet = () => {
   const [date, setDate] = useState(null);
-  const [images, setImages] = useState(null);
+  const [images, setImages] = useState([]);
   const [mainImage, setMainImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
 
   function onDateChange(date, dateString) {
     setDate(dateString);
@@ -50,33 +58,15 @@ const AddPet = () => {
     setMainImage(value.fileList[0]?.originFileObj);
   };
 
-  const normFile = (uploadEvent) => {
-    if (Array.isArray(uploadEvent)) {
-      return uploadEvent;
-    }
-  };
+  const handleCancel = () => setPreviewVisible(false);
 
-  const validateFile = (value) => {
-    const file = value;
-
-    const fileTypes = ["image/png", "image/jpg", "image/jpeg", "image/svg+xml"];
-
-    if (!fileTypes.includes(file.type)) {
-      message.error(`${file.name} format is not accepted.`);
-      return Upload.LIST_IGNORE;
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
     }
 
-    const isLt1M = file.size / 1024 / 1024 <= 1;
-    if (!isLt1M) {
-      message.error(`Image size should be smaller than 1MB.`);
-      return Upload.LIST_IGNORE;
-    }
-  };
-
-  const dummyRequest = ({ file, onSuccess }) => {
-    setTimeout(() => {
-      onSuccess("ok");
-    }, 0);
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
   };
 
   const formItemLayout = {
@@ -547,18 +537,28 @@ const AddPet = () => {
                       getValueFromEvent={normFile}
                     >
                       <Upload
+                        className="left"
                         name="mainImage"
-                        listType="picture"
-                        maxCount={1}
+                        listType="picture-card"
                         beforeUpload={validateFile}
                         onChange={onMainImageChange}
                         customRequest={dummyRequest}
+                        onPreview={handlePreview}
                         rules={[{ required: true }]}
                         accept="image/png, image/jpeg, image/svg+xml"
                       >
-                        <Button icon={<UploadOutlined />}>
-                          Upload image only (Max: 1)
-                        </Button>
+                        {isEmpty(mainImage) ? (
+                          <div>
+                            <PlusOutlined />
+                            <div
+                              style={{
+                                marginTop: 5,
+                              }}
+                            >
+                              Upload image only (Max: 1)
+                            </div>
+                          </div>
+                        ) : null}
                       </Upload>
                     </Form.Item>
 
@@ -569,26 +569,33 @@ const AddPet = () => {
                       getValueFromEvent={normFile}
                     >
                       <Upload
+                        className="left"
                         name="images"
-                        listType="picture"
-                        maxCount={10}
+                        listType="picture-card"
                         beforeUpload={validateFile}
                         onChange={onImageChange}
                         customRequest={dummyRequest}
+                        onPreview={handlePreview}
                         accept="image/png, image/jpeg, image/svg+xml"
                       >
-                        <Button icon={<UploadOutlined />}>
-                          Upload images only (Max: 10)
-                        </Button>
+                        {images?.length >= 10 ? null : (
+                          <div>
+                            <PlusOutlined />
+                            <div
+                              style={{
+                                marginTop: 5,
+                              }}
+                            >
+                              Upload image only (Max: 10)
+                            </div>
+                          </div>
+                        )}
                       </Upload>
                     </Form.Item>
                   </Panel>
                 </Collapse>
 
-                <Form.Item 
-                wrapperCol={{span: 24}}
-                className="submit-btn"
-                >
+                <Form.Item wrapperCol={{ span: 24 }} className="submit-btn">
                   <Button
                     type="primary"
                     htmlType="submit"
@@ -599,12 +606,26 @@ const AddPet = () => {
                   </Button>
                 </Form.Item>
               </Form>
+
+              <Modal
+                visible={previewVisible}
+                footer={null}
+                onCancel={handleCancel}
+              >
+                <img
+                  alt="image"
+                  style={{
+                    width: "100%",
+                  }}
+                  src={previewImage}
+                />
+              </Modal>
             </div>
           </Col>
         </Row>
       </div>
     </div>
   );
-}
+};
 
 export default AddPet;

@@ -45,7 +45,7 @@ export const AllRoutes = () => {
       {/* Only open to login user */}
       <Route exact path="/" element={<ProtectedRouteRequireLogin />}>
         <Route exact path="/unauthorized" element={<Unauthorized />} />
-        <Route exact path="/profile" element={accountType == "adopter" ? <AdopterForm size="small" /> : <RescuerForm size="small"/>} />
+        <Route exact path="/profile" element={accountType === "adopter" ? <AdopterForm size="small" /> : <RescuerForm size="small"/>} />
       </Route>
 
       {/* Only open to adopter */}

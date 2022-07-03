@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { omitBy, isNil, map, sortBy, trim } from "lodash";
+import { omitBy, isNil, map } from "lodash";
 import { useNavigate } from "react-router-dom";
 import useQuery from "../../hooks/useQuery";
 import useAuthContext from "../../hooks/useAuthContext";
-import { monthDifference, formatDate, calculateAge } from "../../helpers/date";
+import { formatDate, calculateAge } from "../../helpers/date";
 import { getPets } from "../../services/pet.services";
 import { getAccount } from "../../services/auth.services";
 import getColorCodes from "../../helpers/color";
@@ -21,7 +21,6 @@ import {
 } from "antd";
 import {
   LoadingOutlined,
-  QuestionCircleOutlined,
   MailFilled,
   PhoneFilled,
   FacebookFilled,
@@ -178,7 +177,7 @@ function Pet() {
                       </Col>
 
                       <Col span={24} align="left" className="brief">
-                        {petState.data.healthCondition == "Healthy" ? (
+                        {petState.data.healthCondition === "Healthy" ? (
                           <Tooltip placement="top" title={descForVaccinated}>
                             <Tag icon={<CheckCircleOutlined />} color="green">
                               {petState.data.healthCondition}

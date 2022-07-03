@@ -45,12 +45,26 @@ const Application = ({
       okType: "danger",
       cancelText: "No",
       onOk() {
-        handleRejectApplication();
+        handleUpdateApplication("Rejected");
       },
     });
   };
 
-  const handleRejectApplication = async () => {
+  const showCancelConfirm = () => {
+    confirm({
+      title: "Are you sure to cancel this application?",
+      icon: <ExclamationCircleFilled style={{ color: "red" }} />,
+      content: "You can't uncancel this application once you cancel it. You can only apply again if this was a mistake.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        handleUpdateApplication("Cancelled");
+      },
+    });
+  };
+
+  const handleUpdateApplication = async (status) => {
     const res = await updateApplications({
       adoptionApplication: omitBy(
         {
@@ -60,7 +74,7 @@ const Application = ({
           rescuerID: data.rescuerID._id,
           paymentID: data.paymentID?._id ? data.paymentID._id : null,
 
-          status: "Rejected",
+          status: status,
         },
         (v) => isNil(v) || v.toString().trim() === ""
       ),
@@ -70,6 +84,7 @@ const Application = ({
       return false;
     } else {
       message.success("Updated adoption application successfully!");
+      window.location.href = window.location.href; //force refresh page to update status
       return res;
     }
   };
@@ -172,8 +187,21 @@ const Application = ({
               placement="top"
               title="You can't unreject this application once you reject. You can still edit the details, but the status will remain as 'Rejected'. You can only ask the applicant to apply again if this was a mistake."
             >
-              <Button danger onClick={showDeleteConfirm} disabled={data.status === "Completed" || data.status === "Rejected" || !data.petID.active || data.petID.adopted}>
+              <Button danger onClick={showDeleteConfirm} disabled={data.status === "Completed" || data.status === "Rejected"  || data.status === "Cancelled" || !data.petID.active || data.petID.adopted}>
                 Reject application
+              </Button>
+            </Tooltip>
+          </Col>
+        )}
+
+        {isAdopter && (
+          <Col span={breakpoint.md ? 12 : 24} align="end">
+            <Tooltip
+              placement="top"
+              title="You can't uncancel this application once you cancel it. You can only apply again if this was a mistake."
+            >
+              <Button danger onClick={showCancelConfirm} disabled={data.status === "Completed" || data.status === "Rejected" || data.status === "Cancelled" || !data.petID.active || data.petID.adopted}>
+                Cancel application
               </Button>
             </Tooltip>
           </Col>

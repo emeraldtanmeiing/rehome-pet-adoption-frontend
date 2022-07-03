@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { omitBy, isNil, unset, trim } from "lodash";
+import { omitBy, isNil } from "lodash";
 import { useNavigate } from "react-router-dom";
 import { registerAdopter } from "../../services/auth.services.js";
+import { dummyRequest, validateFile, normFile } from "../../helpers/image";
 
 import {
   Row,
@@ -24,37 +25,8 @@ function SignupAdopter() {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const normFile = (uploadEvent) => {
-    if (Array.isArray(uploadEvent)) {
-      return uploadEvent;
-    }
-  };
-
-  const validateFile = (value) => {
-    const file = value;
-
-    const fileTypes = ["image/png", "image/jpg", "image/jpeg", "image/svg+xml"];
-
-    if (!fileTypes.includes(file.type)) {
-      message.error(`${file.name} format is not accepted.`);
-      return Upload.LIST_IGNORE;
-    }
-
-    const isLt1M = file.size / 1024 / 1024 <= 1;
-    if (!isLt1M) {
-      message.error(`Image size should be smaller than 1MB.`);
-      return Upload.LIST_IGNORE;
-    }
-  };
-
   const onImageChange = (value) => {
     setImage(value.fileList[0]?.originFileObj);
-  };
-
-  const dummyRequest = ({ file, onSuccess }) => {
-    setTimeout(() => {
-      onSuccess("ok");
-    }, 0);
   };
 
   const handleSignUpAsRescuer = () => {
@@ -71,7 +43,10 @@ function SignupAdopter() {
   const navigate = useNavigate();
   const onFinish = async (values) => {
     setIsLoading(true);
-    const account = omitBy(values, v => isNil(v) || v.toString().trim() === '');
+    const account = omitBy(
+      values,
+      (v) => isNil(v) || v.toString().trim() === ""
+    );
 
     const res = await registerAdopter({ account, image });
 
@@ -128,7 +103,7 @@ function SignupAdopter() {
     </Form.Item>
   );
 
-  const gridProps = { xxl: 14, xl: 14, lg: 14, md: 24, sm: 24, xs: 24 }
+  const gridProps = { xxl: 14, xl: 14, lg: 14, md: 24, sm: 24, xs: 24 };
 
   return (
     <div className="signup-adopter">
@@ -147,7 +122,6 @@ function SignupAdopter() {
               >
                 <Button
                   type="dashed"
-                  // style={{ width: "100%" }}
                   onClick={handleSignUpAsRescuer}
                 >
                   Sign up as rescuer
@@ -305,7 +279,7 @@ function SignupAdopter() {
                       validator(_, value) {
                         if (
                           !value ||
-                          (value.length == 5 && value.match(/^[0-9]+$/) != null)
+                          (value.length === 5 && value.match(/^[0-9]+$/) != null)
                         ) {
                           return Promise.resolve();
                         }

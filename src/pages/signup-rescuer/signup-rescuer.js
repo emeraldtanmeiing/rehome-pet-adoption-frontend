@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { omitBy, isNil, unset, trim } from "lodash";
+import { omitBy, isNil } from "lodash";
 import { registerRescuer } from "../../services/auth.services.js";
+import { dummyRequest, validateFile, normFile } from "../../helpers/image";
 
 import {
   Row,
@@ -14,7 +15,6 @@ import {
   Upload,
   Tooltip,
   message,
-  Divider,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
@@ -42,37 +42,8 @@ function SignupRescuer() {
     value: website,
   }));
 
-  const normFile = (uploadEvent) => {
-    if (Array.isArray(uploadEvent)) {
-      return uploadEvent;
-    }
-  };
-
-  const validateFile = (value) => {
-    const file = value;
-
-    const fileTypes = ["image/png", "image/jpg", "image/jpeg", "image/svg+xml"];
-
-    if (!fileTypes.includes(file.type)) {
-      message.error(`${file.name} format is not accepted.`);
-      return Upload.LIST_IGNORE;
-    }
-
-    const isLt1M = file.size / 1024 / 1024 <= 1;
-    if (!isLt1M) {
-      message.error(`Image size should be smaller than 1MB.`);
-      return Upload.LIST_IGNORE;
-    }
-  };
-
   const onImageChange = (value) => {
     setImage(value.fileList[0]?.originFileObj);
-  };
-
-  const dummyRequest = ({ file, onSuccess }) => {
-    setTimeout(() => {
-      onSuccess("ok");
-    }, 0);
   };
 
   const validateMessages = {
@@ -345,7 +316,7 @@ function SignupRescuer() {
                       validator(_, value) {
                         if (
                           !value ||
-                          (value.length == 5 && value.match(/^[0-9]+$/) != null)
+                          (value.length === 5 && value.match(/^[0-9]+$/) != null)
                         ) {
                           return Promise.resolve();
                         }

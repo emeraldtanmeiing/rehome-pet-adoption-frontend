@@ -37,7 +37,7 @@ const monthDifference = (date1, date2, roundUpFractionalMonths = true) => {
 };
 
 const formatDate = (givenDate, showTime = false) => {
-  if(isEmpty(givenDate) || givenDate == "-" ){
+  if(isEmpty(givenDate) || givenDate === "-" ){
     return "-"
   }
 
