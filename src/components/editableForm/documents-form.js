@@ -8,7 +8,7 @@ import {
 } from "../../helpers/image";
 
 import { PlusOutlined } from "@ant-design/icons";
-import { Modal, Upload, Form, Button } from "antd";
+import { Modal, Upload, Form, Button, message } from "antd";
 
 import "./editableForm.less";
 
@@ -21,8 +21,7 @@ const DocumentsForm = ({
   setImages,
   setExistingImages,
 }) => {
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
+  const [filename, setFilename] = useState([]);
 
   const [fileList, setFileList] = useState(
     existingImages?.map((doc, index) => {
@@ -40,18 +39,16 @@ const DocumentsForm = ({
   );
 
   const validateFileTypes = (value) => {
-    return validateFile(value, "documents");
-  };
-
-  const handleCancel = () => setPreviewVisible(false);
-
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+    const validationResult = validateFile(value, "documents");
+    if(!isEmpty(validationResult)){
+      return validationResult;
     }
 
-    setPreviewImage(file.url || file.preview);
-    setPreviewVisible(true);
+    if(filename.includes(value.name)){
+      message.error("Please save first if you wish to upload file with same filenames.");
+      return Upload.LIST_IGNORE;
+    }
+    
   };
 
   useEffect(() => {
@@ -63,6 +60,7 @@ const DocumentsForm = ({
           existingImages.push(file.url);
         } else {
           images.push(file.originFileObj);
+          filename.push(file.name)
         }
         setExistingImages(existingImages);
         setImages(images);
@@ -98,21 +96,11 @@ const DocumentsForm = ({
           fileList={fileList}
           beforeUpload={validateFileTypes}
           customRequest={dummyRequest}
-          onPreview={handlePreview}
           onChange={handleChange}
         >
           {fileList.length >= maxNumberOfImages ? null : uploadButton}
         </Upload>
       </Form.Item>
-      <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
-        <img
-          alt="image"
-          style={{
-            width: "100%",
-          }}
-          src={previewImage}
-        />
-      </Modal>
     </div>
   );
 };

@@ -264,7 +264,7 @@ const AdoptionForm = ({
             <Col span={18} className="description">
               <div>
                 There's no right or wrong about these questions. Honest
-                responses can give them more ideas about how to create a plan
+                responses can give the contact person/rescuer/organization more ideas about how to create a plan
                 that's suitable for you when adopting a pet. <br /> <br /> You can always
                 choose to leave blank if you feel uncomfortable with any of the
                 questions.

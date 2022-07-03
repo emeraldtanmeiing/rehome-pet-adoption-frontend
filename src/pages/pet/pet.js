@@ -17,6 +17,7 @@ import {
   Divider,
   Avatar,
   Tag,
+  Modal,
   message,
 } from "antd";
 import {
@@ -35,14 +36,11 @@ import LoginModal from "../../components/login-modal/login-modal";
 import "./pet.less";
 
 function Pet() {
+
   const [petState, setPetState] = useState({ status: "idle", data: null });
-  const [rescuerState, setRescuerState] = useState({
-    status: "idle",
-    data: null,
-  });
+  const [rescuerState, setRescuerState] = useState({ status: "idle", data: null });
   const [visible, setVisible] = useState(false);
-  const isLoading =
-    petState.status !== "success" || rescuerState.status !== "success";
+  const isLoading = petState.status !== "success" || rescuerState.status !== "success";
 
   useEffect(() => {
     fetchPets();
@@ -122,6 +120,14 @@ function Pet() {
     setVisible(false);
   };
 
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const handleCancel = () => setPreviewVisible(false);
+  const handlePreview = async (image) => {
+    setPreviewImage(image);
+    setPreviewVisible(true);
+  };
+
   const descForVaccinated =
     "Vaccinations help prevent the pet from catching and spreading some serious infectious diseases, many of which can be fatal. We highly recommend pet owners to discuss with vet a vaccination plan that's right for the pet.";
   const descForSpayedOrNeutered =
@@ -129,8 +135,8 @@ function Pet() {
   const descForDewormed =
     "Deworming the pet contributes to its health. We recommend pet owner to discuss with vet for a deworming plan.";
 
-  const leftColProps = { xxl: 16, xl: 16, lg: 16, md: 16, sm: 24, xs: 24 };
-  const rightColProps = { xxl: 8, xl: 8, lg: 8, md: 8, sm: 24, xs: 24 };
+  const leftColProps = { xxl: 15, xl: 15, lg: 15, md: 15, sm: 24, xs: 24 };
+  const rightColProps = { xxl: 9, xl: 9, lg: 9, md: 9, sm: 24, xs: 24 };
   const detailsProps = { xxl: 8, xl: 8, lg: 8, md: 12, sm: 12, xs: 12 };
 
   return (
@@ -159,19 +165,15 @@ function Pet() {
                               alt="pet"
                               src={image}
                               key={index}
-                              onClick={() => window.open(image)}
+                              onClick={() => handlePreview(image)}
                             />
                           );
                         }
                       )}
                     </div>
                   </Col>
-                  <Col
-                    className="brief-wrapper outline"
-                    align="left"
-                    {...rightColProps}
-                  >
-                    <Row>
+                  <Col align="left" {...rightColProps}>
+                    <Row className="brief-wrapper outline">
                       <Col span={24}>
                         <h2>{petState.data.name.toUpperCase()}</h2>
                       </Col>
@@ -265,14 +267,14 @@ function Pet() {
                       <Col className="fee-explanation" span={24}>
                         <h4 className="star">*</h4>
                         <h4>
-                          All rescuers in ReHome have been verified, indicating
-                          that they are likely to be licenced non-governmental
-                          organisations (NGOs) or long-term pet rescue
-                          organisations. The adoption fee can assist the
-                          rescuers in covering operating costs, pet care,
-                          medical bills, and other expenses so that they can
-                          continue to save lives and help more animals in need.
-                          As a result, ReHome advises rescuers to charge a small
+                          All organizations in ReHome have been verified,
+                          indicating that they are likely to be licenced
+                          non-governmental organisations (NGOs) or long-term pet
+                          rescue organisations. The adoption fee assists them in
+                          covering operating costs, pet care, medical bills, and
+                          other expenses so that they can continue to save lives
+                          and eventually helping more animals in need. As a
+                          result, ReHome advises organizations to charge a small
                           fee.
                         </h4>
                       </Col>
@@ -284,7 +286,7 @@ function Pet() {
                           <h2>More details</h2>
                         </Row>
                         <Row gutter={[16, 16]}>
-                        <Col {...detailsProps}>
+                          <Col {...detailsProps}>
                             <div className="details outline">
                               <h3>Gender</h3>
                               <div>{petState.data.gender}</div>
@@ -344,43 +346,46 @@ function Pet() {
                       </Button>
                     </Row>
                   </Col>
-                  {(petState.data.active && !petState.data.adopted) ? (<Col className="adoption outline" {...rightColProps}>
-                    <h4>Adoption fee</h4>
-                    <h2>
-                      {petState.data.fee === 0
-                        ? "FREE"
-                        : `RM${petState.data.fee}`}
-                    </h2>
-                    <Button
-                      type="primary"
-                      size="large"
-                      style={{ width: "100%" }}
-                      onClick={onClickAdopt}
-                    >
-                      Adopt
-                    </Button>
-                  </Col>):(
+                  {petState.data.active && !petState.data.adopted ? (
+                    <Col {...rightColProps}>
+                      <div className="adoption outline">
+                        <h4>Adoption fee</h4>
+                        <h2>
+                          {petState.data.fee === 0
+                            ? "FREE"
+                            : `RM${petState.data.fee}`}
+                        </h2>
+                        <Button
+                          type="primary"
+                          size="large"
+                          style={{ width: "100%" }}
+                          onClick={onClickAdopt}
+                        >
+                          Adopt
+                        </Button>
+                      </div>
+                    </Col>
+                  ) : (
                     <Col className="not-available outline" {...rightColProps}>
-                    <h3>
-                    {petState.data.adopted ?
-                    <>{petState.data.name} is adopted.</>:
-                    <>{petState.data.name} is not available for adoption.</>
-
-                    }
-                    </h3>
-                    <Button
-                      type="primary"
-                      size="large"
-                      style={{ width: "100%" }}
-                      disabled
-                    >
-                      Adopt
-                    </Button>
-                  </Col>
-                  ) 
-
-                  }
-                  
+                      <h3>
+                        {petState.data.adopted ? (
+                          <>{petState.data.name} is adopted.</>
+                        ) : (
+                          <>
+                            {petState.data.name} is not available for adoption.
+                          </>
+                        )}
+                      </h3>
+                      <Button
+                        type="primary"
+                        size="large"
+                        style={{ width: "100%" }}
+                        disabled
+                      >
+                        Adopt
+                      </Button>
+                    </Col>
+                  )}
                 </Row>
 
                 <Divider />
@@ -399,7 +404,7 @@ function Pet() {
                       </Col>
                       <Col>
                         <h3>{rescuerState.data.name}</h3>
-                        <div>
+                        <div style={{wordWrap: "break-word", width: "400px"}}>
                           <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}
                           {rescuerState.data.address}
                           {", "}
@@ -480,6 +485,13 @@ function Pet() {
       </div>
 
       <LoginModal visible={visible} onCancel={onCancel} />
+
+      <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+        <img
+          style={{ width: "100%" }}
+          src={previewImage}
+        />
+      </Modal>
     </div>
   );
 }

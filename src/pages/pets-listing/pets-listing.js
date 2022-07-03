@@ -33,7 +33,6 @@ function PetsListing() {
       v => isNil(v) || v.toString().trim() === ''
     );
 
-    //TODO: IMPORTANT: only get {active:true, adopted:false} pets
     const res = await getPets(params);
 
     if (res?.error) {

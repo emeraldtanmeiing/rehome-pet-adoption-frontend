@@ -140,7 +140,7 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
   return (
     <div className="editable-form">
       <Row align="center">
-        <Col align="right" span={size === "small" && breakpoint.md ? 18 : 24}>
+        <Col align="right" span={size === "small" && breakpoint.md ? 18 : 23}>
           {editing ? (
             <>
               <Button
@@ -177,7 +177,7 @@ const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
           )}
         </Col>
 
-        <Col span={size === "small" && breakpoint.md ? 18 : 24}>
+        <Col span={size === "small" && breakpoint.md ? 18 : 23}>
           <Form form={form} labelCol={{ span: 24 }}>
             <Row gutter={24}>
               <EditableContext.Provider value={form}>

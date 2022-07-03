@@ -25,6 +25,7 @@ TODO:
 ![ ] - payment gateway
 ![ ] - admin review rescuer
 [ ] - add get pet filter
+[ ] - rescuer page
 [ ] - pet's description cant go to next line
 [ ] - change cookie key
 [ ] - add notification on homepage: This is a dummy website
@@ -36,7 +37,6 @@ TODO:
 [ ] - click on ? can trigger on/off (in add pet and edit pet)
 [ ] - ask rescuer to double check before checking "picked up" button
 [ ] - add validation on date and time
-[ ] - 
 [ ] - 
 [ ] - 
 

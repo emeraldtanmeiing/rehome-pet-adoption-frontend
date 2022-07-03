@@ -99,15 +99,16 @@ const ImagesForm = ({
           {fileList.length >= maxNumberOfImages ? null : uploadButton}
         </Upload>
       </Form.Item>
+
       <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
         <img
-          alt="image"
           style={{
             width: "100%",
           }}
           src={previewImage}
         />
       </Modal>
+      
     </div>
   );
 };
