@@ -8,7 +8,7 @@ import {
 } from "../../helpers/image";
 
 import { PlusOutlined } from "@ant-design/icons";
-import { Modal, Upload, Form, Button, message } from "antd";
+import { Upload, Form, Button, message } from "antd";
 
 import "./editableForm.less";
 
@@ -55,19 +55,22 @@ const DocumentsForm = ({
     if (!isEmpty(fileList)) {
       let existingImages = [];
       let images = [];
+      let filenameArray = []
       fileList.forEach((file) => {
         if (file.url) {
           existingImages.push(file.url);
         } else {
           images.push(file.originFileObj);
-          filename.push(file.name)
+          filenameArray.push(file.name);
         }
         setExistingImages(existingImages);
         setImages(images);
+        setFilename(filenameArray);
       });
     } else {
       setExistingImages([]);
       setImages([]);
+      setFilename([]);
     }
   }, [fileList]);
 
