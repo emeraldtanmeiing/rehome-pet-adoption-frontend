@@ -57,11 +57,11 @@ const LeftMenu = ({ mode }) => {
 
   const MenuForAdmin = (
     <>
-      <Menu.Item>
+      <Menu.Item disabled>
         <Link to={"/admin/dashboard"}>Dashboard</Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to={"/admin/rescuers"}>All rescuers</Link>
+        <Link to={"/admin/rescuers-listing"}>Rescuers</Link>
       </Menu.Item>
     </>
   );

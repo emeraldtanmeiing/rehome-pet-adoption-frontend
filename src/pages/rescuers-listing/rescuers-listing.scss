@@ -1,0 +1,16 @@
+.rescuers-listing {
+  padding-top: 30px;
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+
+    button {
+      margin: 0 3px 3px 0;
+    }
+  }
+
+  .short {
+    padding: 16px 9px;
+  }
+}

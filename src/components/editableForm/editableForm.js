@@ -9,7 +9,7 @@ import "./editableForm.less";
 
 const EditableContext = React.createContext();
 
-const EditableForm = ({ fields, api, editable = true, size = "default" }) => {
+const EditableForm = ({ fields, api = null, editable = true, size = "default" }) => {
   let formattedFields = fields.map((item) => ({ [item.name]: item.value }));
   formattedFields = Object.assign({}, ...formattedFields);
 

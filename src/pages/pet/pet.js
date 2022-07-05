@@ -408,7 +408,7 @@ function Pet() {
                           <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}
                           {rescuerState.data.address}
                           {", "}
-                          {rescuerState.data.city}, {rescuerState.data.country}
+                          {rescuerState.data.city}{", "} {rescuerState.data.stateOrProvince},{rescuerState.data.country}
                         </div>
                       </Col>
                     </Row>

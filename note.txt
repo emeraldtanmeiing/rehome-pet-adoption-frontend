@@ -37,6 +37,11 @@ TODO:
 [ ] - click on ? can trigger on/off (in add pet and edit pet)
 [ ] - ask rescuer to double check before checking "picked up" button
 [ ] - add validation on date and time
+[ ] - add login user credentials at login page for easier testing
+[ ] - add 404 page
+[ ] - 
+[ ] - 
+[ ] - 
 [ ] - 
 [ ] - 
 

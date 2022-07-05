@@ -2,8 +2,6 @@ import React from "react";
 
 import { Tag } from "antd";
 
-import "./application-status.less";
-
 const ApplicationStatus = ({ status, pet = null }) => {
   
   if(pet){

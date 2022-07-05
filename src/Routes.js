@@ -9,11 +9,12 @@ import SignupAdopter from "./pages/signup-adopter/signup-adopter";
 import Login from "./pages/login/login";
 import AdopterForm from "./components/adopterForm/adopterForm";
 import RescuerForm from "./components/rescuerForm/rescuerForm";
+import RescuersListing from "./pages/rescuers-listing/rescuers-listing";
+import RescuerForAdmin from "./pages/rescuer-for-admin/rescuer-for-admin";
 
 import Pet from "./pages/pet/pet";
 import PetRescuer from "./pages/pet-rescuer/pet-rescuer";
 import AddPet from "./pages/add-pet/add-pet";
-import PetForm from "./components/petForm/petForm";
 import PetsListing from "./pages/pets-listing/pets-listing";
 import PetsListingSpecificRescuer from "./pages/pets-listing-rescuer/pets-listing-rescuer";
 
@@ -72,6 +73,16 @@ export const AllRoutes = () => {
         <Route exact path="/rescuer/pet" element={<PetRescuer />} />
         <Route exact path="/rescuer/applications" element={<ApplicationsListingRescuer />} />
         <Route exact path="/rescuer/application" element={<ApplicationRescuer />} />
+      </Route>
+
+      {/* Only open to admin */}
+      <Route
+        exact
+        path="/"
+        element={<ProtectedRouteRequireType allowedTypes={["admin"]} />}
+      >
+        <Route exact path="/admin/rescuers-listing" element={<RescuersListing />} />
+        <Route exact path="/admin/rescuer" element={<RescuerForAdmin />} />
       </Route>
       
     </Routes>
