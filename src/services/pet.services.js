@@ -98,7 +98,7 @@ export const updatePet = async ({ pet, mainImage, images, existingImages }) => {
       data.append("images", images[i]);
     }
   }
-  console.log({existingImages})
+ 
   if(!isEmpty(existingImages)){
     const lengthOfexistingImages = existingImages.length;
     for (let i = 0; i < lengthOfexistingImages; i++) {

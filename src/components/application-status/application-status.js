@@ -2,10 +2,10 @@ import React from "react";
 
 import { Tag } from "antd";
 
-const ApplicationStatus = ({ status, pet = null }) => {
+const ApplicationStatus = ({ status, pet = null, rescuerVerified }) => {
   
   if(pet){
-    if(!pet?.active || (status != "Completed" && pet?.adopted)){
+    if(!pet?.active || ((status != "Completed" && status!= "Rejected" && status!="Cancelled") && (pet?.adopted || !rescuerVerified))){
       status = "Not Available"
     } 
   }

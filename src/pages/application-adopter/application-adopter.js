@@ -58,7 +58,6 @@ function ApplicationAdopter() {
       {!isLoading && (
         <>
           <div className="application-adopter-wrapper">
-            {/* <ApplicationStatusDesc /> */}
             <Application data={applicationState.data} isAdopter={true}/>
           </div>
         </>

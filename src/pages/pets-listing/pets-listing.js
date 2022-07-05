@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { omitBy, isNil, sortBy, trim } from "lodash";
+import { omitBy, isNil } from "lodash";
 import useQuery from "../../hooks/useQuery";
 import useAuthContext from "../../hooks/useAuthContext";
 import { getPets } from "../../services/pet.services";
 import { calculateAge } from "../../helpers/date";
-import { useNavigate } from "react-router-dom";
 
 import { Row, Col, Skeleton, Card, Button, message } from "antd";
 import PetCard from "../../components/petCard/petCard";
@@ -29,8 +28,19 @@ function PetsListing() {
     setPetState({ ...petState, status: "loading" });
 
     const params = omitBy(
-      { petID, type, name, rescuerID, resultsPerPage, page, active: true, adopted: false },
-      v => isNil(v) || v.toString().trim() === ''
+      {
+        petID,
+        type,
+        name,
+        rescuerID,
+        resultsPerPage,
+        page,
+        active: true,
+        adopted: false,
+        sortBy: "createdAt",
+        sortMode: "desc",
+      },
+      (v) => isNil(v) || v.toString().trim() === ""
     );
 
     const res = await getPets(params);
@@ -38,15 +48,27 @@ function PetsListing() {
     if (res?.error) {
       message.error(res.error.description);
     } else {
-      res.petsList.map((pet) => {
-        const age = calculateAge(pet.birthDate)
-        pet.age = age;
+      let data = res.petsList;
+
+      data = data.filter((d) => {
+        return d.rescuerID.verified === true;
       });
-      const data = {
-        ...res,
-        petsList: sortBy(res.petsList, "createdAt").reverse(),
-      };
-      setPetState({ ...petState, status: "success", data: data });
+
+      data = data.map((pet) => {
+        const age = calculateAge(pet.birthDate);
+        return {...pet, age: age}
+      });
+
+      setPetState({
+        ...petState,
+        status: "success",
+        data: {
+          petsList: data,
+          totalResultsFound: data.length,
+          page: res.page,
+          resultsPerPage: res.resultsPerPage,
+        },
+      });
     }
   };
 
@@ -74,7 +96,7 @@ function PetsListing() {
             <>
               <Row gutter={[30, 30]} className="loading">
                 {[...Array(12).keys()].map((index) => (
-                  <CardSkeleton index={index} key={index}/>
+                  <CardSkeleton index={index} key={index} />
                 ))}
               </Row>
             </>
@@ -88,21 +110,21 @@ function PetsListing() {
                     <h1>{petState.data.totalResultsFound} pets found</h1>
                   </div>
                   <div>
-                    <Button href={`/pets-listing`}>All</Button>
+                    <Button href={`/pets`}>All</Button>
                   </div>
                   <div>
-                    <Button href={`/pets-listing?type=Cat`}>Cats</Button>
+                    <Button href={`/pets?type=Cat`}>Cats</Button>
                   </div>
                   <div>
-                    <Button href={`/pets-listing?type=Dog`}>Dogs</Button>
+                    <Button href={`/pets?type=Dog`}>Dogs</Button>
                   </div>
                 </Col>
               </Row>
 
               <Row gutter={[30, 30]}>
-                {petState.data.petsList.map((p) => (
-                  <PetCard pet={p} accountType={accountType} />
-                ))}
+                {petState.data.petsList.map((p) => {
+                  return <PetCard pet={p} accountType={accountType} />
+                })}
               </Row>
             </>
           )}

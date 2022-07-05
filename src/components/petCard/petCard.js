@@ -23,16 +23,6 @@ const PetCard = ({ pet, accountType }) => {
   return (
     <>
       <Col xxl={6} xl={6} lg={6} md={8} sm={12} xs={12} className="pet-card">
-      {/* <Card
-          className="not-available"
-          key={pet._id}
-          hoverable
-          size="small"
-        >
-          <div className="not-available-details">
-            inactive
-          </div>
-        </Card> */}
         <Card
           className="pet-card-wrapper"
           key={pet._id}
@@ -57,46 +47,52 @@ const PetCard = ({ pet, accountType }) => {
             </div>
           }
         >
-          <div className={(pet.adopted || !pet.active) ? "not-available" : ""}>
+          <div className={pet.adopted || !pet.active ? "not-available" : ""}>
             <div className="pet-card-details">
-            {accountType === "rescuer" ? (
-              <Row>
-                <Col className="petName" span={24}>
-                  {pet.name.toUpperCase()}
-                </Col>
-                <Col span={24}>
-                  {pet.type} &#8226; {pet.age}
-                </Col>
-                <Row className="more-details">
-                <Col className="active-adopted" span={24}>
-                  {/* <ClockCircleFilled style={{ color: "#abaaaa" }} />{" "} */}
-                  {/* {formatDate(pet.createdAt)} */}
-                  {pet.active ? "Active" : "Inactive"} &#8226; {pet.adopted ? "Adopted" : "Available"}
-                </Col>
-                <Col className="createdAt" span={24}>
-                  <ClockCircleFilled style={{ color: "#abaaaa" }} />{" "}
-                  {formatDate(pet.createdAt)}
-                </Col>
-                <Col className="location" span={24}>
-                  <EnvironmentFilled style={{ color: "#abaaaa" }} /> {pet.city},{" "}
-                  {pet.stateOrProvince}
-                </Col>
+              {accountType === "rescuer" ? (
+                <Row>
+                  <Col className="petName" span={24}>
+                    {pet.name.toUpperCase()}
+                  </Col>
+
+                  <Col span={24}>
+                    {pet.type} &#8226; {pet.age}
+                  </Col>
+
+                  <Row className="more-details">
+                    <Col className="active-adopted" span={24}>
+                      {pet.active ? "Active" : "Inactive"} &#8226;{" "}
+                      {pet.adopted ? "Adopted" : "Available"}
+                    </Col>
+                    <Col className="createdAt" span={24}>
+                      <ClockCircleFilled style={{ color: "#abaaaa" }} />{" "}
+                      {formatDate(pet.createdAt)}
+                    </Col>
+                    <Col className="location" span={24}>
+                      <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}
+                      {pet.city}, {pet.stateOrProvince}
+                    </Col>
+                  </Row>
+
                 </Row>
-              </Row>
-            ) : (
-              <Row>
-                <Col className="petName" span={24}>
-                  {pet.name.toUpperCase()}
-                </Col>
-                <Col span={24}>
-                  {pet.type} &#8226; {pet.age}
-                </Col>
-                <Col className="location" span={24}>
-                  <EnvironmentFilled style={{ color: "#abaaaa" }} /> {pet.city},{" "}
-                  {pet.stateOrProvince}
-                </Col>
-              </Row>
-            )}
+              ) : (
+                <Row>
+
+                  <Col className="petName" span={24}>
+                    {pet.name.toUpperCase()}
+                  </Col>
+
+                  <Col span={24}>
+                    {pet.type} &#8226; {pet.age}
+                  </Col>
+
+                  <Col className="location" span={24}>
+                    <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}
+                    {pet.city}, {pet.stateOrProvince}
+                  </Col>
+                  
+                </Row>
+              )}
             </div>
           </div>
         </Card>

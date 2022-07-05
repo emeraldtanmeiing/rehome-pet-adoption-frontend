@@ -35,12 +35,11 @@ import LoginModal from "../../components/login-modal/login-modal";
 
 import "./pet.less";
 
-function Pet() {
+const Pet = () => {
 
   const [petState, setPetState] = useState({ status: "idle", data: null });
-  const [rescuerState, setRescuerState] = useState({ status: "idle", data: null });
   const [visible, setVisible] = useState(false);
-  const isLoading = petState.status !== "success" || rescuerState.status !== "success";
+  const isLoading = petState.status !== "success";
 
   useEffect(() => {
     fetchPets();
@@ -66,25 +65,8 @@ function Pet() {
       const colorCodes = getColorCodes(pet.color);
       const age = calculateAge(pet.birthDate);
       const data = { ...pet, colorCodes: colorCodes, age: age };
-
+     
       setPetState({ ...petState, status: "success", data: data });
-      await fetchRescuer(res.petsList[0].rescuerID);
-    }
-  };
-
-  const fetchRescuer = async (accountID) => {
-    setRescuerState({ ...rescuerState, status: "loading" });
-
-    const res = await getAccount({ accountID });
-
-    if (res?.error) {
-      message.error(res.error.description);
-    } else {
-      setRescuerState({
-        ...rescuerState,
-        status: "success",
-        data: res.account,
-      });
     }
   };
 
@@ -346,7 +328,7 @@ function Pet() {
                       </Button>
                     </Row>
                   </Col>
-                  {petState.data.active && !petState.data.adopted ? (
+                  {petState.data.active && !petState.data.adopted && petState.data.rescuerID.verified ? (
                     <Col {...rightColProps}>
                       <div className="adoption outline">
                         <h4>Adoption fee</h4>
@@ -400,15 +382,15 @@ function Pet() {
                   >
                     <Row gutter={[16, 16]}>
                       <Col>
-                        <Avatar size={64} src={rescuerState.data.image} />
+                        <Avatar size={64} src={petState.data.rescuerID.image} />
                       </Col>
                       <Col>
-                        <h3>{rescuerState.data.name}</h3>
+                        <h3>{petState.data.rescuerID.name}</h3>
                         <div style={{wordWrap: "break-word", width: "400px"}}>
                           <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}
-                          {rescuerState.data.address}
+                          {petState.data.rescuerID.address}
                           {", "}
-                          {rescuerState.data.city}{", "} {rescuerState.data.stateOrProvince},{rescuerState.data.country}
+                          {petState.data.rescuerID.city}{", "} {petState.data.rescuerID.stateOrProvince},{petState.data.rescuerID.country}
                         </div>
                       </Col>
                     </Row>
@@ -423,7 +405,7 @@ function Pet() {
                         type="text"
                         icon={<MailFilled style={{ color: "grey" }} />}
                       >
-                        {rescuerState.data.email}
+                        {petState.data.rescuerID.email}
                       </Button>
                     </div>
                     <div>
@@ -431,7 +413,7 @@ function Pet() {
                         type="text"
                         icon={<PhoneFilled style={{ color: "grey" }} />}
                       >
-                        {rescuerState.data.phone}
+                        {petState.data.rescuerID.phone}
                       </Button>
                     </div>
                   </Col>
@@ -440,33 +422,33 @@ function Pet() {
                     align="left"
                     span={{ xxl: 10, xl: 10, lg: 10, md: 10, sm: 24, xs: 24 }}
                   >
-                    {rescuerState.data.facebookLink && (
+                    {petState.data.rescuerID.facebookLink && (
                       <Button
                         style={{ marginRight: "20px" }}
                         icon={<FacebookFilled style={{ color: "grey" }} />}
                         onClick={() => {
-                          window.open(rescuerState.data.facebookLink);
+                          window.open(petState.data.rescuerID.facebookLink);
                         }}
                       />
                     )}
 
-                    {rescuerState.data.instagramLink && (
+                    {petState.data.rescuerID.instagramLink && (
                       <Button
                         style={{ marginRight: "20px" }}
                         icon={<InstagramFilled style={{ color: "grey" }} />}
                         onClick={() => {
-                          window.open(rescuerState.data.instagramLink);
+                          window.open(petState.data.rescuerID.instagramLink);
                         }}
                       />
                     )}
 
-                    {rescuerState.data.organizationWebsiteLink && (
+                    {petState.data.rescuerID.organizationWebsiteLink && (
                       <Button
                         style={{ marginRight: "20px" }}
                         icon={<GlobalOutlined style={{ color: "grey" }} />}
                         onClick={() => {
                           window.open(
-                            rescuerState.data.organizationWebsiteLink
+                            petState.data.rescuerID.organizationWebsiteLink
                           );
                         }}
                       />

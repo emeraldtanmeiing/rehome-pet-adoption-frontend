@@ -1,13 +1,13 @@
+import React, { useRef, useState } from "react";
 import { map } from "lodash";
 import { formatDate } from "../../helpers/date";
 
 import { SearchOutlined } from "@ant-design/icons";
-import { Button, Input, Space, Table, Avatar, Tag, Grid } from "antd";
-import React, { useRef, useState } from "react";
+import { Button, Input, Space, Table, Avatar, Grid } from "antd";
 import Highlighter from "react-highlight-words";
+import ApplicationStatus from "../application-status/application-status";
 
 import "./applications-listing.scss";
-import ApplicationStatus from "../application-status/application-status";
 
 const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
   let data = map(applicationsList, (a, index) => {
@@ -25,6 +25,7 @@ const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
       adopterPhone: a.adopterID.phone,
       rescuer: a.rescuerID.name,
       rescuerPhone: a.rescuerID.phone,
+      rescuerVerified: a.rescuerID.verified,
       appliedAt: formatDate(a.createdAt),
       status: a.status,
       interview: `${interviewDate}, ${interviewTime}`,
@@ -181,7 +182,7 @@ const ApplicationsListing = ({ applicationsList, showRescuer = true }) => {
       render: (status, record) => {
         return (
           <>
-            <ApplicationStatus status={status} pet={record.pet}/>
+            <ApplicationStatus status={status} pet={record.pet} rescuerVerified={record.rescuerVerified} />
           </>
         );
       },

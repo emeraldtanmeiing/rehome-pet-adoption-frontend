@@ -33,6 +33,7 @@ const Application = ({
   isRescuer = false,
   isAdmin = false,
 }) => {
+ 
   const breakpoint = Grid.useBreakpoint();
 
   const showDeleteConfirm = () => {
@@ -176,7 +177,7 @@ const Application = ({
               <h2>Adoption application</h2>
             </Col>
             <Col>
-              <ApplicationStatus status={data.status} pet={data.petID}/>
+              <ApplicationStatus status={data.status} pet={data.petID} rescuerVerified={data.rescuerID.verified}/>
             </Col>
           </Row>
         </Col>
@@ -187,7 +188,7 @@ const Application = ({
               placement="top"
               title="You can't unreject this application once you reject. You can still edit the details, but the status will remain as 'Rejected'. You can only ask the applicant to apply again if this was a mistake."
             >
-              <Button danger onClick={showDeleteConfirm} disabled={data.status === "Completed" || data.status === "Rejected"  || data.status === "Cancelled" || !data.petID.active || data.petID.adopted}>
+              <Button danger onClick={showDeleteConfirm} disabled={data.status === "Completed" || data.status === "Rejected" || data.status === "Cancelled" || !data.petID.active || data.petID.adopted || !data.rescuerID.verified}>
                 Reject application
               </Button>
             </Tooltip>
@@ -200,7 +201,7 @@ const Application = ({
               placement="top"
               title="You can't uncancel this application once you cancel it. You can only apply again if this was a mistake."
             >
-              <Button danger onClick={showCancelConfirm} disabled={data.status === "Completed" || data.status === "Rejected" || data.status === "Cancelled" || !data.petID.active || data.petID.adopted}>
+              <Button danger onClick={showCancelConfirm} disabled={data.status === "Completed" || data.status === "Rejected" || data.status === "Cancelled" || !data.petID.active || data.petID.adopted || !data.rescuerID.verified}>
                 Cancel application
               </Button>
             </Tooltip>

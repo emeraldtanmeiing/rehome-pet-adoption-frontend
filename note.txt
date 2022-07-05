@@ -39,7 +39,7 @@ TODO:
 [ ] - add validation on date and time
 [ ] - add login user credentials at login page for easier testing
 [ ] - add 404 page
-[ ] - 
+[ ] - customer service
 [ ] - 
 [ ] - 
 [ ] - 

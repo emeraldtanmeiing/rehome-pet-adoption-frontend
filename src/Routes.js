@@ -41,7 +41,7 @@ export const AllRoutes = () => {
       <Route exact path="/signup" element={<SignupAdopter />} />
       <Route exact path="/rescuer/signup" element={<SignupRescuer />} />
       <Route exact path="/pet" element={<Pet />} />
-      <Route exact path="/pets-listing" element={<PetsListing />} />
+      <Route exact path="/pets" element={<PetsListing />} />
 
       {/* Only open to login user */}
       <Route exact path="/" element={<ProtectedRouteRequireLogin />}>
@@ -68,7 +68,7 @@ export const AllRoutes = () => {
         path="/"
         element={<ProtectedRouteRequireType allowedTypes={["rescuer"]} />}
       >
-        <Route exact path="/rescuer/pets-listing" element={<PetsListingSpecificRescuer />} />
+        <Route exact path="/rescuer/pets" element={<PetsListingSpecificRescuer />} />
         <Route exact path="/rescuer/pet/new" element={<AddPet />} />
         <Route exact path="/rescuer/pet" element={<PetRescuer />} />
         <Route exact path="/rescuer/applications" element={<ApplicationsListingRescuer />} />

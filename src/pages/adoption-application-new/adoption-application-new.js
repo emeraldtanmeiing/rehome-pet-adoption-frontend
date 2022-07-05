@@ -43,7 +43,7 @@ function AdoptionApplicationNew() {
         "You haven't select the pet you wish to adopt. Please click the 'Adopt' Button on your interested pet before applying an adoption application.",
         10
       );
-      navigate("/pets-listing");
+      navigate("/pets");
     } else {
       fetchRescuerID();
     }
@@ -52,7 +52,7 @@ function AdoptionApplicationNew() {
   const fetchRescuerID = async () => {
     const petID = getToBeAppliedPetID();
     const pet = await getPets({ petID });
-    setRescuerID(pet.petsList[0].rescuerID);
+    setRescuerID(pet.petsList[0].rescuerID._id);
   };
 
   const { accountID } = useAuthContext();

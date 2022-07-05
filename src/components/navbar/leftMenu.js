@@ -13,7 +13,7 @@ const LeftMenu = ({ mode }) => {
   const MenuForPublic = (
     <>
       <Menu.Item>
-        <Link to={"/pets-listing"}>Available pets</Link>
+        <Link to={"/pets"}>Available pets</Link>
       </Menu.Item>
       <Menu.Item disabled={true}>
         <Link to={"/events"}>Adoption events</Link>
@@ -24,7 +24,7 @@ const LeftMenu = ({ mode }) => {
   const MenuForAdopter = (
     <>
       <Menu.Item>
-        <Link to={"/pets-listing"}>Available pets</Link>
+        <Link to={"/pets"}>Available pets</Link>
       </Menu.Item>
       <Menu.Item disabled={true}>
         <Link to={"/events"}>Adoption events</Link>
@@ -44,7 +44,7 @@ const LeftMenu = ({ mode }) => {
         <Link to={"/rescuer/pet/new"}>Publish pet</Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to={`/rescuer/pets-listing?rescuerID=${accountID}`}>My pets</Link>
+        <Link to={`/rescuer/pets?rescuerID=${accountID}`}>My pets</Link>
       </Menu.Item>
       <Menu.Item disabled={true}>
         <Link to={"/rescuer/events"}>My events</Link>

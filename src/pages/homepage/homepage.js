@@ -8,7 +8,7 @@ const Homepage = () => {
 
   const navigate = useNavigate();
   const onClickAdopt = () => {
-    navigate("/pets-listing");
+    navigate("/pets");
   };
   const onClickUploadPets = () => {
     message.info("Sign up as a rescuer to upload pets.");
