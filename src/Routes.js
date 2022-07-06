@@ -11,6 +11,7 @@ import AdopterForm from "./components/adopterForm/adopterForm";
 import RescuerForm from "./components/rescuerForm/rescuerForm";
 import RescuersListing from "./pages/rescuers-listing/rescuers-listing";
 import RescuerForAdmin from "./pages/rescuer-for-admin/rescuer-for-admin";
+import Rescuer from "./pages/rescuer/rescuer";
 
 import Pet from "./pages/pet/pet";
 import PetRescuer from "./pages/pet-rescuer/pet-rescuer";
@@ -42,6 +43,7 @@ export const AllRoutes = () => {
       <Route exact path="/rescuer/signup" element={<SignupRescuer />} />
       <Route exact path="/pet" element={<Pet />} />
       <Route exact path="/pets" element={<PetsListing />} />
+      <Route exact path="/rescuer" element={<Rescuer />} />
 
       {/* Only open to login user */}
       <Route exact path="/" element={<ProtectedRouteRequireLogin />}>

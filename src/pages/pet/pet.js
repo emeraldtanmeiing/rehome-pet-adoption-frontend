@@ -36,7 +36,6 @@ import LoginModal from "../../components/login-modal/login-modal";
 import "./pet.less";
 
 const Pet = () => {
-
   const [petState, setPetState] = useState({ status: "idle", data: null });
   const [visible, setVisible] = useState(false);
   const isLoading = petState.status !== "success";
@@ -65,7 +64,7 @@ const Pet = () => {
       const colorCodes = getColorCodes(pet.color);
       const age = calculateAge(pet.birthDate);
       const data = { ...pet, colorCodes: colorCodes, age: age };
-     
+
       setPetState({ ...petState, status: "success", data: data });
     }
   };
@@ -328,7 +327,9 @@ const Pet = () => {
                       </Button>
                     </Row>
                   </Col>
-                  {petState.data.active && !petState.data.adopted && petState.data.rescuerID.verified ? (
+                  {petState.data.active &&
+                  !petState.data.adopted &&
+                  petState.data.rescuerID.verified ? (
                     <Col {...rightColProps}>
                       <div className="adoption outline">
                         <h4>Adoption fee</h4>
@@ -382,15 +383,35 @@ const Pet = () => {
                   >
                     <Row gutter={[16, 16]}>
                       <Col>
-                        <Avatar size={64} src={petState.data.rescuerID.image} />
+                        <Avatar
+                          onClick={() => {
+                            window.open(
+                              `/rescuer?rescuerID=${petState.data.rescuerID._id}`
+                            );
+                          }}
+                          style={{ cursor: "pointer" }}
+                          size={64}
+                          src={petState.data.rescuerID.image}
+                        />
                       </Col>
                       <Col>
-                        <h3>{petState.data.rescuerID.name}</h3>
-                        <div style={{wordWrap: "break-word", width: "400px"}}>
+                        <h3
+                          onClick={() => {
+                            window.open(
+                              `/rescuer?rescuerID=${petState.data.rescuerID._id}`
+                            );
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {petState.data.rescuerID.name}
+                        </h3>
+                        <div style={{ wordWrap: "break-word", width: "400px" }}>
                           <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}
                           {petState.data.rescuerID.address}
                           {", "}
-                          {petState.data.rescuerID.city}{", "} {petState.data.rescuerID.stateOrProvince},{petState.data.rescuerID.country}
+                          {petState.data.rescuerID.city}
+                          {", "} {petState.data.rescuerID.stateOrProvince},
+                          {petState.data.rescuerID.country}
                         </div>
                       </Col>
                     </Row>
@@ -454,9 +475,10 @@ const Pet = () => {
                       />
                     )}
 
-                    {/* TODO: navigate to rescuer page */}
-                    <Button disabled href={"/rescuer"}>
-                      More pets from this org
+                    <Button
+                      href={`/rescuer?rescuerID=${petState.data.rescuerID._id}`}
+                    >
+                      More pets from {petState.data.rescuerID.name}
                     </Button>
                   </Col>
                 </Row>
@@ -469,13 +491,10 @@ const Pet = () => {
       <LoginModal visible={visible} onCancel={onCancel} />
 
       <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
-        <img
-          style={{ width: "100%" }}
-          src={previewImage}
-        />
+        <img style={{ width: "100%" }} src={previewImage} />
       </Modal>
     </div>
   );
-}
+};
 
 export default Pet;

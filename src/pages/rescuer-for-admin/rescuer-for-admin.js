@@ -248,7 +248,6 @@ const RescuerForAdmin = () => {
                 </Col>
                 <Col>
                   <RescuerStatus
-                    active={rescuer.data.active}
                     verified={rescuer.data.verified}
                   />
                 </Col>

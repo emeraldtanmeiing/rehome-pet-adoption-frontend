@@ -21,11 +21,11 @@ TODO:
 [/] - redirect back to sign up adopter in sign up rescuer page
 [/] - cancel application
 [/] - edit pet's birthDate not working
+[/] - admin review rescuer
+[/] - rescuer page
 
 ![ ] - payment gateway
-![ ] - admin review rescuer
-[ ] - add get pet filter
-[ ] - rescuer page
+![ ] - add get pet filter
 [ ] - pet's description cant go to next line
 [ ] - change cookie key
 [ ] - add notification on homepage: This is a dummy website
@@ -53,3 +53,5 @@ change password
 undo adopted state
 support more document type
 give pet and application unique code
+blogs
+add pet story on completed application

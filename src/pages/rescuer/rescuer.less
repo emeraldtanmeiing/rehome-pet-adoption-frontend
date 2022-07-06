@@ -1,0 +1,103 @@
+@import "~antd/dist/antd.less";
+
+.rescuer {
+  // .adoption {
+  //   padding: 10px;
+  //   height: 140px;
+  //   background-color: @primary-1;
+  //   border: 3px solid @primary-color;
+  //   box-shadow: 0 1px 10px -2px @primary-1, 0 3px 10px 0 @primary-1,
+  //     0 5px 12px 10px @primary-1;
+  // }
+
+  .background {
+    height: 330px;
+    width: 100%;
+    background: rgb(255, 126, 130);
+    background: linear-gradient(
+      45deg,
+      rgba(255, 126, 130, 1) 0%,
+      rgba(255, 195, 160, 1) 52%,
+      rgba(251, 172, 116, 1) 100%
+    );
+    border-radius: @border-radius-base + 8px;
+  }
+
+  .rescuer-info {
+    // height: 300px;
+    width: 80%;
+    background: #fff;
+    border-radius: @border-radius-base + 3px;
+    box-shadow: @card-shadow;
+    margin-top: -225px;
+    padding: 0 20px;
+
+    div {
+      padding-top: 15px;
+    }
+  }
+
+  .profile-pic {
+    margin-top: -40px;
+    border: 2px solid #fff;
+    box-shadow: @card-shadow;
+  }
+
+  .name {
+    display: flex;
+    justify-content: center;
+
+    .rescuer-status {
+      padding-left: 10px;
+      margin-top: 15px;
+      padding-top: 0px;
+    }
+  }
+
+  .contact {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    div {
+      padding-left: 30px;
+      padding-top: 0;
+    }
+
+    .joined {
+      display: flex;
+      align-items: center;
+    }
+
+    .ant-btn {
+      padding: 0;
+      font-weight: 500;
+    }
+
+    .anticon-mail {
+      margin-top: -3px;
+    }
+
+    .social-media {
+      display: flex;
+
+      .ant-btn {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .address {
+    word-wrap: break-word;
+  }
+
+  .address-large {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  .pets {
+    margin-top: 60px;
+  }
+
+}

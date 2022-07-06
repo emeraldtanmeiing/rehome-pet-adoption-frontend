@@ -73,16 +73,15 @@ const PetCard = ({ pet, accountType }) => {
                       {pet.city}, {pet.stateOrProvince}
                     </Col>
                   </Row>
-
                 </Row>
               ) : (
                 <Row>
-
                   <Col className="petName" span={24}>
                     {pet.name.toUpperCase()}
                   </Col>
-
                   <Col span={24}>
+                    {pet.active ? "" : <>Inactive &#8226; </>}
+                    {pet.adopted ? <>Adopted &#8226; </> : ""}
                     {pet.type} &#8226; {pet.age}
                   </Col>
 
@@ -90,7 +89,6 @@ const PetCard = ({ pet, accountType }) => {
                     <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}
                     {pet.city}, {pet.stateOrProvince}
                   </Col>
-                  
                 </Row>
               )}
             </div>
