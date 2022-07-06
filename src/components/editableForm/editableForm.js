@@ -24,11 +24,33 @@ const EditableForm = ({ fields, api = null, editable = true, size = "default" })
   const [time, setTime] = useState(null);
 
   useEffect(() => {
+    console.log("run")
     form.setFieldsValue(data);
+    if(data.interviewDate){
+      setDate(data.interviewDate)
+    }
+    if(data.pickupDate){
+      setDate(data.pickupDate)
+    }
+    if(data.interviewTime){
+      setTime(data.interviewTime)
+    }
+    if(data.pickupTime){
+      setTime(data.pickupTime)
+    }
   }, []);
 
+  useEffect(()=>{
+    console.log({time})
+  }, [time])
+  useEffect(()=>{
+    console.log({data})
+  }, [data])
+
   const toggleEdit = () => {
+    console.log("yes")
     if (!editing) {
+      console.log("here")
       form.setFieldsValue({
         ...data,
         ...(data.interviewDate && {
@@ -95,9 +117,11 @@ const EditableForm = ({ fields, api = null, editable = true, size = "default" })
       ...(data.birthDate && { birthDate: data.birthDate }),
       ...(dateMonth && { birthDate: dateMonth }),
     });
+
     if (!res) {
       form.setFieldsValue(data);
     }
+
     if (res) {
       setData({
         ...data,
@@ -118,12 +142,14 @@ const EditableForm = ({ fields, api = null, editable = true, size = "default" })
     if ((image || !isEmpty(images)) && (res?.image || res?.mainImage || res?.images)) {
       window.location.href = window.location.href; //force refresh page to update image
     }
-    
-    if(!isEqual(find(fields, f => f.type=="images")?.value, existingImages)){
+   
+    const imagesField = find(fields, f => f.type=="images")
+    if(imagesField && !isEqual(imagesField?.value, existingImages)){
       window.location.href = window.location.href; //force refresh page to update image
     }
     
-    if(!isEqual(find(fields, f => f.type=="documents")?.value, existingImages)){
+    const documentsField = find(fields, f => f.type=="documents")
+    if(documentsField && (!isEqual(documentsField?.value, existingImages) || images)){
       window.location.href = window.location.href; //force refresh page to update image
     }
   };

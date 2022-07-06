@@ -24,6 +24,7 @@ TODO:
 [/] - admin review rescuer
 [/] - rescuer page
 
+![ ] - document being removed when updating interviewTime
 ![ ] - payment gateway
 ![ ] - add get pet filter
 [ ] - pet's description cant go to next line
@@ -40,7 +41,7 @@ TODO:
 [ ] - add login user credentials at login page for easier testing
 [ ] - add 404 page
 [ ] - customer service
-[ ] - 
+[ ] - logo_small add cursor: pointer
 [ ] - 
 [ ] - 
 [ ] - 
