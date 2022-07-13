@@ -57,7 +57,7 @@ const LeftMenu = ({ mode }) => {
 
   const MenuForAdmin = (
     <>
-      <Menu.Item disabled>
+      <Menu.Item>
         <Link to={"/admin/dashboard"}>Dashboard</Link>
       </Menu.Item>
       <Menu.Item>

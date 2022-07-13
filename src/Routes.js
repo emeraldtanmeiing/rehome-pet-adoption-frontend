@@ -30,6 +30,8 @@ import ApplicationsListingAdopter from "./pages/applications-listing-adopter/app
 import ApplicationRescuer from "./pages/application-rescuer/application-rescuer";
 import ApplicationAdopter from "./pages/application-adopter/application-adopter";
 
+import Dashboard from "./pages/dashboard/dashboard";
+
 export const AllRoutes = () => {
   const accessToken = Cookies.get("accessToken");
   const accountType = Cookies.get("type");
@@ -85,6 +87,7 @@ export const AllRoutes = () => {
       >
         <Route exact path="/admin/rescuers-listing" element={<RescuersListing />} />
         <Route exact path="/admin/rescuer" element={<RescuerForAdmin />} />
+        <Route exact path="/admin/dashboard" element={<Dashboard />} />
       </Route>
       
     </Routes>

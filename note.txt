@@ -24,9 +24,14 @@ TODO:
 [/] - admin review rescuer
 [/] - rescuer page
 
-![ ] - document being removed when updating interviewTime
 ![ ] - payment gateway
 ![ ] - add get pet filter
+![ ] - homepage
+![ ] - dashboard
+![ ] - ADD INDEX
+![ ] - adoption event
+![ ] - document being removed when updating interviewTime
+[ ] - adopted pet's page design
 [ ] - pet's description cant go to next line
 [ ] - change cookie key
 [ ] - add notification on homepage: This is a dummy website
@@ -42,8 +47,8 @@ TODO:
 [ ] - add 404 page
 [ ] - customer service
 [ ] - logo_small add cursor: pointer
-[ ] - 
-[ ] - 
+[ ] - back to login in signup page
+[ ] - change create pet page to a button in 'my pets' 
 [ ] - 
 
 Future Enhancements:
@@ -56,3 +61,6 @@ support more document type
 give pet and application unique code
 blogs
 add pet story on completed application
+operating hour
+smart contract
+mongodb transaction
