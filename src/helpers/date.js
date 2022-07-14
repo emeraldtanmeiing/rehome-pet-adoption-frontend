@@ -80,6 +80,52 @@ const formatDate = (givenDate, showTime = false) => {
   return formattedDate;
 };
 
+const shortMonth = (month) => {
+  let m;
+  switch(month){
+    case "January":
+      m = "Jan";
+      break;
+    case "February":
+      m = "Feb";
+      break;
+    case "March":
+      m = "Mar";
+      break;
+    case "April":
+      m = "Apr";
+      break;
+    case "May":
+      m = "Ma";
+      break;
+    case "June":
+      m = "June";
+      break;
+    case "July":
+      m = "July";
+      break;
+    case "August":
+      m = "Aug";
+      break;
+    case "September":
+      m = "Sep";
+      break;
+    case "October":
+      m = "Oct";
+      break;
+    case "November":
+      m = "Nov";
+      break;
+    case "December":
+      m = "Dec";
+      break;
+    default:
+      m = month;
+  }
+
+  return m;
+};
+
 const calculateAge = (birthDate) => {
   const ageInMonths = monthDifference(
     new Date(birthDate),
@@ -96,4 +142,4 @@ const calculateAge = (birthDate) => {
   return ageString
 } 
 
-export { monthDifference, formatDate, calculateAge };
+export { monthDifference, formatDate, shortMonth, calculateAge };

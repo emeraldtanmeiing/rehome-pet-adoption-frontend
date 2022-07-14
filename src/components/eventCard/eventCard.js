@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { formatDate } from "../../helpers/date";
+import { formatDate, shortMonth } from "../../helpers/date";
 
 import { Card, Row, Col } from "antd";
 import { ClockCircleFilled, EnvironmentFilled } from "@ant-design/icons";
@@ -52,11 +52,11 @@ const EventCard = ({ event, accountType }) => {
               <Row>
                 <Col span={8} className="date" align="center">
                   <h1>{formatDate(event.date).split(" ")[0]}</h1>
-                  <h3>{formatDate(event.date).split(" ")[1]}</h3>
+                  <h3>{shortMonth(formatDate(event.date).split(" ")[1])}</h3>
                   <h3>{formatDate(event.date).split(" ")[2]}</h3>
                 </Col>
                 <Col span={16} className="name-location">
-                  <div className="eventName">{event.name.toUpperCase()}</div>
+                  <div className="eventName">{event.name}</div>
                   <div className="location">
                     <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}
                     {event.address}
