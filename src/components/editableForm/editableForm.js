@@ -24,7 +24,6 @@ const EditableForm = ({ fields, api = null, editable = true, size = "default" })
   const [time, setTime] = useState(null);
 
   useEffect(() => {
-    console.log("run")
     form.setFieldsValue(data);
     if(data.interviewDate){
       setDate(data.interviewDate)
@@ -32,11 +31,17 @@ const EditableForm = ({ fields, api = null, editable = true, size = "default" })
     if(data.pickupDate){
       setDate(data.pickupDate)
     }
+    if(data.date){
+      setDate(data.date)
+    }
     if(data.interviewTime){
       setTime(data.interviewTime)
     }
     if(data.pickupTime){
       setTime(data.pickupTime)
+    }
+    if(data.time){
+      setTime(data.time)
     }
   }, []);
 
@@ -67,6 +72,12 @@ const EditableForm = ({ fields, api = null, editable = true, size = "default" })
         }),
         ...(data.birthDate && {
           birthDate: moment(data.birthDate),
+        }),
+        ...(data.date && {
+          date: moment(data.date),
+        }),
+        ...(data.time && {
+          time: moment("00:00", "HH:mm"),
         }),
       });
     }
@@ -108,11 +119,13 @@ const EditableForm = ({ fields, api = null, editable = true, size = "default" })
 
       ...(data.interviewDate && { interviewDate: data.interviewDate }),
       ...(data.pickupDate && { pickupDate: data.pickupDate }),
-      ...(date && { interviewDate: date, pickupDate: date }),
+      ...(data.time && { time: data.time }),
+      ...(date && { interviewDate: date, pickupDate: date, date: date }),
 
       ...(data.interviewTime && { interviewTime: data.interviewTime }),
       ...(data.pickupTime && { pickupTime: data.pickupTime }),
-      ...(time && { interviewTime: time, pickupTime: time }),
+      ...(data.time && { time: data.time }),
+      ...(time && { interviewTime: time, pickupTime: time, time: time}),
 
       ...(data.birthDate && { birthDate: data.birthDate }),
       ...(dateMonth && { birthDate: dateMonth }),
@@ -132,6 +145,8 @@ const EditableForm = ({ fields, api = null, editable = true, size = "default" })
         ...(res.interviewTime && { interviewTime: res.interviewTime }),
         ...(res.pickupDate && { pickupDate: res.pickupDate }),
         ...(res.pickupTime && { pickupTime: res.pickupTime }),
+        ...(res.date && { date: res.date }),
+        ...(res.time && { time: res.time }),
         ...(res.birthDate && { birthDate: res.birthDate }),
       });
     }

@@ -14,7 +14,7 @@ const Homepage = () => {
     message.info("Sign up as a rescuer to upload pets.");
     navigate("/rescuer/signup");
   };
-  const onClickevents = () => {
+  const onClickEvents = () => {
     navigate("/events");
   };
 
@@ -33,18 +33,17 @@ const Homepage = () => {
           </Button>
         </div>
         <div className="button">
-          <Button disabled type="primary" onClick={onClickevents}>
+          <Button type="primary" onClick={onClickEvents}>
             Browse pet adoption event
           </Button>
         </div>
         <div className="button">
-          <Button disabled type="primary" onClick={onClickevents}>
+          <Button disabled type="primary" onClick={onClickEvents}>
             Successful pet adoption story
           </Button>
         </div>
       </div>
-    </div>
-  );
+    </div>  );
 };
 
 export default Homepage;

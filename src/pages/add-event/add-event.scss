@@ -1,0 +1,27 @@
+.add-event {
+  // .title {
+  //   padding-bottom: 20px;
+  // }
+
+  .ant-select-selection-item,
+  .ant-upload,
+  .ant-form-item-explain {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .right {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  .add-event-button {
+    margin-bottom: 20px;
+  }
+
+  .ant-picker, .ant-upload {
+    width: 100%;
+  }
+}

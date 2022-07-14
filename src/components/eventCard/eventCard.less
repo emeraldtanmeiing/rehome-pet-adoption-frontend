@@ -1,0 +1,53 @@
+@import '~antd/dist/antd.less';
+
+.event-card {
+  .ant-card-body {
+    padding: 0 !important;
+  }
+
+  .not-available {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .event-card-details {
+    padding: 16px;
+
+    .eventName {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    
+    .date {
+      // padding-right: 10px;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      
+      h1, h3 {
+        margin: 0;
+        color: @primary-color;
+      }
+    }
+
+    .name-location {
+      padding-left: 15px;
+    }
+
+    .active,
+    .location {
+      font-size: 12px;
+      color: #9e9d9d;
+    }
+
+    .location {
+      padding-top: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis; 
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+
+    .more-details {
+      padding-top: 10px;
+    }
+  }
+}

@@ -1,0 +1,58 @@
+@import "~antd/dist/antd.less";
+
+.event {
+  .left {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .image-wrapper {
+    width: 100%;
+    margin-bottom: 25px;
+  }
+
+  .image {
+    width: 100%;
+  }
+
+  .details {
+    font-size: 12pt;
+
+    svg {
+      margin-right: 7px;
+    }
+  }
+
+  .description {
+    padding: 20px 10px;
+    padding-top: 18px;
+  }
+
+  @media (max-width: @screen-md) {
+    .brief-big {
+      display: none;
+    }
+  }
+
+  @media (min-width: @screen-md) {
+    .brief-small {
+      display: none;
+    }
+  }
+
+  .outline {
+    border: 1px solid #d9d9d9;
+    box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
+    border-radius: 4px;
+  }
+
+  .brief-wrapper {
+    padding: 10px 15px;
+    background-color: #f6f6f6;
+    height: 200px;
+
+    .brief {
+      height: 110px;
+    }
+  }
+}

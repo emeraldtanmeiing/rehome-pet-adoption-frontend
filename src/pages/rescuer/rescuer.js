@@ -1,25 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { omitBy, isNil, map } from "lodash";
-import { useNavigate } from "react-router-dom";
+import { omitBy, isNil } from "lodash";
 import useQuery from "../../hooks/useQuery";
-import useAuthContext from "../../hooks/useAuthContext";
-import { formatDate, calculateAge } from "../../helpers/date";
+import { calculateAge } from "../../helpers/date";
 import { getPets } from "../../services/pet.services";
 import { getAccount } from "../../services/auth.services";
+import { getEvents } from "../../services/event.services";
 
-import {
-  Row,
-  Col,
-  Spin,
-  Button,
-  Tooltip,
-  Divider,
-  Avatar,
-  Tag,
-  Modal,
-  message,
-  Grid,
-} from "antd";
+import { Row, Col, Spin, Button, Avatar, message, Grid } from "antd";
 import {
   LoadingOutlined,
   MailFilled,
@@ -29,23 +16,24 @@ import {
   InstagramFilled,
   ClockCircleFilled,
   GlobalOutlined,
-  CheckCircleOutlined,
-  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 
 import "./rescuer.less";
 import RescuerStatus from "../../components/rescuer-status/rescuer-status";
 import PetCard from "../../components/petCard/petCard";
+import EventCard from "../../components/eventCard/eventCard";
 
 const Rescuer = () => {
   const [rescuer, setRescuer] = useState({ status: "idle", data: null });
   const [pet, setPet] = useState({ status: "idle", data: null });
+  const [event, setEvent] = useState({ status: "idle", data: null });
   const [showMore, setShowMore] = useState(false);
-  const isLoading = rescuer.status !== "success" || pet.status !== "success";
+  const isLoading = rescuer.status !== "success" || pet.status !== "success" || event.status !== "success";
 
   useEffect(() => {
     fetchRescuer();
     fetchPets();
+    fetchEvents();
   }, []);
 
   const query = useQuery();
@@ -69,12 +57,44 @@ const Rescuer = () => {
     setPet({ ...pet, status: "loading" });
 
     if (rescuerID) {
-      const res = await getPets({ rescuerID: rescuerID, active: true, sortBy: "adopted", sortMode: "asc" });
+      const res = await getPets({
+        rescuerID: rescuerID,
+        active: true,
+        sortBy: "adopted",
+        sortMode: "asc",
+      });
 
       if (res?.error) {
         message.error(res.error.description);
       } else {
         setPet({ ...pet, status: "success", data: res });
+      }
+    }
+  };
+
+  const fetchEvents = async () => {
+    setEvent({ ...event, status: "loading" });
+
+    if (rescuerID) {
+      const params = omitBy(
+        {
+          rescuerID,
+          sortBy: "date",
+          sortMode: "desc",
+        },
+        (v) => isNil(v) || v.toString().trim() === ""
+      );
+
+      const res = await getEvents(params);
+
+      if (res?.error) {
+        message.error(res.error.description);
+      } else {
+        setEvent({
+          ...event,
+          status: "success",
+          data: res,
+        });
       }
     }
   };
@@ -187,7 +207,7 @@ const Rescuer = () => {
             </Col>
           </Row>
 
-          <Row className="pets" gutter={[30, 30]}>
+          <Row className="pets" gutter={[20, 20]}>
             <Col span={24} align="left">
               <h2>{pet.data.totalResultsFound} pets found</h2>
             </Col>
@@ -196,6 +216,16 @@ const Rescuer = () => {
               const age = calculateAge(p.birthDate);
               p.age = age;
               return <PetCard pet={p} accountType="adopter" />;
+            })}
+          </Row>
+
+          <Row className="events section" gutter={[20, 20]}>
+            <Col span={24} align="left">
+              <h2>{event.data.totalResultsFound} events found</h2>
+            </Col>
+
+            {event.data.eventsList.map((p) => {
+              return <EventCard event={p} accountType="adopter" />;
             })}
           </Row>
         </>

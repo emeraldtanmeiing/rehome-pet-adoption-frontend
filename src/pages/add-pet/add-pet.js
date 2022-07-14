@@ -153,7 +153,7 @@ const AddPet = () => {
       message.error(res.error.description);
       setIsLoading(false);
     } else {
-      message.success("Create pet successful!");
+      message.success("Successfully published a new pet!");
       navigate(`/rescuer/pets?rescuerID=${rescuerID}`);
     }
   };

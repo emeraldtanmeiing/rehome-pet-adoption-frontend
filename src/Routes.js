@@ -30,6 +30,13 @@ import ApplicationsListingAdopter from "./pages/applications-listing-adopter/app
 import ApplicationRescuer from "./pages/application-rescuer/application-rescuer";
 import ApplicationAdopter from "./pages/application-adopter/application-adopter";
 
+//event
+import Event from "./pages/event/event";
+import AddEvent from "./pages/add-event/add-event";
+import EventsListing from "./pages/events-listing/events-listing";
+import EventsListingRescuer from "./pages/events-listing-rescuer/events-listing-rescuer";
+import EventRescuer from "./pages/event-rescuer/event-rescuer";
+
 import Dashboard from "./pages/dashboard/dashboard";
 
 export const AllRoutes = () => {
@@ -45,6 +52,8 @@ export const AllRoutes = () => {
       <Route exact path="/rescuer/signup" element={<SignupRescuer />} />
       <Route exact path="/pet" element={<Pet />} />
       <Route exact path="/pets" element={<PetsListing />} />
+      <Route exact path="/events" element={<EventsListing />} />
+      <Route exact path="/event" element={<Event />} />
       <Route exact path="/rescuer" element={<Rescuer />} />
 
       {/* Only open to login user */}
@@ -77,6 +86,9 @@ export const AllRoutes = () => {
         <Route exact path="/rescuer/pet" element={<PetRescuer />} />
         <Route exact path="/rescuer/applications" element={<ApplicationsListingRescuer />} />
         <Route exact path="/rescuer/application" element={<ApplicationRescuer />} />
+        <Route exact path="/rescuer/events" element={<EventsListingRescuer />} />
+        <Route exact path="/rescuer/event" element={<EventRescuer />} />
+        <Route exact path="/rescuer/event/new" element={<AddEvent />} />
       </Route>
 
       {/* Only open to admin */}

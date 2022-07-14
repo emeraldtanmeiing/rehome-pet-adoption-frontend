@@ -17,12 +17,11 @@ export const dummyRequest = ({ file, onSuccess }) => {
 
 export const validateFile = (value, type = "image") => {
   const file = value;
-
   let fileTypes;
-  if (type === "image") {
-    fileTypes = ["image/png", "image/jpg", "image/jpeg", "image/svg+xml"];
-  } else {
+  if (type === "documents") {
     fileTypes = ["application/pdf"];
+  } else {
+    fileTypes = ["image/png", "image/jpg", "image/jpeg", "image/svg+xml"];
   }
 
   if (!fileTypes.includes(file.type)) {

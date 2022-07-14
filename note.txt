@@ -23,11 +23,11 @@ TODO:
 [/] - edit pet's birthDate not working
 [/] - admin review rescuer
 [/] - rescuer page
+[/] - dashboard
 
 ![ ] - payment gateway
 ![ ] - add get pet filter
 ![ ] - homepage
-![ ] - dashboard
 ![ ] - ADD INDEX
 ![ ] - adoption event
 ![ ] - document being removed when updating interviewTime

@@ -1,23 +1,23 @@
 import React from "react";
 import { Row, Col, Button, Grid } from "antd";
-import PetForm from "../../components/petForm/petForm";
+import EventForm from "../../components/eventForm/eventForm";
 import useQuery from "../../hooks/useQuery";
 
-const PetRescuer = () => {
+const EventRescuer = () => {
   const query = useQuery();
-  const petID = query.get("petID");
+  const eventID = query.get("eventID");
   const breakpoint = Grid.useBreakpoint();
 
   return (
-    <div className="pet-form">
+    <div className="event-form">
       <Row align="center" style={{paddingBottom: "10px"}}>
         <Col span={breakpoint.md ? 18 : 24} align="end">
-          <Button onClick={() => window.open(`/pet?petID=${petID}`)}>View as Public</Button>
+          <Button onClick={() => window.open(`/event?eventID=${eventID}`)}>View as Public</Button>
         </Col>
       </Row>
-      <PetForm editable={true} size="small" />
+      <EventForm editable={true} size="small" eventID={eventID}/>
     </div>
   );
 };
 
-export default PetRescuer;
+export default EventRescuer;

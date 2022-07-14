@@ -5,7 +5,7 @@ import { getPets } from "../../services/pet.services";
 import useAuthContext from "../../hooks/useAuthContext";
 import { calculateAge } from "../../helpers/date";
 
-import { Row, Col, Skeleton, Card, Button, message } from "antd";
+import { Row, Col, Skeleton, Card, Button, Grid, message } from "antd";
 import PetCard from "../../components/petCard/petCard";
 
 import "./pets-listing-rescuer.scss";
@@ -31,7 +31,7 @@ function PetsListingSpecificRescuer() {
 
     const params = omitBy(
       { petID, type, name, rescuerID, resultsPerPage, page },
-      v => isNil(v) || v.toString().trim() === ''
+      (v) => isNil(v) || v.toString().trim() === ""
     );
 
     const res = await getPets(params);
@@ -40,7 +40,7 @@ function PetsListingSpecificRescuer() {
       message.error(res.error.description);
     } else {
       res.petsList.map((pet) => {
-        const age = calculateAge(pet.birthDate)
+        const age = calculateAge(pet.birthDate);
         pet.age = age;
       });
       const data = {
@@ -64,7 +64,7 @@ function PetsListingSpecificRescuer() {
   };
 
   const { accountType } = useAuthContext();
-
+  const breakpoint = Grid.useBreakpoint();
   return (
     <div className="pets-listing-rescuer">
       <div className="pets-listing-rescuer-wrapper">
@@ -82,13 +82,16 @@ function PetsListingSpecificRescuer() {
           {petState.status === "success" && (
             <>
               <Row>
-                <Col className="title" align="left">
-                  <div>
-                    <h1>My Pets</h1>
-                  </div>
+                <Col className="title" align="left" span={breakpoint.md ? 12 : 24} >
+                  <h1>My Pets</h1>
+                </Col>
+                <Col className="publish-pet" align={breakpoint.md ? "right" : "left"} span={breakpoint.md ? 12 : 24} >
+                  <Button type="primary" href="/rescuer/pet/new">
+                    Publish a new pet
+                  </Button>
                 </Col>
               </Row>
-
+              
               <Row>
                 <Col span={24} align="left">
                   <h2>Recently added</h2>
@@ -96,7 +99,7 @@ function PetsListingSpecificRescuer() {
               </Row>
 
               <Row gutter={[30, 30]}>
-                {petState.data.petsList.slice(0,4).map((p) => (
+                {petState.data.petsList.slice(0, 4).map((p) => (
                   <PetCard pet={p} accountType={accountType} />
                 ))}
               </Row>
@@ -108,7 +111,7 @@ function PetsListingSpecificRescuer() {
               </Row>
 
               <Row>
-              <Col className="filter-bar" align="left">
+                <Col className="filter-bar" align="left">
                   <h4>{petState.data.totalResultsFound} pets found</h4>
                   {/* <div>
                     <Button href={`/adopt`}>All</Button>

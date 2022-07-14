@@ -2,72 +2,45 @@ import React, { useEffect, useState } from "react";
 import { omitBy, isNil } from "lodash";
 import useQuery from "../../hooks/useQuery";
 import useAuthContext from "../../hooks/useAuthContext";
-import { getPets } from "../../services/pet.services";
+import { getEvents } from "../../services/event.services";
 import { calculateAge } from "../../helpers/date";
 
-import { Row, Col, Skeleton, Card, Button, message } from "antd";
-import PetCard from "../../components/petCard/petCard";
+import { Row, Col, Skeleton, Card, Button, Grid, message } from "antd";
+import EventCard from "../../components/eventCard/eventCard";
 
-import "./pets-listing.scss";
+import "./events-listing.scss";
 
-function PetsListing() {
-  const [petState, setPetState] = useState({ status: "idle", data: null });
+function EventsListing() {
+  const [event, setEvent] = useState({ status: "idle", data: null });
 
   const query = useQuery();
-  const petID = query.get("petID");
-  const type = query.get("type");
-  const name = query.get("name");
-  // const ageInMonths = query.get("ageInMonths");
-  const rescuerID = query.get("rescuerID");
+  const eventID = query.get("eventID");
   const resultsPerPage = query.get("resultsPerPage");
   const page = query.get("page");
 
   const { accountType } = useAuthContext();
 
-  const fetchPets = async () => {
-    setPetState({ ...petState, status: "loading" });
+  const fetchEvents = async () => {
+    setEvent({ ...event, status: "loading" });
 
     const params = omitBy(
       {
-        petID,
-        type,
-        name,
-        rescuerID,
-        resultsPerPage,
-        page,
         active: true,
-        adopted: false,
-        sortBy: "createdAt",
+        sortBy: "date",
         sortMode: "desc",
       },
       (v) => isNil(v) || v.toString().trim() === ""
     );
 
-    const res = await getPets(params);
+    const res = await getEvents(params);
 
     if (res?.error) {
       message.error(res.error.description);
     } else {
-      let data = res.petsList;
-
-      data = data.filter((d) => {
-        return d.rescuerID.verified === true;
-      });
-
-      data = data.map((pet) => {
-        const age = calculateAge(pet.birthDate);
-        return {...pet, age: age}
-      });
-
-      setPetState({
-        ...petState,
+      setEvent({
+        ...event,
         status: "success",
-        data: {
-          petsList: data,
-          totalResultsFound: data.length,
-          page: res.page,
-          resultsPerPage: res.resultsPerPage,
-        },
+        data: res,
       });
     }
   };
@@ -85,14 +58,15 @@ function PetsListing() {
   };
 
   useEffect(() => {
-    fetchPets();
+    fetchEvents();
   }, []);
 
+  const breakpoint = Grid.useBreakpoint();
   return (
-    <div className="pets-listing">
-      <div className="pets-listing-wrapper">
+    <div className="events-listing">
+      <div className="events-listing-wrapper">
         <div className="cards">
-          {petState.status === "loading" && (
+          {event.status === "loading" && (
             <>
               <Row gutter={[30, 30]} className="loading">
                 {[...Array(12).keys()].map((index) => (
@@ -102,12 +76,14 @@ function PetsListing() {
             </>
           )}
 
-          {petState.status === "success" && (
+          {event.status === "success" && (
             <>
               <Row>
-                <Col className="filter-bar" align="left">
+                <Col className="filter-bar" align="left" span={24}>
                   <div>
-                    <h1>{petState.data.totalResultsFound} Pets found</h1>
+                    <h1>
+                      {event.data.totalResultsFound} Adoption Events found
+                    </h1>
                   </div>
                   <div>
                     <Button href={`/pets`}>All</Button>
@@ -119,12 +95,14 @@ function PetsListing() {
                     <Button href={`/pets?type=Dog`}>Dogs</Button>
                   </div>
                 </Col>
-              </Row>
 
-              <Row gutter={[30, 30]}>
-                {petState.data.petsList.map((p) => {
-                  return <PetCard pet={p} accountType={accountType} />
-                })}
+                <Col span={24} align="left">
+                  <Row gutter={[30, 30]}>
+                    {event.data.eventsList?.map((p) => {
+                      return <EventCard event={p} accountType={accountType} />;
+                    })}
+                  </Row>
+                </Col>
               </Row>
             </>
           )}
@@ -134,4 +112,4 @@ function PetsListing() {
   );
 }
 
-export default PetsListing;
+export default EventsListing;
