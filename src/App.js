@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet";
 
 import Navbar from "./components/navbar";
 
+import 'ant-design-pro/dist/ant-design-pro.css';
 import "./App.less";
 import "./App.scss";
 

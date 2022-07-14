@@ -24,12 +24,12 @@ TODO:
 [/] - admin review rescuer
 [/] - rescuer page
 [/] - dashboard
+![/] - adoption event
 
 ![ ] - payment gateway
 ![ ] - add get pet filter
 ![ ] - homepage
 ![ ] - ADD INDEX
-![ ] - adoption event
 ![ ] - document being removed when updating interviewTime
 [ ] - adopted pet's page design
 [ ] - pet's description cant go to next line

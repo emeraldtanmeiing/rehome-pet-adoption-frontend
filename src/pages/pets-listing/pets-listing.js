@@ -5,36 +5,26 @@ import useAuthContext from "../../hooks/useAuthContext";
 import { getPets } from "../../services/pet.services";
 import { calculateAge } from "../../helpers/date";
 
-import { Row, Col, Skeleton, Card, Button, message } from "antd";
+import { Row, Col, Skeleton, Card, Button, Input, message, Grid } from "antd";
 import PetCard from "../../components/petCard/petCard";
 
-import "./pets-listing.scss";
+import "./pets-listing.less";
 
-function PetsListing() {
-  const [petState, setPetState] = useState({ status: "idle", data: null });
+const { Search } = Input;
 
-  const query = useQuery();
-  const petID = query.get("petID");
-  const type = query.get("type");
-  const name = query.get("name");
-  // const ageInMonths = query.get("ageInMonths");
-  const rescuerID = query.get("rescuerID");
-  const resultsPerPage = query.get("resultsPerPage");
-  const page = query.get("page");
+const PetsListing = () => {
+  const [pet, setPet] = useState({ status: "idle", data: null });
+  const [searchText, setSearchText] = useState("");
 
   const { accountType } = useAuthContext();
 
-  const fetchPets = async () => {
-    setPetState({ ...petState, status: "loading" });
+  const fetchPets = async ({ searchText, type }) => {
+    setPet({ ...pet, status: "loading" });
 
     const params = omitBy(
       {
-        petID,
-        type,
-        name,
-        rescuerID,
-        resultsPerPage,
-        page,
+        ...(searchText && { searchText: searchText }),
+        ...(type && { type: type }),
         active: true,
         adopted: false,
         sortBy: "createdAt",
@@ -56,11 +46,11 @@ function PetsListing() {
 
       data = data.map((pet) => {
         const age = calculateAge(pet.birthDate);
-        return {...pet, age: age}
+        return { ...pet, age: age };
       });
 
-      setPetState({
-        ...petState,
+      setPet({
+        ...pet,
         status: "success",
         data: {
           petsList: data,
@@ -85,14 +75,23 @@ function PetsListing() {
   };
 
   useEffect(() => {
-    fetchPets();
+    fetchPets(null);
   }, []);
+
+  const onSearch = (value) => setSearchText(value.toLowerCase());
+
+  useEffect(() => {
+    if (searchText.length === 0 || searchText.length > 2)
+      fetchPets({ searchText });
+  }, [searchText]);
+
+  const breakpoint = Grid.useBreakpoint();
 
   return (
     <div className="pets-listing">
       <div className="pets-listing-wrapper">
         <div className="cards">
-          {petState.status === "loading" && (
+          {pet.status === "loading" && (
             <>
               <Row gutter={[30, 30]} className="loading">
                 {[...Array(12).keys()].map((index) => (
@@ -102,28 +101,54 @@ function PetsListing() {
             </>
           )}
 
-          {petState.status === "success" && (
+          {pet.status === "success" && (
             <>
               <Row>
                 <Col className="filter-bar" align="left">
                   <div>
-                    <h1>{petState.data.totalResultsFound} Pets found</h1>
+                    <h1>{pet.data.totalResultsFound} Pets found</h1>
                   </div>
                   <div>
-                    <Button href={`/pets`}>All</Button>
+                    <Button
+                      onClick={() => {
+                        fetchPets({});
+                      }}
+                    >
+                      All
+                    </Button>
                   </div>
                   <div>
-                    <Button href={`/pets?type=Cat`}>Cats</Button>
+                    <Button
+                      onClick={() => {
+                        fetchPets({ type: "Cat" });
+                      }}
+                    >
+                      Cats
+                    </Button>
                   </div>
                   <div>
-                    <Button href={`/pets?type=Dog`}>Dogs</Button>
+                    <Button
+                      onClick={() => {
+                        fetchPets({ type: "Dog" });
+                      }}
+                    >
+                      Dogs
+                    </Button>
+                  </div>
+                  <div className="searchbar">
+                    <Search
+                      placeholder="Search pet's name, description, location..."
+                      onSearch={onSearch}
+                      enterButton
+                      // size="large"
+                    />
                   </div>
                 </Col>
               </Row>
 
               <Row gutter={[30, 30]}>
-                {petState.data.petsList.map((p) => {
-                  return <PetCard pet={p} accountType={accountType} />
+                {pet.data.petsList.map((p) => {
+                  return <PetCard pet={p} accountType={accountType} />;
                 })}
               </Row>
             </>
@@ -132,6 +157,6 @@ function PetsListing() {
       </div>
     </div>
   );
-}
+};
 
 export default PetsListing;
