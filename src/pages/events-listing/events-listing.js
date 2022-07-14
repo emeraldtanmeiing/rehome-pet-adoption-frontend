@@ -85,7 +85,7 @@ function EventsListing() {
                       {event.data.totalResultsFound} Adoption Events found
                     </h1>
                   </div>
-                  <div>
+                  {/* <div>
                     <Button href={`/pets`}>All</Button>
                   </div>
                   <div>
@@ -93,7 +93,7 @@ function EventsListing() {
                   </div>
                   <div>
                     <Button href={`/pets?type=Dog`}>Dogs</Button>
-                  </div>
+                  </div> */}
                 </Col>
 
                 <Col span={24} align="left">
