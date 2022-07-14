@@ -24,7 +24,7 @@ TODO:
 [/] - admin review rescuer
 [/] - rescuer page
 [/] - dashboard
-![/] - adoption event
+[/] - event
 
 ![ ] - payment gateway
 ![ ] - add get pet filter
@@ -64,3 +64,11 @@ add pet story on completed application
 operating hour
 smart contract
 mongodb transaction
+
+
+const [searchText, setSearchText] = useState("");
+  const onSearch = (value) => setSearchText(value.toLowerCase());
+  useEffect(() => {
+    if (searchText.length === 0 || searchText.length > 2)
+      fetchPets({ searchText });
+  }, [searchText]);

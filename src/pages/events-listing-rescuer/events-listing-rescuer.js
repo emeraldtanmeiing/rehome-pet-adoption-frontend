@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { omitBy, isNil } from "lodash";
-import useQuery from "../../hooks/useQuery";
-import useAuthContext from "../../hooks/useAuthContext";
 import { getEvents } from "../../services/event.services";
-import { calculateAge } from "../../helpers/date";
 import Cookies from "js-cookie";
 
-import { Row, Col, Skeleton, Card, Button, Grid, message } from "antd";
+import { Row, Col, Skeleton, Card, Button, Grid, Input, Divider, message } from "antd";
 import EventCard from "../../components/eventCard/eventCard";
 
 import "./events-listing-rescuer.scss";
 
+const { Search } = Input;
+
 function EventsListingRescuer() {
   const [event, setEvent] = useState({ status: "idle", data: null });
+  const [recentEvents, setRecentEvents] = useState({ status: "idle", data: null });
+  const isLoading = event.status !== "success" || recentEvents.status !== "success";
 
-  const query = useQuery();
-  const resultsPerPage = query.get("resultsPerPage");
-  const page = query.get("page");
+  useEffect(() => {
+    fetchEvents();
+    fetchRecentEvents();
+  }, []);
 
   const accountID = Cookies.get("accountID");
   const accountType = Cookies.get("type");
-
-  const fetchEvents = async () => {
+  
+  const fetchEvents = async ({searchText}) => {
     setEvent({ ...event, status: "loading" });
 
     const params = omitBy(
       {
+        ...(searchText && {searchText}),
         rescuerID: accountID,
-        resultsPerPage,
-        page,
         sortBy: "date",
         sortMode: "desc",
       },
@@ -48,6 +49,33 @@ function EventsListingRescuer() {
     }
   };
 
+  const fetchRecentEvents = async () => {
+    setRecentEvents({ ...recentEvents, status: "loading" });
+
+    const params = omitBy(
+      {
+        rescuerID: accountID,
+        resultsPerPage: 4,
+        sortBy: "createdAt",
+        sortMode: "desc",
+      },
+      (v) => isNil(v) || v.toString().trim() === ""
+    );
+
+    const res = await getEvents(params);
+
+    if (res?.error) {
+      message.error(res.error.description);
+    } else {
+      setRecentEvents({
+        ...recentEvents,
+        status: "success",
+        data: res.eventsList,
+      });
+    }
+  };
+  
+
   const CardSkeleton = (index) => {
     return (
       <>
@@ -60,16 +88,19 @@ function EventsListingRescuer() {
     );
   };
 
+  const [searchText, setSearchText] = useState("");
+  const onSearch = (value) => setSearchText(value.toLowerCase());
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    if (searchText.length === 0 || searchText.length > 1)
+    fetchEvents({ searchText });
+  }, [searchText]);
 
   const breakpoint = Grid.useBreakpoint();
   return (
     <div className="events-listing-rescuer">
       <div className="events-listing-rescuer-wrapper">
         <div className="cards">
-          {event.status === "loading" && (
+          {isLoading && (
             <>
               <Row gutter={[30, 30]} className="loading">
                 {[...Array(12).keys()].map((index) => (
@@ -79,7 +110,7 @@ function EventsListingRescuer() {
             </>
           )}
 
-          {event.status === "success" && (
+          {!isLoading && (
             <>
               <Row>
                 <Col
@@ -102,20 +133,40 @@ function EventsListingRescuer() {
 
               <Row className="section">
                 <Col span={24} align="left">
-                  <h2>Recent events</h2>
+                  <h2>Recent added</h2>
                 </Col>
                 <Col span={24} align="left">
                   <Row gutter={[30, 30]}>
-                    {event.data.eventsList.slice(0, 4).map((p) => (
+                    {recentEvents.data.map((p) => (
                       <EventCard event={p} accountType={accountType} />
                     ))}
                   </Row>
                 </Col>
               </Row>
 
-              <Row className="section">
-                <Col span={24} align="left">
-                  <h2>All events</h2>
+              <Divider />
+
+              <Row >
+              <Col span={24} align="left" className="filter-bar">
+                  <h2 className="all-events">All events</h2>
+                  <div>
+                    <Button
+                      onClick={() => {
+                        fetchEvents({});
+                      }}
+                      className="all-button"
+                    >
+                      All
+                    </Button>
+                  </div>
+                  <div className="searchbar">
+                    <Search
+                      placeholder="Search event by name, date, time, location..."
+                      onSearch={onSearch}
+                      enterButton
+                      // size="large"
+                    />
+                  </div>
                 </Col>
                 <Col span={24} align="left">
                   <h4>{event.data.totalResultsFound} events found</h4>

@@ -34,7 +34,7 @@ const Homepage = () => {
         </div>
         <div className="button">
           <Button type="primary" onClick={onClickEvents}>
-            Browse pet adoption event
+            Browse event
           </Button>
         </div>
         <div className="button">

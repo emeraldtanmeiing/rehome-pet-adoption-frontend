@@ -3,28 +3,25 @@ import { omitBy, isNil } from "lodash";
 import useQuery from "../../hooks/useQuery";
 import useAuthContext from "../../hooks/useAuthContext";
 import { getEvents } from "../../services/event.services";
-import { calculateAge } from "../../helpers/date";
 
-import { Row, Col, Skeleton, Card, Button, Grid, message } from "antd";
+import { Row, Col, Skeleton, Card, Input, Grid, Button, message } from "antd";
 import EventCard from "../../components/eventCard/eventCard";
 
 import "./events-listing.scss";
 
+const { Search } = Input;
+
 function EventsListing() {
   const [event, setEvent] = useState({ status: "idle", data: null });
 
-  const query = useQuery();
-  const eventID = query.get("eventID");
-  const resultsPerPage = query.get("resultsPerPage");
-  const page = query.get("page");
-
   const { accountType } = useAuthContext();
 
-  const fetchEvents = async () => {
+  const fetchEvents = async ({searchText}) => {
     setEvent({ ...event, status: "loading" });
 
     const params = omitBy(
       {
+        ...(searchText && {searchText: searchText}),
         active: true,
         sortBy: "date",
         sortMode: "desc",
@@ -61,7 +58,13 @@ function EventsListing() {
     fetchEvents();
   }, []);
 
-  const breakpoint = Grid.useBreakpoint();
+  const [searchText, setSearchText] = useState("");
+  const onSearch = (value) => setSearchText(value.toLowerCase());
+  useEffect(() => {
+    if (searchText.length === 0 || searchText.length > 1)
+    fetchEvents({ searchText });
+  }, [searchText]);
+
   return (
     <div className="events-listing">
       <div className="events-listing-wrapper">
@@ -82,18 +85,26 @@ function EventsListing() {
                 <Col className="filter-bar" align="left" span={24}>
                   <div>
                     <h1>
-                      {event.data.totalResultsFound} Adoption Events found
+                      {event.data.totalResultsFound} Events found
                     </h1>
                   </div>
-                  {/* <div>
-                    <Button href={`/pets`}>All</Button>
-                  </div>
                   <div>
-                    <Button href={`/pets?type=Cat`}>Cats</Button>
+                    <Button
+                      onClick={() => {
+                        fetchEvents({});
+                      }}
+                    >
+                      All
+                    </Button>
                   </div>
-                  <div>
-                    <Button href={`/pets?type=Dog`}>Dogs</Button>
-                  </div> */}
+                  <div className="searchbar">
+                    <Search
+                      placeholder="Search event by name, date, time, location..."
+                      onSearch={onSearch}
+                      enterButton
+                      // size="large"
+                    />
+                  </div>
                 </Col>
 
                 <Col span={24} align="left">

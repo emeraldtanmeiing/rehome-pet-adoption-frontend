@@ -1,36 +1,50 @@
 import React, { useEffect, useState } from "react";
-import { omitBy, isNil, sortBy, trim } from "lodash";
-import useQuery from "../../hooks/useQuery";
+import { omitBy, isNil } from "lodash";
 import { getPets } from "../../services/pet.services";
-import useAuthContext from "../../hooks/useAuthContext";
 import { calculateAge } from "../../helpers/date";
+import Cookies from "js-cookie";
 
-import { Row, Col, Skeleton, Card, Button, Grid, message } from "antd";
+import {
+  Row,
+  Col,
+  Skeleton,
+  Card,
+  Button,
+  Grid,
+  Input,
+  Divider,
+  message,
+} from "antd";
 import PetCard from "../../components/petCard/petCard";
 
 import "./pets-listing-rescuer.scss";
 
+const { Search } = Input;
+
 function PetsListingSpecificRescuer() {
-  const [petState, setPetState] = useState({ status: "idle", data: null });
+  const [pet, setPet] = useState({ status: "idle", data: null });
+  const [recentPets, setRecentPets] = useState({ status: "idle", data: null });
+  const isLoading = pet.status !== "success" || recentPets.status !== "success";
 
   useEffect(() => {
     fetchPets();
+    fetchRecentPets();
   }, []);
 
-  const query = useQuery();
-  const petID = query.get("petID");
-  const type = query.get("type");
-  const name = query.get("name");
-  // const ageInMonths = query.get("ageInMonths");
-  const rescuerID = query.get("rescuerID");
-  const resultsPerPage = query.get("resultsPerPage");
-  const page = query.get("page");
+  const accountID = Cookies.get("accountID");
+  const accountType = Cookies.get("type");
 
-  const fetchPets = async () => {
-    setPetState({ ...petState, status: "loading" });
+  const fetchPets = async ({ type, searchText }) => {
+    setPet({ ...pet, status: "loading" });
 
     const params = omitBy(
-      { petID, type, name, rescuerID, resultsPerPage, page },
+      {
+        ...(type && { type }),
+        ...(searchText && { searchText }),
+        rescuerID: accountID,
+        sortBy: "createdAt",
+        sortMode: "desc",
+      },
       (v) => isNil(v) || v.toString().trim() === ""
     );
 
@@ -43,11 +57,33 @@ function PetsListingSpecificRescuer() {
         const age = calculateAge(pet.birthDate);
         pet.age = age;
       });
-      const data = {
-        ...res,
-        petsList: sortBy(res.petsList, "createdAt").reverse(),
-      };
-      setPetState({ ...petState, status: "success", data: data });
+      setPet({ ...pet, status: "success", data: res });
+    }
+  };
+
+  const fetchRecentPets = async () => {
+    setRecentPets({ ...recentPets, status: "loading" });
+
+    const params = omitBy(
+      {
+        rescuerID: accountID,
+        resultsPerPage: 4,
+        sortBy: "createdAt",
+        sortMode: "desc",
+      },
+      (v) => isNil(v) || v.toString().trim() === ""
+    );
+
+    const res = await getPets(params);
+
+    if (res?.error) {
+      message.error(res.error.description);
+    } else {
+      res.petsList.map((pet) => {
+        const age = calculateAge(pet.birthDate);
+        pet.age = age;
+      });
+      setRecentPets({ ...recentPets, status: "success", data: res.petsList });
     }
   };
 
@@ -63,13 +99,20 @@ function PetsListingSpecificRescuer() {
     );
   };
 
-  const { accountType } = useAuthContext();
+  const [searchText, setSearchText] = useState("");
+  const onSearch = (value) => setSearchText(value.toLowerCase());
+  useEffect(() => {
+    if (searchText.length === 0 || searchText.length > 1)
+      fetchPets({ searchText });
+  }, [searchText]);
+
   const breakpoint = Grid.useBreakpoint();
+
   return (
     <div className="pets-listing-rescuer">
       <div className="pets-listing-rescuer-wrapper">
         <div className="cards">
-          {petState.status === "loading" && (
+          {isLoading && (
             <>
               <Row gutter={[30, 30]} className="loading">
                 {[...Array(12).keys()].map((index) => (
@@ -79,54 +122,91 @@ function PetsListingSpecificRescuer() {
             </>
           )}
 
-          {petState.status === "success" && (
+          {!isLoading && (
             <>
               <Row>
-                <Col className="title" align="left" span={breakpoint.md ? 12 : 24} >
+                <Col
+                  className="title"
+                  align="left"
+                  span={breakpoint.md ? 12 : 24}
+                >
                   <h1>My Pets</h1>
                 </Col>
-                <Col className="publish-pet" align={breakpoint.md ? "right" : "left"} span={breakpoint.md ? 12 : 24} >
+                <Col
+                  className="publish-pet"
+                  align={breakpoint.md ? "right" : "left"}
+                  span={breakpoint.md ? 12 : 24}
+                >
                   <Button type="primary" href="/rescuer/pet/new">
                     Publish a new pet
                   </Button>
                 </Col>
               </Row>
-              
+
               <Row>
-                <Col span={24} align="left">
+                <Col span={24} align="left" className="section">
                   <h2>Recently added</h2>
                 </Col>
               </Row>
 
               <Row gutter={[30, 30]}>
-                {petState.data.petsList.slice(0, 4).map((p) => (
+                {recentPets.data.map((p) => (
                   <PetCard pet={p} accountType={accountType} />
                 ))}
               </Row>
 
+              <Divider />
+
               <Row>
-                <Col span={24} align="left">
-                  <h2>All pets</h2>
+                <Col span={24} align="left" className="filter-bar">
+                  <h2 className="all-pets">All pets</h2>
+                  <div>
+                    <Button
+                      onClick={() => {
+                        fetchPets({});
+                      }}
+                      className="all-button"
+                    >
+                      All
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      onClick={() => {
+                        fetchPets({ type: "Cat" });
+                      }}
+                    >
+                      Cats
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      onClick={() => {
+                        fetchPets({ type: "Dog" });
+                      }}
+                    >
+                      Dogs
+                    </Button>
+                  </div>
+                  <div className="searchbar">
+                    <Search
+                      placeholder="Search pet by name, description, location..."
+                      onSearch={onSearch}
+                      enterButton
+                      // size="large"
+                    />
+                  </div>
                 </Col>
               </Row>
 
               <Row>
-                <Col className="filter-bar" align="left">
-                  <h4>{petState.data.totalResultsFound} pets found</h4>
-                  {/* <div>
-                    <Button href={`/adopt`}>All</Button>
-                  </div>
-                  <div>
-                    <Button href={`/adopt?type=cat`}>Cats</Button>
-                  </div>
-                  <div>
-                    <Button href={`/adopt?type=dog`}>Dogs</Button>
-                  </div> */}
+                <Col align="left">
+                  <h3>{pet.data.totalResultsFound} pets found</h3>
                 </Col>
               </Row>
 
               <Row gutter={[30, 30]}>
-                {petState.data.petsList.map((p) => (
+                {pet.data.petsList.map((p) => (
                   <PetCard pet={p} accountType={accountType} />
                 ))}
               </Row>

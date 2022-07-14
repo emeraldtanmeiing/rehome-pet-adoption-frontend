@@ -1,6 +1,51 @@
 .pets-listing-rescuer{
-  h2 {
+  .section {
       padding-top: 40px;
+  }
+
+  .ant-divider-horizontal {
+    margin: 55px 0;
+  }
+
+  .filter-bar {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    
+    .ant-btn {
+      margin: 0;
+      margin-bottom: 5px;
+      border-radius: 25px;
+    }
+
+    div, .all-pets {
+      padding-right: 15px;
+    }
+  }
+
+  .searchbar {
+    width: 600px;
+
+    .ant-input {
+      border-bottom-left-radius: 25px;
+      border-top-left-radius: 25px;
+    }
+
+    .ant-input-search > .ant-input-group > .ant-input-group-addon:last-child .ant-input-search-button {
+      border-bottom-right-radius: 25px;
+      border-top-right-radius: 25px;
+    }
+
+    .ant-input-search > .ant-input-group > .ant-input-group-addon:last-child {
+      background: transparent;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .searchbar {
+      width: 270px;
+    }
   }
 
 }

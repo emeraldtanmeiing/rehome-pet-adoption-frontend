@@ -81,7 +81,7 @@ const PetsListing = () => {
   const onSearch = (value) => setSearchText(value.toLowerCase());
 
   useEffect(() => {
-    if (searchText.length === 0 || searchText.length > 2)
+    if (searchText.length === 0 || searchText.length > 1)
       fetchPets({ searchText });
   }, [searchText]);
 
@@ -137,7 +137,7 @@ const PetsListing = () => {
                   </div>
                   <div className="searchbar">
                     <Search
-                      placeholder="Search pet's name, description, location..."
+                      placeholder="Search pet by name, description, location..."
                       onSearch={onSearch}
                       enterButton
                       // size="large"
