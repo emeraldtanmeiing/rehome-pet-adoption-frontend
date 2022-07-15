@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { map } from "lodash";
-import { getReport } from "../../services/report.services.js";
+import { getAdminReport } from "../../services/report.services.js";
 
 import { Row, Col, Spin, message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -19,7 +19,7 @@ const Dashboard = () => {
   const fetchStatistics = async () => {
     setStatistics({ ...statistics, status: "loading" });
 
-    const res = await getReport();
+    const res = await getAdminReport();
 
     if (res?.error) {
       message.error(res.error.description);

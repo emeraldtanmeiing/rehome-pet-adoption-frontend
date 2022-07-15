@@ -34,6 +34,8 @@ import { EnvironmentFilled } from "@ant-design/icons";
 import LoginModal from "../../components/login-modal/login-modal";
 
 import "./pet.less";
+import { useId } from "react";
+import { recoverLineBreak } from "../../helpers/text";
 
 const Pet = () => {
   const [petState, setPetState] = useState({ status: "idle", data: null });
@@ -96,6 +98,15 @@ const Pet = () => {
       navigate("/adopt/application/new");
     }
   };
+
+  const petId = useId();
+  useEffect(() => {
+    if (petState?.data?.description) {
+      document.getElementById(petId).innerHTML = recoverLineBreak(
+        petState.data.description
+      );
+    }
+  }, [petState.data]);
 
   const onCancel = () => {
     setVisible(false);
@@ -241,8 +252,8 @@ const Pet = () => {
                         <h5>Posted on {formatDate(petState.data.createdAt)}</h5>
                       </Col>
 
-                      <Col className="description" span={24}>
-                        {petState.data.description}
+                      <Col className="description" span={24} id={petId}>
+                        Pet's description
                       </Col>
 
                       <Col className="fee-explanation" span={24}>

@@ -9,7 +9,7 @@ import "./petCard.scss";
 
 const { Meta } = Card;
 
-const PetCard = ({ pet, accountType }) => {
+const PetCard = ({ pet, accountType, colBig=null, colSmall=null}) => {
   const navigate = useNavigate();
 
   const handleOnClick = () => {
@@ -22,7 +22,7 @@ const PetCard = ({ pet, accountType }) => {
 
   return (
     <>
-      <Col xxl={6} xl={6} lg={6} md={8} sm={12} xs={12} className="pet-card">
+      <Col xxl={colBig || 6} xl={colBig || 6} lg={colBig || 6} md={colSmall || 8} sm={colSmall || 12} xs={colSmall || 12} className="pet-card">
         <Card
           className="pet-card-wrapper"
           key={pet._id}

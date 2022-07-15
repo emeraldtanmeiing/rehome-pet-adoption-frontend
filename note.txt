@@ -25,30 +25,30 @@ TODO:
 [/] - rescuer page
 [/] - dashboard
 [/] - event
+[X] - ADD INDEX
+[/] - add get pet filter
+[/] - pet's description cant go to next line
+[X] - change cookie key
+[X] - fix the header in application listing when scrolling
+[X] - add reject reason when rejecting application
+[X] - click on ? can trigger on/off (in add pet and edit pet)
+[X] - add validation on date and time
+[X] - back to login in signup page
+[/] - change create pet page to a button in 'my pets' 
+[/] - logo_small add cursor: pointer
+[/] - homepage
 
 ![ ] - payment gateway
-![ ] - add get pet filter
-![ ] - homepage
-![ ] - ADD INDEX
 ![ ] - document being removed when updating interviewTime
 [ ] - adopted pet's page design
-[ ] - pet's description cant go to next line
-[ ] - change cookie key
 [ ] - add notification on homepage: This is a dummy website
 [ ] - footer
 [ ] - loading speed
-[ ] - fix the header in application listing when scrolling
 [ ] - add today's interview&pick up in application listing (filter "To interview" and today's time?)
-[ ] - add reject reason when rejecting application
-[ ] - click on ? can trigger on/off (in add pet and edit pet)
-[ ] - ask rescuer to double check before checking "picked up" button
-[ ] - add validation on date and time
 [ ] - add login user credentials at login page for easier testing
 [ ] - add 404 page
 [ ] - customer service
-[ ] - logo_small add cursor: pointer
-[ ] - back to login in signup page
-[ ] - change create pet page to a button in 'my pets' 
+[ ] - ask rescuer to double check before checking "picked up" button
 [ ] - 
 
 Future Enhancements:
@@ -64,11 +64,4 @@ add pet story on completed application
 operating hour
 smart contract
 mongodb transaction
-
-
-const [searchText, setSearchText] = useState("");
-  const onSearch = (value) => setSearchText(value.toLowerCase());
-  useEffect(() => {
-    if (searchText.length === 0 || searchText.length > 2)
-      fetchPets({ searchText });
-  }, [searchText]);
+adopter can report rescuer

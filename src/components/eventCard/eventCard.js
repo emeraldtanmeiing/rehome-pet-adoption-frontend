@@ -9,7 +9,7 @@ import "./eventCard.less";
 
 const { Meta } = Card;
 
-const EventCard = ({ event, accountType }) => {
+const EventCard = ({ event, accountType, colBig=null, colSmall=null }) => {
   const navigate = useNavigate();
 
   const handleOnClick = () => {
@@ -22,7 +22,7 @@ const EventCard = ({ event, accountType }) => {
 
   return (
     <>
-      <Col xxl={6} xl={6} lg={6} md={8} sm={12} xs={12} className="event-card">
+      <Col xxl={colBig || 6} xl={colBig || 6} lg={colBig || 6} md={colSmall || 8} sm={colSmall || 12} xs={colSmall || 12} className="event-card">
         <Card
           className="event-card-wrapper"
           key={event._id}
@@ -55,7 +55,7 @@ const EventCard = ({ event, accountType }) => {
                   <h3>{shortMonth(formatDate(event.date).split(" ")[1])}</h3>
                   <h3>{formatDate(event.date).split(" ")[2]}</h3>
                 </Col>
-                <Col span={16} className="name-location">
+                <Col span={16} className="name-location" align="left">
                   <div className="eventName">{event.name}</div>
                   <div className="location">
                     <EnvironmentFilled style={{ color: "#abaaaa" }} />{" "}

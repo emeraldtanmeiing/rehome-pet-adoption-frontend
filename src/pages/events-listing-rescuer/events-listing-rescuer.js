@@ -133,7 +133,7 @@ function EventsListingRescuer() {
 
               <Row className="section">
                 <Col span={24} align="left">
-                  <h2>Recent added</h2>
+                  <h2>Recently added</h2>
                 </Col>
                 <Col span={24} align="left">
                   <Row gutter={[30, 30]}>

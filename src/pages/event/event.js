@@ -40,8 +40,6 @@ import LoginModal from "../../components/login-modal/login-modal";
 import "./event.less";
 import {
   recoverLineBreak,
-  stringToHTML,
-  stringToHTML2,
 } from "../../helpers/text";
 
 const Event = () => {
