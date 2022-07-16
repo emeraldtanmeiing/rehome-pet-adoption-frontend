@@ -53,9 +53,8 @@ const EditableForm = ({ fields, api = null, editable = true, size = "default" })
   }, [data])
 
   const toggleEdit = () => {
-    console.log("yes")
+    console.log("toggle edit")
     if (!editing) {
-      console.log("here")
       form.setFieldsValue({
         ...data,
         ...(data.interviewDate && {

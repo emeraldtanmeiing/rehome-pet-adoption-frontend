@@ -84,7 +84,7 @@ const EditableFormItem = ({
   };
 
   const option = (value) => {
-    <Option value={value}>{value}</Option>;
+    return <Option value={value}>{value}</Option>;
   };
 
   const breakpoint = Grid.useBreakpoint();
