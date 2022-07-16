@@ -293,6 +293,7 @@ const PetForm = ({ petID = null, editable = true, size = "default" }) => {
           petSize,
           foodSize,
           foodFee,
+          rescuerID: pet.data.rescuerID._id
         },
         ["age", "mainImage", "images", "existingImages"]
       ),
