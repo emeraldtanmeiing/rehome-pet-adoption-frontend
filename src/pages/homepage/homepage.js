@@ -262,7 +262,7 @@ const Homepage = () => {
 
         <Divider />
 
-        <Row className="about section-last">
+        <Row className="about section">
           <Col
             span={breakpoint.lg ? 18 : 24}
             className="heading-card"
