@@ -9,13 +9,10 @@
 
     .title {
       font-size: 40pt;
-    }
-
-    .rehome {
       font-weight: 900;
     }
 
-    .desc > h2 {
+    .desc {
       color: #fff;
       opacity: 0.9;
     }
@@ -35,22 +32,12 @@
     padding: 10px;
   }
 
-  .ant-divider-horizontal {
-    margin: 0;
-  }
-
-  .statistics {
-    background-color: @primary-2;
-    border-radius: 10px;
-  }
-
-  .heading-card {
+  .heading-card, .about-heading-card {
     margin-right: 30px;
-    padding-left: 40px;
+    padding: 30px 0 20px 40px;
     border-radius: @border-radius-base + 2px;
 
     .heading-card-title {
-      padding: 30px 0 10px 0;
       font-size: 25pt;
       font-weight: 900;
     }
@@ -64,31 +51,42 @@
     }
   }
 
-  .heading-card, .pet .ant-skeleton, .event .ant-skeleton {
+  // .heading-card,
+  .pet .ant-skeleton,
+  .event .ant-skeleton {
     height: 230px;
   }
 
-  #upload-button {
-    margin: 10px 0 0 0;
+  .pet {
+    #upload-button {
+      margin: 10px 0 0 0;
+    }
   }
 
-  .ant-btn-text {
-    padding: 0 0 0 5px;
+  .ant-divider-horizontal {
+    margin: 0;
+  }
+
+  .statistics {
+    background-color: @primary-2;
+    border-radius: 10px;
   }
 
   .about {
-    .heading-card {
-      height: 230px;
+
+    #apu-button {
+      padding: 0;
+      color: darkorange;
     }
-    
+
     .contact-button {
       padding-left: 40px;
-      
+
       button {
-        margin-top: 20px;
+        margin-bottom: 10px;
         margin-right: 10px;
       }
-    } 
+    }
   }
 
   @media (max-width: 992px) {
@@ -100,8 +98,8 @@
       display: none;
     }
 
-    .rehome {
-      font-size: 25pt;
+    .title {
+      font-size: 30pt !important;
     }
 
     .desc {
@@ -110,34 +108,25 @@
     }
 
     .section {
-      margin-top: 10px;
+      margin: 10px 0;
       padding: 10px 0px;
     }
 
-    .section-last {
-      padding: 10px 0px;
-    }
+    .heading-card, .about-heading-card {
+      padding: 10px 0 30px 10px;
 
-    .heading-card, .contact-button {
-      padding-left: 10px;
-      
       .available-statistics {
         padding: 0 0 20px 0;
       }
-    }
-
-    .heading-card {
-      height: 315px;
     }
 
     .contact-button {
       padding-left: 10px !important;
     }
 
-    .about > .heading-card {
-      height: 300px;
+    .ant-divider-horizontal {
+      display: none;
     }
 
   }
-
 }

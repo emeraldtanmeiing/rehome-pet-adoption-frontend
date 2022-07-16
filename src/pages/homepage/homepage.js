@@ -135,16 +135,12 @@ const Homepage = () => {
       <div className="homepage-form-wrapper">
         <Row className="intro" align="bottom">
           <Col span={breakpoint.lg ? 16 : 24} align="left">
-            <div className="title">
-              <span className="rehome">All Pets in One.</span>
-            </div>
-            <div className="desc">
-              <h2>
-                ReHome gathers to-be-adopted pets from verified welfare
-                organizations, NGOs, pet shelters so that you don't have to
-                search it one by one.
-              </h2>
-            </div>
+            <span className="title">All Pets in One.</span>
+            <h2 className="desc">
+              ReHome gathers to-be-adopted pets from verified welfare
+              organizations, NGOs, pet shelters so that you don't have to search
+              it one by one.
+            </h2>
           </Col>
           <Col span={8} align="left" className="logo">
             <img src={logoSmall} alt="logo" />
@@ -167,7 +163,9 @@ const Homepage = () => {
               Browse more pets <ArrowRightOutlined />
             </Button>
 
-            <h3 style={{margin: "20px 0 0 0", }}>Want to post pets for adoption?</h3>
+            <h3 style={{ margin: "20px 0 0 0" }}>
+              Want to post pets for adoption?
+            </h3>
             {/* <div>Sign up and get verified now!</div> */}
             <Button
               // type="primary"
@@ -240,7 +238,9 @@ const Homepage = () => {
           >
             <div className="heading-card-title">Adoption/Voluntary events.</div>
             {!isLoading && (
-              <h3 className="available-statistics">{statistics.data.totalEvent} events available</h3>
+              <h3 className="available-statistics">
+                {statistics.data.totalEvent} events available
+              </h3>
             )}
             <Button type="primary" size="large" onClick={onClickEvents}>
               Browse more events <ArrowRightOutlined />
@@ -265,21 +265,23 @@ const Homepage = () => {
         <Row className="about section">
           <Col
             span={breakpoint.lg ? 18 : 24}
-            className="heading-card"
+            className="about-heading-card"
             align="left"
           >
             <div className="heading-card-title">Know more about us</div>
-            ReHome is a pet adoption network based in Malaysia, aiming to provide a platform for pets to get adopted, as well as 
-            streamline the adoption process to increase the adoption rate. Do
-            notice that this is a proof of concept website, so <b>do not key in any
-            real data</b>, especially sensitive data like phone or address.
+            ReHome is a pet adoption network based in Malaysia, aiming to
+            provide a platform for pets to get adopted, as well as streamline
+            the adoption process to increase the adoption rate. Do notice that
+            this is a proof of concept website, so{" "}
+            <b>do not key in any real data</b>, especially sensitive data like
+            phone or address.
             <br />
             <br />
-            Developed by Emerald Tan, a final year student at
+            Developed by <b>Emerald Tan</b>, a final year student at {" "}
             <Button
               type="text"
               onClick={() => window.open("https://www.apu.edu.my/")}
-              style={{ color: "darkorange" }}
+              id="apu-button"
             >
               APU
             </Button>
@@ -288,44 +290,44 @@ const Homepage = () => {
           </Col>
 
           <Col span={24} className="contact-button" align="left">
-              <Button
-                icon={<LinkedinFilled style={{ color: "grey" }} />}
-                onClick={() => {
-                  window.open("https://www.linkedin.com/in/emerald-tan");
-                }}
-              >
-                Emerald Tan
-              </Button>
+            <Button
+              icon={<LinkedinFilled style={{ color: "grey" }} />}
+              onClick={() => {
+                window.open("https://www.linkedin.com/in/emerald-tan");
+              }}
+            >
+              Emerald Tan
+            </Button>
 
-              <Button
-                icon={<GithubFilled style={{ color: "grey" }} />}
-                onClick={() => {
-                  window.open("https://github.com/emeraldtanmeiing");
-                }}
-              >
-                emeraldtanmeiing
-              </Button>
-              <Button
-                icon={<PhoneFilled style={{ color: "grey" }} />}
-                onClick={() => copyToClipboard("60 18 366 1012")}
-              >
-                +60 18 366 1012
-              </Button>
+            <Button
+              icon={<GithubFilled style={{ color: "grey" }} />}
+              onClick={() => {
+                window.open("https://github.com/emeraldtanmeiing");
+              }}
+            >
+              emeraldtanmeiing
+            </Button>
+            <Button
+              icon={<PhoneFilled style={{ color: "grey" }} />}
+              onClick={() => copyToClipboard("60 18 366 1012")}
+            >
+              +60 18 366 1012
+            </Button>
 
-              <Button
-                icon={<MailFilled style={{ color: "grey" }} />}
-                onClick={() => copyToClipboard("emeraldtanmeiing@gmail.com")}
-              >
-                emeraldtanmeiing@gmail.com
-              </Button>
+            <Button
+              icon={<MailFilled style={{ color: "grey" }} />}
+              onClick={() => copyToClipboard("emeraldtanmeiing@gmail.com")}
+            >
+              emeraldtanmeiing@gmail.com
+            </Button>
 
-              <Button
-                icon={<FileTextFilled style={{ color: "grey" }} />}
-                onClick={() => window.open(process.env.REACT_APP_RESUME_LINK)}
-              >
+            <Button
+              icon={<FileTextFilled style={{ color: "grey" }} />}
+              onClick={() => window.open(process.env.REACT_APP_RESUME_LINK)}
+            >
               Resume
-              </Button>
-            </Col>
+            </Button>
+          </Col>
         </Row>
       </div>
     </div>
