@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { omitBy, isNil } from "lodash";
-import useQuery from "../../hooks/useQuery";
 import useAuthContext from "../../hooks/useAuthContext";
 import { getPets } from "../../services/pet.services";
 import { calculateAge } from "../../helpers/date";
 
 import { Row, Col, Skeleton, Card, Button, Input, message, Grid } from "antd";
 import PetCard from "../../components/petCard/petCard";
+import CardSkeleton from "../../components/card-skeleton/card-skeleton";
 
 import "./pets-listing.less";
 
@@ -60,18 +60,6 @@ const PetsListing = () => {
         },
       });
     }
-  };
-
-  const CardSkeleton = (index) => {
-    return (
-      <>
-        <Col xxl={6} xl={6} lg={6} md={8} sm={12} xs={12}>
-          <Card key={index}>
-            <Skeleton avatar active />
-          </Card>
-        </Col>
-      </>
-    );
   };
 
   useEffect(() => {

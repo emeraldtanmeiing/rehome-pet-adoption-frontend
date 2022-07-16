@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useId } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { getPets } from "../../services/pet.services";
 import { calculateAge } from "../../helpers/date";
 import { getEvents } from "../../services/event.services";
@@ -12,9 +12,11 @@ import {
   PhoneFilled,
   LinkedinFilled,
   GithubFilled,
+  FileTextFilled,
 } from "@ant-design/icons";
 import PetCard from "../../components/petCard/petCard";
 import EventCard from "../../components/eventCard/eventCard";
+import CardSkeleton from "../../components/card-skeleton/card-skeleton";
 import logoSmall from "../../images/logo_small.png";
 
 import "./homepage.less";
@@ -24,11 +26,10 @@ const Homepage = () => {
   const [pet, setPet] = useState({ status: "idle", data: null });
   const [event, setEvent] = useState({ status: "idle", data: null });
   const [statistics, setStatistics] = useState({ status: "idle", data: null });
-
-  const emailId = useId();
-  const phoneId = useId();
-  const linkedinId = useId();
-  const githubId = useId();
+  const isLoading =
+    pet.status !== "success" ||
+    event.status !== "success" ||
+    statistics.status !== "success";
 
   useEffect(() => {
     fetchPet();
@@ -150,76 +151,114 @@ const Homepage = () => {
           </Col>
         </Row>
 
-        {(pet.status === "success" && statistics.status === "success") && (
-          <Row className="pet section">
-            <Col
-              span={breakpoint.lg ? 8 : 24}
-              className="heading-card"
-              align="left"
+        <Row className="pet section">
+          <Col
+            span={breakpoint.lg ? 8 : 24}
+            className="heading-card"
+            align="left"
+          >
+            <div className="heading-card-title">Meet the cuties.</div>
+            {!isLoading && (
+              <h3 className="available-statistics-1">
+                {statistics.data.totalWaitingForAdoptionPet} pets available
+              </h3>
+            )}
+            <Button type="primary" size="large" onClick={onClickAdopt}>
+              Browse more pets <ArrowRightOutlined />
+            </Button>
+
+            <h3 style={{margin: "20px 0 0 0", }}>Want to post pets for adoption?</h3>
+            {/* <div>Sign up and get verified now!</div> */}
+            <Button
+              // type="primary"
+              size="default"
+              onClick={onClickUploadPets}
+              id="upload-button"
             >
-              <div className="heading-card-title">Meet the cuties.</div>
-              <h3>{statistics.data.totalWaitingForAdoptionPet} pets available</h3>
-              <Button type="primary" size="large" onClick={onClickAdopt}>
-                Browse more pets <ArrowRightOutlined />
-              </Button>
-              <Button type="primary" size="large" onClick={onClickUploadPets} id="upload-button">
-                Upload pets for adoption
-              </Button>
-            </Col>
-            <Col span={breakpoint.lg ? 15 : 24}>
+              Sign up & get verified to post pets now!
+            </Button>
+          </Col>
+
+          <Col span={breakpoint.lg ? 15 : 24}>
+            <Row gutter={breakpoint.lg ? [30, 30] : [10, 10]}>
+              {isLoading
+                ? [...Array(2).keys()].map((index) => (
+                    <CardSkeleton index={index} key={index} colBig={12} />
+                  ))
+                : pet.data.petsList.map((p, index) => {
+                    if (breakpoint.lg && index === 3) return null;
+                    return <PetCard pet={p} colBig={8} colSmall={12} />;
+                  })}
+            </Row>
+          </Col>
+        </Row>
+
+        <Row className="statistics section">
+          {isLoading ? (
+            <Col span={24}>
               <Row gutter={breakpoint.lg ? [30, 30] : [10, 10]}>
-                {pet.data.petsList.map((p, index) => {
-                  if (breakpoint.lg && index === 3) return null;
-                  return <PetCard pet={p} colBig={8} colSmall={12} />;
-                })}
+                {[...Array(4).keys()].map((index) => (
+                  <CardSkeleton index={index} key={index} colBig={6} />
+                ))}
               </Row>
             </Col>
-          </Row>
-        )}
+          ) : (
+            <>
+              <Col span={breakpoint.lg ? 6 : 12}>
+                <Statistic
+                  title="Rehomed pets"
+                  value={statistics.data.totalAdoptedPet}
+                />
+              </Col>
+              <Col span={breakpoint.lg ? 6 : 12}>
+                <Statistic
+                  title="Available pets"
+                  value={statistics.data.totalWaitingForAdoptionPet}
+                />
+              </Col>
+              <Col span={breakpoint.lg ? 6 : 12}>
+                <Statistic
+                  title="Completed applications"
+                  value={statistics.data.totalCompletedApplication}
+                />
+              </Col>
+              <Col span={breakpoint.lg ? 6 : 12}>
+                <Statistic
+                  title="Adoption/Voluntary Events"
+                  value={statistics.data.totalEvent}
+                />
+              </Col>
+            </>
+          )}
+        </Row>
 
-        {statistics.status === "success" && (
-          <Row className="statistics section">
-            <Col span={breakpoint.lg ? 6 : 12}>
-              <Statistic title="Rehomed pets" value={statistics.data.totalAdoptedPet} />
-            </Col>
-            <Col span={breakpoint.lg ? 6 : 12}>
-              <Statistic title="Available pets" value={statistics.data.totalWaitingForAdoptionPet} />
-            </Col>
-            <Col span={breakpoint.lg ? 6 : 12}>
-              <Statistic title="Completed applications" value={statistics.data.totalCompletedApplication} />
-            </Col>
-            <Col span={breakpoint.lg ? 6 : 12}>
-              <Statistic title="Adoption/Voluntary Events" value={statistics.data.totalEvent} />
-            </Col>
-            
-          </Row>
-        )}
-
-        {(event.status === "success" && statistics.status === "success") && (
-          <Row className="event section">
-            <Col
-              span={breakpoint.lg ? 8 : 24}
-              className="heading-card"
-              align="left"
-            >
-              <div className="heading-card-title">
-                Adoption/Voluntary events.
-              </div>
-              <h3>{statistics.data.totalEvent} events available</h3>
-              <Button type="primary" size="large" onClick={onClickEvents}>
-                Browse more events <ArrowRightOutlined />
-              </Button>
-            </Col>
-            <Col span={breakpoint.lg ? 15 : 24}>
-              <Row gutter={breakpoint.lg ? [30, 30] : [10, 10]}>
-                {event.data.eventsList.map((p, index) => {
-                  if (breakpoint.lg && index === 3) return null;
-                  return <EventCard event={p} colBig={8} colSmall={12} />;
-                })}
-              </Row>
-            </Col>
-          </Row>
-        )}
+        <Row className="event section">
+          <Col
+            span={breakpoint.lg ? 8 : 24}
+            className="heading-card"
+            align="left"
+          >
+            <div className="heading-card-title">Adoption/Voluntary events.</div>
+            {!isLoading && (
+              <h3 className="available-statistics">{statistics.data.totalEvent} events available</h3>
+            )}
+            <Button type="primary" size="large" onClick={onClickEvents}>
+              Browse more events <ArrowRightOutlined />
+            </Button>
+          </Col>
+          <Col span={breakpoint.lg ? 15 : 24}>
+            <Row gutter={breakpoint.lg ? [30, 30] : [10, 10]}>
+              {isLoading
+                ? [...Array(2).keys()].map((index) => (
+                    <CardSkeleton index={index} key={index} colBig={12} />
+                  ))
+                : event.data.eventsList.map((p, index) => {
+                    if (breakpoint.lg && index === 3) return null;
+                    return <EventCard event={p} colBig={8} colSmall={12} />;
+                  })}
+            </Row>
+          </Col>
+        </Row>
 
         <Divider />
 
@@ -230,22 +269,25 @@ const Homepage = () => {
             align="left"
           >
             <div className="heading-card-title">Know more about us</div>
-            ReHome is a pet adoption network based in Malaysia, aiming to
+            ReHome is a pet adoption network based in Malaysia, aiming to provide a platform for pets to get adopted, as well as 
             streamline the adoption process to increase the adoption rate. Do
-            notice that this is a proof of concept website, so do not key in any
-            real data, especially sensitive data like phone or address.
+            notice that this is a proof of concept website, so <b>do not key in any
+            real data</b>, especially sensitive data like phone or address.
             <br />
             <br />
             Developed by Emerald Tan, a final year student at
             <Button
               type="text"
               onClick={() => window.open("https://www.apu.edu.my/")}
+              style={{ color: "darkorange" }}
             >
-              Asia Pacific University of Technology & Innovation (APU)
+              APU
             </Button>
             .<br />
-            This is her final year project.
-            <div className="contact-button">
+            This is her final year project in 2022.
+          </Col>
+
+          <Col span={24} className="contact-button" align="left">
               <Button
                 icon={<LinkedinFilled style={{ color: "grey" }} />}
                 onClick={() => {
@@ -276,8 +318,14 @@ const Homepage = () => {
               >
                 emeraldtanmeiing@gmail.com
               </Button>
-            </div>
-          </Col>
+
+              <Button
+                icon={<FileTextFilled style={{ color: "grey" }} />}
+                onClick={() => window.open(process.env.REACT_APP_RESUME_LINK)}
+              >
+              Resume
+              </Button>
+            </Col>
         </Row>
       </div>
     </div>
