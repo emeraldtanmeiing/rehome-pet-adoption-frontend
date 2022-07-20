@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { filter } from "lodash";
+import { filter, omitBy, isNil } from "lodash";
 import { getAccount, updateAccount } from "../../services/auth.services";
 
 import { Col, Avatar, Grid, Spin, message } from "antd";
@@ -126,7 +126,7 @@ const AdopterForm = ({ accountID = null, editable = true, size = "default" }) =>
     image,
   }) => {
     const res = await updateAccount({
-      account: {
+      account: omitBy({
         ...account.data,
         name,
         phone,
@@ -135,7 +135,7 @@ const AdopterForm = ({ accountID = null, editable = true, size = "default" }) =>
         city,
         postcode,
         image,
-      },
+      }, isNil)
     });
 
     if (res?.error) {

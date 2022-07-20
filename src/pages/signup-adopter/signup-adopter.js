@@ -110,8 +110,7 @@ function SignupAdopter() {
       <div className="signup-form-wrapper">
         <Row align="center">
           <Col span={24}>
-            <h1>Sign up</h1>
-            <h4>Adopter</h4>
+            <h1>Sign up as Adopter</h1>
           </Col>
           <Col {...gridProps}>
             <div className="signup-rescuer-button right">

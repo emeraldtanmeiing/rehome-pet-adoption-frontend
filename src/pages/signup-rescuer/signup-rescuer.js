@@ -124,8 +124,7 @@ function SignupRescuer() {
       <div className="signup-form-wrapper">
         <Row align="center">
           <Col span={24}>
-            <h1>Sign up</h1>
-            <h4>Rescuer</h4>
+            <h1>Sign up as Rescuer</h1>
           </Col>
           <Col {...gridProps}>
             <Row className="signup-criteria" gutter={[18, 18]}>

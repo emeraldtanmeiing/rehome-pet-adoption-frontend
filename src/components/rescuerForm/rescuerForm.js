@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { filter } from "lodash";
+import { filter, isNil, omitBy } from "lodash";
 import { getAccount, updateAccount } from "../../services/auth.services";
 
 import { Col, Avatar, Grid, Spin, message } from "antd";
@@ -115,13 +115,13 @@ const RescuerForm = ({ accountID = null, editable = true, size = "default" }) =>
       fields.push({
         name: "licenseNo",
         label: "License No",
-        value: a.licenseNo,
+        value: a?.licenseNo,
         editable: true,
       });
       fields.push({
         name: "facebookLink",
         label: "Facebook Link",
-        value: a.facebookLink,
+        value: a?.facebookLink,
         editable: true,
         type: "website",
         extra:"Please provide complete link (eg. https://www.rehomepet.me)"
@@ -129,7 +129,7 @@ const RescuerForm = ({ accountID = null, editable = true, size = "default" }) =>
       fields.push({
         name: "instagramLink",
         label: "Instagram Link",
-        value: a.instagramLink,
+        value: a?.instagramLink,
         editable: true,
         type: "website",
         extra:"Please provide complete link (eg. https://www.rehomepet.me)"
@@ -137,7 +137,7 @@ const RescuerForm = ({ accountID = null, editable = true, size = "default" }) =>
       fields.push({
         name: "organizationWebsiteLink",
         label: "Website Link",
-        value: a.organizationWebsiteLink,
+        value: a?.organizationWebsiteLink,
         editable: true,
         type: "website",
         extra:"Please provide complete link (eg. https://www.rehomepet.me)"
@@ -176,7 +176,7 @@ const RescuerForm = ({ accountID = null, editable = true, size = "default" }) =>
     licenseNo,
   }) => {
     const res = await updateAccount({
-      account: {
+      account: omitBy({
         ...account.data,
         name,
         phone,
@@ -191,7 +191,7 @@ const RescuerForm = ({ accountID = null, editable = true, size = "default" }) =>
         instagramLink,
         organizationWebsiteLink,
         licenseNo,
-      },
+      }, isNil),
     });
 
     if (res?.error) {

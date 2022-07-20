@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { isEmpty } from "lodash";
 import {
   getBase64,
@@ -16,13 +16,13 @@ const ImageForm = ({ name, label, image, setImage, rules }) => {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState(
-    [
+    isEmpty(image) ? [] : [
       {
         uid: 1,
         status: "done",
         url: image,
       },
-    ] || []
+    ]
   );
 
   const handleCancel = () => setPreviewVisible(false);

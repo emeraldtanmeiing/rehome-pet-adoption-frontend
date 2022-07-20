@@ -96,16 +96,18 @@ const EditableFormItem = ({
         formItem = (
           <div className="editable-form-item display-mode">
             <Form.Item {...props}>
-              <Upload
-                listType="picture-card"
-                fileList={
-                  [
-                    {
-                      url: value,
-                    },
-                  ] || []
-                }
-              />
+              {isEmpty(value) ? "No image" : (
+                <Upload
+                  listType="picture-card"
+                  fileList={
+                    [
+                      {
+                        url: value,
+                      },
+                    ] || null
+                  }
+                />
+              )}
             </Form.Item>
           </div>
         );
@@ -158,9 +160,7 @@ const EditableFormItem = ({
                   }) || []
                 }
               >
-                {isEmpty(value) && (
-                  <>No document.</>
-                )}
+                {isEmpty(value) && <>No document.</>}
               </Upload>
             </Form.Item>
           </div>
