@@ -21,6 +21,8 @@ function AdoptionApplicationNew() {
   const [current, setCurrent] = useState(0);
   const next = () => {
     setCurrent(current + 1);
+    const nextButton = document.getElementById("next-btn");
+    nextButton.style.backgroundColor = "#f38434";
   };
   const prev = () => {
     setCurrent(current - 1);
@@ -202,7 +204,7 @@ function AdoptionApplicationNew() {
                 )}
                 {current < steps.length - 1 && (
                   <div>
-                    <Button type="primary" onClick={() => next()}>
+                    <Button id="next-btn" type="primary" onClick={() => next()}>
                       Next
                     </Button>
                   </div>

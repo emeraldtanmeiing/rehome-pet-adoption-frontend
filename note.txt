@@ -37,11 +37,11 @@ TODO:
 [/] - change create pet page to a button in 'my pets' 
 [/] - logo_small add cursor: pointer
 [/] - homepage
+[/] - verify rescuer page has undefined data
+[/] - payment in application
+[/] - next button
 
-![ ] - payment gateway
 ![ ] - document being removed when updating interviewTime
-![ ] - next button
-![ ] - verify rescuer page has undefined data
 [ ] - adopted pet's page design
 [ ] - add notification on homepage: This is a dummy website
 [ ] - footer
