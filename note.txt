@@ -34,24 +34,23 @@ TODO:
 [X] - click on ? can trigger on/off (in add pet and edit pet)
 [X] - add validation on date and time
 [X] - back to login in signup page
+[X] - add today's interview&pick up in application listing (filter "To interview" and today's time?)
 [/] - change create pet page to a button in 'my pets' 
 [/] - logo_small add cursor: pointer
 [/] - homepage
 [/] - verify rescuer page has undefined data
 [/] - payment in application
 [/] - next button
+[/] - add notification on homepage: This is a dummy website
+[/] - document being removed when updating interviewTime
 
-![ ] - document being removed when updating interviewTime
 [ ] - adopted pet's page design
-[ ] - add notification on homepage: This is a dummy website
 [ ] - footer
 [ ] - loading speed
-[ ] - add today's interview&pick up in application listing (filter "To interview" and today's time?)
 [ ] - add login user credentials at login page for easier testing
 [ ] - add 404 page
 [ ] - customer service
 [ ] - ask rescuer to double check before checking "picked up" button
-[ ] - 
 
 Future Enhancements:
 Add video

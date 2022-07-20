@@ -163,21 +163,25 @@ function ApplicationSteps({
             <br />
             <br />
             After approval, you will be able to make a payment of adoption fee
-            via ReHome if it's needed. 
+            via ReHome if it's needed.
             <br />
-            (Note that this is a proof-of-concept website, there should be no transaction involved.)
+            (Note that this is a proof-of-concept website, there should be no
+            transaction involved.)
             <br />
             <br />
             <br />
-            {application.petID.fee === 0
-              ? <b>You do not need to pay for adoption since the adoption fee is FREE. Please proceed to pick up the pet.</b>
-              : <ApplicationFormPayment
-            application={application}
-            editable={!application.paid && application.petID.fee !== 0}
-          />}
-
+            {application.petID.fee === 0 ? (
+              <b>
+                You do not need to pay for adoption since the adoption fee is
+                FREE. Please proceed to pick up the pet.
+              </b>
+            ) : application.status === "To Pay" ? (
+              <ApplicationFormPayment
+                application={application}
+                editable={!application.paid && application.petID.fee !== 0}
+              />
+            ) : null}
           </div>
-          
         </>
       )}
       {(isRescuer || isAdmin) && (
@@ -195,10 +199,14 @@ function ApplicationSteps({
               <br />
               <br />
               {application.petID.fee === 0 ? (
-                <b>There's no need for adopter to pay since the adoption fee is FREE.</b>
+                <b>
+                  There's no need for adopter to pay since the adoption fee is
+                  FREE.
+                </b>
               ) : (
                 <>
-                  The system has notified the applicant about payment. Please wait for payment to be completed before arrange for pick up.
+                  The system has notified the applicant about payment. Please
+                  wait for payment to be completed before arrange for pick up.
                   <br />
                   <br />
                   <ApplicationFormPayment
