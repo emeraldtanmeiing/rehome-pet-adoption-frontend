@@ -56,7 +56,7 @@ const Dashboard = () => {
       ) : (
         <div className="dashboard-wrapper">
           <div className="pet background">
-            <h1 className="heading">Pet</h1>
+            <h1 className="heading">Pets</h1>
 
             <Row className="text-statistics-group section">
               {textStatistics({

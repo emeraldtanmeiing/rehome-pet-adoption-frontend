@@ -8,6 +8,7 @@ import ApplicationFormPickUp from "../applicationForm/applicationForm-pickup.js"
 import ApplicationFormNoteAndDocs from "../applicationForm/applicationForm-note-docs.js";
 
 import "./application-steps.scss";
+import ApplicationFormPayment from "../applicationForm/applicationForm-payment.js";
 
 function ApplicationSteps({
   adopterID,
@@ -70,7 +71,7 @@ function ApplicationSteps({
 
   const interviewInfo = (
     <>
-      {(isAdopter) && (
+      {isAdopter && (
         <>
           <div>
             An offline or online interview with you will be arranged by the
@@ -89,7 +90,10 @@ function ApplicationSteps({
       )}
       {(isRescuer || isAdmin) && (
         <>
-          <ApplicationFormInterview application={application} editable={application.petID.active && !application.petID.adopted}/>
+          <ApplicationFormInterview
+            application={application}
+            editable={application.petID.active && !application.petID.adopted}
+          />
         </>
       )}
     </>
@@ -97,7 +101,7 @@ function ApplicationSteps({
 
   const approvalInfo = (
     <>
-      {(isAdopter) && (
+      {isAdopter && (
         <>
           <div>
             After review and interview, the pet's rescuer/contact
@@ -136,7 +140,12 @@ function ApplicationSteps({
                   reject the application.
                 </Col>
               </Row>
-              <ApplicationFormApproval application={application} editable={application.petID.active && !application.petID.adopted}/>
+              <ApplicationFormApproval
+                application={application}
+                editable={
+                  application.petID.active && !application.petID.adopted
+                }
+              />
             </>
           )}
         </>
@@ -150,18 +159,25 @@ function ApplicationSteps({
       {isAdopter && (
         <>
           <div>
-            Adoption fee:{" "}
-            {application.petID.fee === 0
-              ? "FREE"
-              : `RM ${application.petID.fee}`}
+            Adoption fee: RM {application.petID.fee}
             <br />
             <br />
             After approval, you will be able to make a payment of adoption fee
-            via ReHome if it's needed.
+            via ReHome if it's needed. 
+            <br />
+            (Note that this is a proof-of-concept website, there should be no transaction involved.)
             <br />
             <br />
             <br />
+            {application.petID.fee === 0
+              ? <b>You do not need to pay for adoption since the adoption fee is FREE. Please proceed to pick up the pet.</b>
+              : <ApplicationFormPayment
+            application={application}
+            editable={!application.paid && application.petID.fee !== 0}
+          />}
+
           </div>
+          
         </>
       )}
       {(isRescuer || isAdmin) && (
@@ -174,7 +190,24 @@ function ApplicationSteps({
               the adoption fee.
             </>
           ) : (
-            <>Notified the applicant about payment / FREE</>
+            <div>
+              Adoption fee: RM {application.petID.fee}
+              <br />
+              <br />
+              {application.petID.fee === 0 ? (
+                <b>There's no need for adopter to pay since the adoption fee is FREE.</b>
+              ) : (
+                <>
+                  The system has notified the applicant about payment. Please wait for payment to be completed before arrange for pick up.
+                  <br />
+                  <br />
+                  <ApplicationFormPayment
+                    application={application}
+                    editable={false}
+                  />
+                </>
+              )}
+            </div>
           )}
         </>
       )}
@@ -209,7 +242,8 @@ function ApplicationSteps({
             ) : (
               <>
                 After you mark the pet as picked up, ReHome will consider this
-                pet as <b>adopted</b>. <br /><br />
+                pet as <b>adopted</b>. <br />
+                <br />
                 You will no longer able to edit the application except the{" "}
                 <b>Notes & Documents</b> fields.
                 <br />
@@ -221,9 +255,15 @@ function ApplicationSteps({
                 <br />
                 Hence, only mark the pet as <b>"Picked up"</b> after the pet is
                 picked up and make sure the adoption is fully completed.
-                <br /><br /><br />
-               
-                <ApplicationFormPickUp application={application} editable={application.petID.active && !application.petID.adopted}/>
+                <br />
+                <br />
+                <br />
+                <ApplicationFormPickUp
+                  application={application}
+                  editable={
+                    application.petID.active && !application.petID.adopted
+                  }
+                />
               </>
             )}
           </>

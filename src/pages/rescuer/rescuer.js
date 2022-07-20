@@ -79,6 +79,7 @@ const Rescuer = () => {
       const params = omitBy(
         {
           rescuerID,
+          active: true,
           sortBy: "date",
           sortMode: "desc",
         },

@@ -40,6 +40,8 @@ TODO:
 
 ![ ] - payment gateway
 ![ ] - document being removed when updating interviewTime
+![ ] - next button
+![ ] - verify rescuer page has undefined data
 [ ] - adopted pet's page design
 [ ] - add notification on homepage: This is a dummy website
 [ ] - footer
@@ -65,3 +67,4 @@ operating hour
 smart contract
 mongodb transaction
 adopter can report rescuer
+navigation
