@@ -1,3 +1,3 @@
 # Rehome: A Pet Adoption Website
-Here is Emerald's Final Year Project: Rehome - A Pet Adoption Website! \
-It's in progress, so stay tuned!
+
+![alt text](src/images/poster.png)
