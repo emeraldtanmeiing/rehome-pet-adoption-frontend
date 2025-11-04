@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/rehome-pet-adoption-frontend/static/css/main.9040935a.css",
-    "main.js": "/rehome-pet-adoption-frontend/static/js/main.7a1ae744.js",
+    "main.css": "/rehome-pet-adoption-frontend/static/css/main.c78cf6fa.css",
+    "main.js": "/rehome-pet-adoption-frontend/static/js/main.2d6bd75c.js",
     "static/media/ZenMaruGothic-Bold.woff": "/rehome-pet-adoption-frontend/static/media/ZenMaruGothic-Bold.f7f99371a53b55be7d1f.woff",
     "static/media/ZenMaruGothic-Medium.woff": "/rehome-pet-adoption-frontend/static/media/ZenMaruGothic-Medium.df6d214d6241a26eb3f4.woff",
     "static/media/ZenMaruGothic-Black.woff": "/rehome-pet-adoption-frontend/static/media/ZenMaruGothic-Black.1fcca6f2467a990e49d3.woff",
@@ -15,11 +15,11 @@
     "static/media/homepage-background.png": "/rehome-pet-adoption-frontend/static/media/homepage-background.e01bd06a2902b71e2105.png",
     "static/media/logo.png": "/rehome-pet-adoption-frontend/static/media/logo.eddf4db9b35e0f5932c8.png",
     "index.html": "/rehome-pet-adoption-frontend/index.html",
-    "main.9040935a.css.map": "/rehome-pet-adoption-frontend/static/css/main.9040935a.css.map",
-    "main.7a1ae744.js.map": "/rehome-pet-adoption-frontend/static/js/main.7a1ae744.js.map"
+    "main.c78cf6fa.css.map": "/rehome-pet-adoption-frontend/static/css/main.c78cf6fa.css.map",
+    "main.2d6bd75c.js.map": "/rehome-pet-adoption-frontend/static/js/main.2d6bd75c.js.map"
   },
   "entrypoints": [
-    "static/css/main.9040935a.css",
-    "static/js/main.7a1ae744.js"
+    "static/css/main.c78cf6fa.css",
+    "static/js/main.2d6bd75c.js"
   ]
 }
