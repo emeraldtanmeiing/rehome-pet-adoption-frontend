@@ -3,6 +3,13 @@ import axios from "axios";
 import errorHandler from "../helpers/errorHandler";
 import Cookies from "js-cookie";
 
+const mockPublicReport = {
+  totalAdoptedPet: 100,
+  totalWaitingForAdoptionPet: 100,
+  totalCompletedApplication: 100,
+  totalEvent: 100,
+};
+
 export const getAdminReport = async () => {
   const url = apiURL(`/report/admin`);
 
@@ -29,8 +36,9 @@ export const getAdminReport = async () => {
   }
 };
 
-
 export const getPublicReport = async () => {
+  return mockPublicReport;
+
   const url = apiURL(`/report`);
 
   try {

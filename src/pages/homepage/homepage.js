@@ -277,7 +277,7 @@ const Homepage = () => {
             phone or address.
             <br />
             <br />
-            Developed by <b>Emerald Tan</b>, a final year student at {" "}
+            Developed by <b>Emerald Tan</b>, a final year student at{" "}
             <Button
               type="text"
               onClick={() => window.open("https://www.apu.edu.my/")}
@@ -302,10 +302,12 @@ const Homepage = () => {
             <Button
               icon={<GithubFilled style={{ color: "grey" }} />}
               onClick={() => {
-                window.open("https://github.com/emeraldtanmeiing");
+                window.open(
+                  "https://github.com/emeraldtanmeiing/rehome-pet-adoption-frontend"
+                );
               }}
             >
-              emeraldtanmeiing
+              Project source code
             </Button>
             <Button
               icon={<PhoneFilled style={{ color: "grey" }} />}
@@ -319,13 +321,6 @@ const Homepage = () => {
               onClick={() => copyToClipboard("emeraldtanmeiing@gmail.com")}
             >
               emeraldtanmeiing@gmail.com
-            </Button>
-
-            <Button
-              icon={<FileTextFilled style={{ color: "grey" }} />}
-              onClick={() => window.open(process.env.REACT_APP_RESUME_LINK)}
-            >
-              Resume
             </Button>
           </Col>
         </Row>
