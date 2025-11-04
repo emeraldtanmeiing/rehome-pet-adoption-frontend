@@ -2,7 +2,7 @@
   "name": "rehome-pet-adoption-frontend",
   "version": "0.1.1",
   "private": true,
-  "homepage": "https://emeraldtanmeiing.github.io/rehome-pet-adoption-frontend",
+  "homepage": "https://emeraldtanmeiing.github.io/rehome-pet-adoption-frontend/",
   "scripts": {
     "start": "craco start",
     "build": "craco build",
